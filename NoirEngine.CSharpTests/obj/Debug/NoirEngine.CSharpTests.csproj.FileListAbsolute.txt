@@ -1,0 +1,11 @@
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\NoirEngine.CSharpTests.dll
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\NoirEngine.CSharpTests.pdb
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\Assembly-CSharp.dll
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\UnityEngine.dll
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\Assembly-CSharp.pdb
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\UnityEngine.xml
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\bin\Debug\ko\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\obj\Debug\NoirEngine.CSharpTests.csprojResolveAssemblyReference.cache
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\obj\Debug\NoirEngine.CSharpTests.dll
+C:\Users\led78\Desktop\Studio Blackroom\Git\NoirEngine\NoirEngine.CSharpTests\obj\Debug\NoirEngine.CSharpTests.pdb
