@@ -38,7 +38,17 @@ namespace Noir.Util
 		/// 처리 진행 여부입니다.
 		/// </summary>
 		public bool IsRemain { get { return this.nIndex < this.sString.Length; } }
-		
+
+		/// <summary>
+		/// 현재 처리중인 문자가 여백문자가 아닌지의 여부입니다.
+		/// </summary>
+		public bool IsBlackSpace { get { return this.IsRemain && !Char.IsWhiteSpace(this.CharacterUnsafe); } }
+
+		/// <summary>
+		/// 현재 처리중인 문자가 여백문자인지의 여부입니다.
+		/// </summary>
+		public bool IsWhiteSpace { get { return this.IsRemain && Char.IsWhiteSpace(this.CharacterUnsafe); } }
+
 		/// <summary>
 		/// 남은 문자의 개수를 가져옵니다.
 		/// </summary>
@@ -64,7 +74,7 @@ namespace Noir.Util
 			this.nIndex = 0;
 			this.sString = sTarget;
 		}
-		
+
 		/// <summary>
 		/// 현재 처리중인 문자가 지정된 문자와 일치하는지 여부를 가져옵니다.
 		/// </summary>
@@ -103,58 +113,243 @@ namespace Noir.Util
 		}
 
 		/// <summary>
-		/// 
+		/// 현재 처리중인 문자가 지정된 문자와 일치하지 않는지 여부를 가져옵니다.
 		/// </summary>
-		/// <param name="nChar"></param>
-		/// <returns></returns>
+		/// <param name="nChar">비교할 문자입니다.</param>
+		/// <returns>처리가 완료된 상태거나 두 문자가 같다면 true, 다르다면 false를 반환합니다.</returns>
 		public bool tryNotMatchChar(char nChar)
 		{
 			return this.IsRemain && this.CharacterUnsafe != nChar;
 		}
 
 		/// <summary>
-		/// 
+		/// 현재 처리중인 문자가 지정된 문자들과 일치하지 않는지 여부를 가져옵니다.
 		/// </summary>
-		/// <param name="sChar"></param>
-		/// <returns></returns>
+		/// <param name="sChar">비교할 문자들입니다.</param>
+		/// <returns>처리가 완료된 상태거나 하나라도 일치한다면 false, 일치하는 문자가 없다면 true를 반환합니다.</returns>
 		public bool tryNotMatchChar(string sChar)
 		{
-
+			return this.IsRemain && sChar.IndexOf(this.CharacterUnsafe) < 0;
 		}
-		
+
+		/// <summary>
+		/// 현재 처리중인 문자와 지정된 문자가 일치하는 동안 문자를 무시합니다.
+		/// </summary>
+		/// <param name="nChar">무시할 문자입니다.</param>
 		public void skipWhile(char nChar)
 		{
+			while (this.tryMatchChar(nChar))
+			{
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
 
+				++this.nIndex;
+			}
 		}
 
+		/// <summary>
+		/// 현재 처리중인 문자와 지정된 문자들이 일치하는 동안 문자를 무시합니다.
+		/// </summary>
+		/// <param name="sChar">무시할 문자들입니다.</param>
 		public void skipWhile(string sChar)
 		{
-			
+			while (this.tryMatchChar(sChar))
+			{
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
+
+				++this.nIndex;
+			}
 		}
 
+		/// <summary>
+		/// 문자를 일정 개수만큼 무시합니다.
+		/// </summary>
+		/// <param name="nCount">무시할 문자의 개수입니다.</param>
 		public void skipWhile(int nCount)
 		{
+			for (; this.IsRemain && nCount > 0; --nCount)
+			{
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
 
+				++this.nIndex;
+			}
 		}
 
+		/// <summary>
+		/// 여백문자가 나타날 때 까지 모든 문자를 무시합니다.
+		/// </summary>
+		public void skipBlackspace()
+		{
+			while (this.IsBlackSpace)
+				++this.nIndex;
+		}
+
+		/// <summary>
+		/// 여백문자가 아닌 문자가 나타날 때 까지 모든 문자를 무시합니다.
+		/// </summary>
+		public void skipWhitespace()
+		{
+			while (this.IsWhiteSpace)
+			{
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
+
+				++this.nIndex;
+			}
+		}
+
+		/// <summary>
+		/// 특정 문자가 나올 때 까지 문자를 무시합니다.
+		/// </summary>
+		/// <param name="nChar">나오기를 기다릴 문자입니다.</param>
 		public void skipUntil(char nChar)
 		{
+			while (this.tryNotMatchChar(nChar))
+			{
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
 
+				++this.nIndex;
+			}
 		}
 
+		/// <summary>
+		/// 특정 문자들이 나올 때 까지 문자를 무시합니다.
+		/// </summary>
+		/// <param name="sChar">나오기를 기다릴 문자들입니다.</param>
 		public void skipUntil(string sChar)
 		{
+			while (this.tryNotMatchChar(sChar))
+			{
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
 
+				++this.nIndex;
+			}
 		}
 
+		/// <summary>
+		/// 특정 문자가 나올 때 까지 문자를 병합해 가져옵니다.
+		/// </summary>
+		/// <param name="nChar">나오기를 기다릴 문자입니다.</param>
+		/// <returns>병합된 문자열입니다.</returns>
 		public string mergeUntil(char nChar)
 		{
+			StringBuilder sBuilder = new StringBuilder();
 
+			while (this.tryMatchChar(nChar))
+			{
+				sBuilder.Append(this.CharacterUnsafe);
+
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
+
+				++this.nIndex;
+			}
+
+			return sBuilder.ToString();
 		}
 
+		/// <summary>
+		/// 특정 문자들이 나올 때 까지 문자를 병합해 가져옵니다.
+		/// </summary>
+		/// <param name="sChar">나오기를 기다릴 문자들입니다.</param>
+		/// <returns>병합된 문자열입니다.</returns>
 		public string mergeUntil(string sChar)
 		{
+			StringBuilder sBuilder = new StringBuilder();
 
+			while (this.tryMatchChar(sChar))
+			{
+				sBuilder.Append(this.CharacterUnsafe);
+
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
+
+				++this.nIndex;
+			}
+
+			return sBuilder.ToString();
+		}
+
+		/// <summary>
+		/// 여백문자가 나타날 때 까지 모든 문자를 병합해 가져옵니다.
+		/// </summary>
+		/// <returns>병합된 문자열입니다.</returns>
+		public string mergeBlackspace()
+		{
+			StringBuilder sBuilder = new StringBuilder();
+
+			while (this.IsBlackSpace)
+			{
+				sBuilder.Append(this.CharacterUnsafe);
+				++this.nIndex;
+			}
+
+			return sBuilder.ToString();
+		}
+
+		/// <summary>
+		/// 여백문자 또는 특정 문자들이 나타날 때 까지 모든 문자를 병합해 가져옵니다.
+		/// </summary>
+		/// <param name="sChar">나타나기를 기다릴 문자들입니다.</param>
+		/// <returns>병합된 문자열입니다.</returns>
+		public string mergeBlackspace(string sChar)
+		{
+			StringBuilder sBuilder = new StringBuilder();
+
+			while (this.IsBlackSpace && this.tryNotMatchChar(sChar))
+			{
+				sBuilder.Append(this.CharacterUnsafe);
+				++this.nIndex;
+			}
+
+			return sBuilder.ToString();
+		}
+
+		/// <summary>
+		/// 여백문자가 아닌 문자가 나타날 때 까지 모든 문자를 병합해 가져옵니다.
+		/// </summary>
+		/// <returns>병합된 문자열입니다.</returns>
+		public string mergeWhitespace()
+		{
+			StringBuilder sBuilder = new StringBuilder();
+
+			while (this.IsWhiteSpace)
+			{
+				sBuilder.Append(this.CharacterUnsafe);
+
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
+
+				++this.nIndex;
+			}
+
+			return sBuilder.ToString();
+		}
+
+		/// <summary>
+		/// 여백문자가 아닌 문자 또는 특정 문자들이 나타날 때 까지 모든 문자를 병합해 가져옵니다.
+		/// </summary>
+		/// <param name="sChar">나타나기를 기다릴 문자들입니다.</param>
+		/// <returns>병합된 문자열입니다.</returns>
+		public string mergeWhitespace(string sChar)
+		{
+			StringBuilder sBuilder = new StringBuilder();
+
+			while (this.IsWhiteSpace && this.tryNotMatchChar(sChar))
+			{
+				sBuilder.Append(this.CharacterUnsafe);
+
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
+
+				++this.nIndex;
+			}
+
+			return sBuilder.ToString();
 		}
 	}
 }
