@@ -105,7 +105,7 @@ namespace Noir.Util
 			if (this.RemainCount < sTarget.Length)
 				return false;
 
-			for (int nFirst = this.nIndex, nSecond = 0; nSecond < sString.Length; ++nFirst, ++nSecond)
+			for (int nFirst = this.nIndex, nSecond = 0; nSecond < sTarget.Length; ++nFirst, ++nSecond)
 				if (this.sString[nFirst] != sTarget[nSecond])
 					return false;
 
@@ -239,7 +239,7 @@ namespace Noir.Util
 		{
 			StringBuilder sBuilder = new StringBuilder();
 
-			while (this.tryMatchChar(nChar))
+			while (this.tryNotMatchChar(nChar))
 			{
 				sBuilder.Append(this.CharacterUnsafe);
 
@@ -261,7 +261,7 @@ namespace Noir.Util
 		{
 			StringBuilder sBuilder = new StringBuilder();
 
-			while (this.tryMatchChar(sChar))
+			while (this.tryNotMatchChar(sChar))
 			{
 				sBuilder.Append(this.CharacterUnsafe);
 

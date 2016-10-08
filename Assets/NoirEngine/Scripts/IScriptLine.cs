@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Noir.Script
 {
-	interface IScriptLine
+	public interface IScriptLine
 	{
 		void runScript();
 	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Noir.Util;
+using UnityEngine;
 
 namespace Noir.Script
 {
@@ -23,14 +24,12 @@ namespace Noir.Script
 			
 			sStringParser.skipWhile(1);
 
-			this.sName = sStringParser.mergeBlackspace();
+			this.sName = sStringParser.mergeBlackspace("]");
 
 			sStringParser.skipWhitespace();
 
-			while(sStringParser.tryMatchChar(']'))
+			while(sStringParser.tryNotMatchChar(']'))
 			{
-				sStringParser.skipWhitespace();
-
 				string sKey = sStringParser.mergeBlackspace("=");
 				sStringParser.skipWhitespace();
 
@@ -50,6 +49,8 @@ namespace Noir.Script
 				sStringParser.skipWhile(1);
 
 				this.sAttribute.Add(sKey, sValue);
+
+				sStringParser.skipWhitespace();
 			}
 
 			sStringParser.skipWhile(1);
@@ -57,7 +58,7 @@ namespace Noir.Script
 
 		void IScriptLine.runScript()
 		{
-			throw new NotImplementedException();
+			Debug.Log("명령 : " + this.sName);
 		}
 	}
 }
