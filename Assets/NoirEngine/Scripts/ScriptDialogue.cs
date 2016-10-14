@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Noir.Util;
-using UnityEngine;
 
 namespace Noir.Script
 {
-	public class ScriptDialogue : IScriptLine
+	public class ScriptDialogue : ScriptLine
 	{
 		private string sDialogue;
 
 		public string Dialogue { get { return this.sDialogue; } }
 
-		public ScriptDialogue(StringParser sStringParser)
+		public ScriptDialogue(string sScriptFilePath, StringParser sStringParser) : base(sScriptFilePath, sStringParser.Line)
 		{
 			StringBuilder sDialogueBuilder = new StringBuilder();
 
@@ -40,9 +39,9 @@ namespace Noir.Script
 			this.sDialogue = sDialogueBuilder.ToString();
 		}
 
-		void IScriptLine.runScript()
+		public override void runScript()
 		{
-			Debug.Log("대사 : " + this.sDialogue);
+			//Empty.
 		}
 	}
 }

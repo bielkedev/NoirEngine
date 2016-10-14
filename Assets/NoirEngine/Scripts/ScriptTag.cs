@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Noir.Util;
-using UnityEngine;
 
 namespace Noir.Script
 {
-	public class ScriptTag : IScriptLine
+	public class ScriptTag : ScriptLine
 	{
 		private string sName;
 		private Dictionary<string, string> sAttribute;
@@ -15,7 +14,7 @@ namespace Noir.Script
 		public string Name { get { return this.sName; } }
 		public Dictionary<string, string> Attribute { get { return this.sAttribute; } }
 
-		public ScriptTag(StringParser sStringParser)
+		public ScriptTag(string sScriptFilePath, StringParser sStringParser) : base(sScriptFilePath, sStringParser.Line)
 		{
 			this.sAttribute = new Dictionary<string, string>();
 
@@ -44,7 +43,7 @@ namespace Noir.Script
 
 				sStringParser.skipWhile(1);
 
-				string sValue = sStringParser.mergeUntil('"');
+				string sValue = sStringParser.mergeUntilWithEscape('"', '\\');
 
 				sStringParser.skipWhile(1);
 
@@ -56,9 +55,17 @@ namespace Noir.Script
 			sStringParser.skipWhile(1);
 		}
 
-		void IScriptLine.runScript()
+		public override void runScript()
 		{
-			Debug.Log("명령 : " + this.sName);
+			var sHandler = ScriptTagManager.getTagHandler(this.sName);
+
+			if (sHandler == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, this.sName + "은(는) 정의되지 않은 명령어입니다.", this);
+				return;
+			}
+
+			sHandler(this);
 		}
 	}
 }

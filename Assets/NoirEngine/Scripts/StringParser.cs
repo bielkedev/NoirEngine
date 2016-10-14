@@ -275,6 +275,51 @@ namespace Noir.Util
 		}
 
 		/// <summary>
+		/// 특정 문자가 나올 때 까지 문자를 병합해 가져옵니다. 이스케이프 문자를 지원합니다.
+		/// </summary>
+		/// <param name="nChar">나오기를 기다릴 문자입니다.</param>
+		/// <param name="nEscape">이스케이프 문자입니다. 이 문자 뒤에 나오기를 기다릴 문자가 나와도 무시합니다.</param>
+		/// <returns>병합된 문자열입니다.</returns>
+		public string mergeUntilWithEscape(char nChar, char nEscape)
+		{
+			StringBuilder sBuilder = new StringBuilder();
+			string sEscape = new string(nEscape, 2);
+			string sChar = new string(nChar, 1);
+
+			sChar += nEscape;
+
+			while(this.tryNotMatchChar(nChar))
+			{
+				if(this.tryMatchChar(nEscape))
+				{
+					if (this.tryMatchStr(sEscape))
+					{
+						sBuilder.Append(nEscape);
+						this.skipWhile(2);
+					}
+					else if (this.tryMatchStr(sChar))
+					{
+						sBuilder.Append(nChar);
+						this.skipWhile(2);
+					}
+					else
+					{
+						this.skipWhile(1);
+						sBuilder.Append(this.CharacterUnsafe);
+						this.skipWhile(1);
+					}
+				}
+				else
+				{
+					sBuilder.Append(this.CharacterUnsafe);
+					this.skipWhile(1);
+				}
+			}
+
+			return sBuilder.ToString();
+		}
+
+		/// <summary>
 		/// 여백문자가 나타날 때 까지 모든 문자를 병합해 가져옵니다.
 		/// </summary>
 		/// <returns>병합된 문자열입니다.</returns>

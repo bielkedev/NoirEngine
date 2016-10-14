@@ -9,16 +9,16 @@ using Noir.Util;
 namespace Noir.Script
 {
 	/// <summary>
-	/// 스크립트를 관리합니다.
+	/// 스크립트 객체입니다.
 	/// </summary>
 	public class Script
 	{
 		private static Regex sCommentMatcher = new Regex("(?:\\/\\/.*)|(?:\\/\\*(?:(?!\\*\\/)[\\s\\S])*\\*\\/)", RegexOptions.Compiled);
 
-		private List<IScriptLine> sScriptLineList = new List<IScriptLine>();
+		private List<ScriptLine> sScriptLineList = new List<ScriptLine>();
 		private Dictionary<string, int> sRegionList = new Dictionary<string, int>();
 
-		public List<IScriptLine> ScriptLineList { get { return this.sScriptLineList; } }
+		public List<ScriptLine> ScriptLineList { get { return this.sScriptLineList; } }
 		public Dictionary<string, int> RegionList { get { return this.sRegionList; } }
 
 		public Script(string sScriptFilePath)
@@ -71,7 +71,7 @@ namespace Noir.Script
 				{
 					try
 					{
-						this.sScriptLineList.Add(new ScriptTag(sParser));
+						this.sScriptLineList.Add(new ScriptTag(sScriptFilePath, sParser));
 					}
 					catch(Exception sException)
 					{
@@ -82,7 +82,7 @@ namespace Noir.Script
 				{
 					try
 					{
-						this.sScriptLineList.Add(new ScriptDummy(sParser));
+						this.sScriptLineList.Add(new ScriptWait(sScriptFilePath, sParser));
 					}
 					catch (Exception sException)
 					{
@@ -93,7 +93,7 @@ namespace Noir.Script
 				{
 					try
 					{
-						this.sScriptLineList.Add(new ScriptDialogue(sParser));
+						this.sScriptLineList.Add(new ScriptDialogue(sScriptFilePath, sParser));
 					}
 					catch (Exception sException)
 					{

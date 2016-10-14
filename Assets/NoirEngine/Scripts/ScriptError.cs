@@ -27,20 +27,28 @@ namespace Noir.Script
 		public delegate void ErrorHandler(ref Error sError);
 		public static event ErrorHandler ErrorEvent;
 
-		private static List<Error> sErrorList = new List<Error>();
-
-		public static void pushError(ErrorType eNewErrorType, string sNewErrorMessage, string sNewErrorFilePath, int nNewErrorLineNumber)
+		public static void pushError(ErrorType eNewErrorType, string sNewErrorMessage, ScriptLine sScriptLine)
 		{
 			Error sError;
 			sError.eErrorType = eNewErrorType;
 			sError.sErrorMessage = sNewErrorMessage;
-			sError.sErrorFilePath = sNewErrorFilePath;
-			sError.nErrorLineNumber = nNewErrorLineNumber;
+			sError.sErrorFilePath = sScriptLine.ScriptFilePath;
+			sError.nErrorLineNumber = sScriptLine.ScriptFileLine;
 
 			if (ScriptError.ErrorEvent != null)
 				ScriptError.ErrorEvent(ref sError);
+		}
 
-			ScriptError.sErrorList.Add(sError);
+		public static void pushError(ErrorType eNewErrorType, string sNewErrorMessage, string sScriptFilePath, int nScriptFileLine)
+		{
+			Error sError;
+			sError.eErrorType = eNewErrorType;
+			sError.sErrorMessage = sNewErrorMessage;
+			sError.sErrorFilePath = sScriptFilePath;
+			sError.nErrorLineNumber = nScriptFileLine;
+
+			if (ScriptError.ErrorEvent != null)
+				ScriptError.ErrorEvent(ref sError);
 		}
 	}
 }
