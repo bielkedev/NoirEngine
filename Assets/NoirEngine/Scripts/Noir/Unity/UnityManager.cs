@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Noir.Equation;
 using Noir.Script;
 using Noir.UI;
 using UnityEngine;
@@ -68,14 +69,16 @@ namespace Noir.Unity
 
 		private void Start()
 		{
-			ScriptError.ErrorEvent += this.OnError;
-			ScriptTagManager.initTagHandler();
-
 			UIManager.UnityManagerObject = this;
 
-			/*
-				여기에 각종 초기화 삽입
-			*/
+			//에러 핸들러 등록
+			ScriptError.ErrorEvent += this.OnError;
+
+			//모듈 초기화
+			EquationVariable.initEquationVariable();
+			ScriptTagManager.initTagHandler();
+
+			//유니티 오브젝트 초기화
 			{
 				this._MenuPanel.SetActive(false);
 				this._BacklogPanel.SetActive(false);
