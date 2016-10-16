@@ -201,6 +201,21 @@ namespace Noir.Util
 		}
 
 		/// <summary>
+		/// 여백문자가 아닌 문자 또는 특정 문자가 나타날 때 까지 모든 문자를 무시합니다.
+		/// </summary>
+		/// <param name="sChar">나오기를 기다릴 문자입니다.</param>
+		public void skipWhitespace(string sChar)
+		{
+			while (this.IsWhiteSpace && this.tryNotMatchChar(sChar))
+			{
+				if (this.CharacterUnsafe == '\n')
+					++this.nLine;
+
+				++this.nIndex;
+			}
+		}
+
+		/// <summary>
 		/// 특정 문자가 나올 때 까지 문자를 무시합니다.
 		/// </summary>
 		/// <param name="nChar">나오기를 기다릴 문자입니다.</param>

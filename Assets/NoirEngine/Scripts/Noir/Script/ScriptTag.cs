@@ -14,6 +14,12 @@ namespace Noir.Script
 		public string Name { get { return this.sName; } }
 		public Dictionary<string, string> Attribute { get { return this.sAttribute; } }
 
+		public ScriptTag(string sTagName) : base("", -1)
+		{
+			this.sName = sTagName;
+			this.sAttribute = new Dictionary<string, string>();
+		}
+
 		public ScriptTag(string sScriptFilePath, StringParser sStringParser) : base(sScriptFilePath, sStringParser.Line)
 		{
 			this.sAttribute = new Dictionary<string, string>();

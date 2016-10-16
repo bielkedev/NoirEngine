@@ -9,15 +9,15 @@ namespace Noir.Script
 {
 	public class ScriptDialogue : ScriptLine
 	{
-		private string sDialogue;
-
 		public string Dialogue { get { return this.sDialogue; } }
+
+		private string sDialogue;
 
 		public ScriptDialogue(string sScriptFilePath, StringParser sStringParser) : base(sScriptFilePath, sStringParser.Line)
 		{
 			StringBuilder sDialogueBuilder = new StringBuilder();
 
-			while(sStringParser.tryNotMatchChar("[@*"))
+			while(sStringParser.tryNotMatchChar("\n[@*"))
 			{
 				if (sStringParser.tryMatchChar('\\'))
 				{
@@ -43,6 +43,7 @@ namespace Noir.Script
 		public override void runScript()
 		{
 			UIManager.appendDialogueText(this.sDialogue);
+			UIManager.appendBacklogDialogueLog(this.sDialogue);
 		}
 	}
 }

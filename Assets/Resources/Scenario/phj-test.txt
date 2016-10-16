@@ -9,14 +9,8 @@
 //pressed : 129
 //disabled : 83
 
-텍스트입니다.1@
-[rt]테스트입니다.2@
-[rt]테스트입니다.3@
-[rt]테스트입니다.4@
-[rt]테스트입니다.5@
-[rp]테스트입니다.6@
-[rt]테스트입니다.7@
-[rt]테스트입니다.8@
-[rp]테스트입니다.9@
-[rt]테스트입니다.10@
-[rp]테스트입니다.11@
+[&autoinsert target="linehead" command="[rp]"]
+[&autoinsert target="lineend" command="@"]
+
+1 : this is a test text.
+2 : this is a test text.

@@ -39,6 +39,7 @@ namespace Noir.Unity
 		[Header("Backlog UI")]
 		public GameObject _BacklogPanel;
 		public Button _BacklogReturnButton;
+		public ScrollRect _BacklogScroll;
 		public GameObject _BacklogContent;
 		public GameObject _BacklogDialogueLog;
 
@@ -62,6 +63,7 @@ namespace Noir.Unity
 			sText.text = sDialogueText;
 
 			this.sBacklogContentRectTransform.sizeDelta = new Vector2(this.sBacklogContentRectTransform.sizeDelta.x, this.sBacklogContentRectTransform.sizeDelta.y + nHeight);
+			this._BacklogScroll.verticalNormalizedPosition = 0.0f;
 		}
 
 		private void Start()
@@ -88,14 +90,14 @@ namespace Noir.Unity
 
 				Vector3[] vCorner = new Vector3[4];
 				this.sBacklogContentRectTransform.GetWorldCorners(vCorner);
-				this.sBacklogContentSize.x = Screen.width - vCorner[0].x - vCorner[2].x;
+				this.sBacklogContentSize.x = Math.Abs(vCorner[0].x - vCorner[2].x);
 				this.sBacklogContentSize.y = 0;
 			}
 
 			UIManager.clearNameText();
 			UIManager.clearDialogueText();
 
-			ScriptRuntime.callScript(this._ScriptFilePath, null);
+			ScriptRuntime.gotoScript(this._ScriptFilePath, null);
 			ScriptRuntime.runScript();
 		}
 

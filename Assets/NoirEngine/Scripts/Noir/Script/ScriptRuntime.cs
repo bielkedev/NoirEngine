@@ -14,6 +14,9 @@ namespace Noir.Script
 		}
 
 		public static bool IsRunning { get { return ScriptRuntime.sCurrentScript != null; } }
+		public static bool IsSuspended { get { return ScriptRuntime.bSuspendScript; } }
+		public static int CurrentLineIndex { get { return ScriptRuntime.nCurrentLineIndex; } }
+		public static Script CurrentScript { get { return ScriptRuntime.sCurrentScript; } }
 
 		private static Stack<ScriptCall> sScriptCallStack = new Stack<ScriptCall>();
 		private static Dictionary<string, Script> sScriptMap = new Dictionary<string, Script>();
@@ -49,9 +52,94 @@ namespace Noir.Script
 		}
 
 		/// <summary>
+		/// 특정 스크립트의 특정 구역으로 점프합니다.
+		/// </summary>
+		/// <param name="sScriptPath">호출할 스크립트의 파일 경로입니다. null일 경우 현재 실행중인 스크립트의 원본을 대상으로 합니다.</param>
+		/// <param name="sRegionName">호출할 구역의 이름입니다. null일 경우 스크립트를 처음부터 실행합니다.</param>
+		public static void gotoScript(string sScriptPath, string sRegionName)
+		{
+			Script sTargetScript = null;
+
+			if (sScriptPath == null)
+			{
+				if (ScriptRuntime.sCurrentScript == null)
+				{
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "실행중인 스크립트가 없습니다.", "EMPTY", -1);
+					return;
+				}
+
+				sTargetScript = ScriptRuntime.sCurrentScript.ScriptBody;
+			}
+			else
+				sTargetScript = ScriptRuntime.loadScript(sScriptPath);
+
+			int nTargetLineIndex;
+
+			if (sRegionName == null)
+				nTargetLineIndex = 0;
+			else
+			{
+				if (!sTargetScript.RegionList.TryGetValue(sRegionName, out nTargetLineIndex))
+				{
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "레이블이 정의되지 않았습니다.", "EMPTY", -1);
+					return;
+				}
+			}
+
+			ScriptRuntime.nCurrentLineIndex = nTargetLineIndex;
+			ScriptRuntime.sCurrentScript = sTargetScript;
+		}
+
+		/// <summary>
 		/// 특정 스크립트의 특정 구역을 호출합니다. 스크립트가 실행중이라면 호출스택에 기록됩니다. 실행중이 아니라면 기록하지 않습니다.
 		/// </summary>
-		/// <param name="sScriptPath">호출할 스크립트의 파일 경로입니다. null일 경우 현재 실행중인 스크립트를 대상으로 합니다.</param>
+		/// <param name="sScript">호출할 스크립트 객체입니다. null일 경우 현재 실행중인 스크립트의 원본을 대상으로 합니다.</param>
+		/// <param name="sRegionName">호출할 구역의 이름입니다. null일 경우 스크립트를 처음부터 실행합니다.</param>
+		public static void callScript(Script sScript, string sRegionName)
+		{
+			if (sScript == null)
+			{
+				if (ScriptRuntime.sCurrentScript == null)
+				{
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "실행중인 스크립트가 없습니다.", "EMPTY", -1);
+					return;
+				}
+
+				sScript = ScriptRuntime.sCurrentScript.ScriptBody;
+			}
+
+			int nTargetLineIndex;
+
+			if (sRegionName == null)
+				nTargetLineIndex = 0;
+			else
+			{
+				if (!sScript.RegionList.TryGetValue(sRegionName, out nTargetLineIndex))
+				{
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "레이블이 정의되지 않았습니다.", "EMPTY", -1);
+					return;
+				}
+			}
+
+			//스크립트가 실행중이라면 콜스택 푸시
+			if (ScriptRuntime.IsRunning)
+			{
+				ScriptCall sCall;
+
+				sCall.nLineIndex = ScriptRuntime.nCurrentLineIndex;
+				sCall.sScript = ScriptRuntime.sCurrentScript;
+
+				ScriptRuntime.sScriptCallStack.Push(sCall);
+			}
+
+			ScriptRuntime.nCurrentLineIndex = nTargetLineIndex;
+			ScriptRuntime.sCurrentScript = sScript;
+		}
+
+		/// <summary>
+		/// 특정 스크립트의 특정 구역을 호출합니다. 스크립트가 실행중이라면 호출스택에 기록됩니다. 실행중이 아니라면 기록하지 않습니다.
+		/// </summary>
+		/// <param name="sScriptPath">호출할 스크립트의 파일 경로입니다. null일 경우 현재 실행중인 스크립트의 원본을 대상으로 합니다.</param>
 		/// <param name="sRegionName">호출할 구역의 이름입니다. null일 경우 스크립트를 처음부터 실행합니다.</param>
 		public static void callScript(string sScriptPath, string sRegionName)
 		{
@@ -65,7 +153,7 @@ namespace Noir.Script
 					return;
 				}
 
-				sTargetScript = ScriptRuntime.sCurrentScript;
+				sTargetScript = ScriptRuntime.sCurrentScript.ScriptBody;
 			}
 			else
 				sTargetScript = ScriptRuntime.loadScript(sScriptPath);
@@ -128,21 +216,27 @@ namespace Noir.Script
 			if (!ScriptRuntime.IsRunning)
 				return;
 
-			if (ScriptRuntime.bSuspendScript)
+			for(;;)
 			{
-				ScriptRuntime.bSuspendScript = false;
-				return;
-			}
-
-			while(ScriptRuntime.nCurrentLineIndex < ScriptRuntime.sCurrentScript.ScriptLineList.Count)
-			{
-				ScriptRuntime.sCurrentScript.ScriptLineList[ScriptRuntime.nCurrentLineIndex++].runScript();
-
 				if (ScriptRuntime.bSuspendScript)
 				{
 					ScriptRuntime.bSuspendScript = false;
 					return;
 				}
+
+				while (ScriptRuntime.nCurrentLineIndex < ScriptRuntime.sCurrentScript.ScriptLineList.Count)
+				{
+					ScriptRuntime.sCurrentScript.ScriptLineList[ScriptRuntime.nCurrentLineIndex++].runScript();
+
+					if (ScriptRuntime.bSuspendScript)
+					{
+						ScriptRuntime.bSuspendScript = false;
+						return;
+					}
+				}
+
+				//스크립트 실행을 끝냈으면 콜스택 되감기 시도
+				ScriptRuntime.returnScript();
 			}
 		}
 

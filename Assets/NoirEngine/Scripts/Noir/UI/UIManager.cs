@@ -30,7 +30,11 @@ namespace Noir.UI
 		public static void appendDialogueText(string sDialogueText)
 		{
 			UIManager.sUnityManager._DialogueText.text += sDialogueText;
-			UIManager.sUnityManager.addBacklogDialogueLog(sDialogueText);
+		}
+
+		public static void appendBacklogDialogueLog(string sBacklogText)
+		{
+			UIManager.sUnityManager.addBacklogDialogueLog(sBacklogText);
 		}
 	}
 }
