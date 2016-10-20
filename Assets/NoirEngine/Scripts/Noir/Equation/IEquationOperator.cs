@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Noir.Equation
 {
-	public class EquationNode
+	public interface IEquationOperator
 	{
-
+		void doOperate(Stack<EquationValue> sStack);
 	}
 }

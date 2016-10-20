@@ -5,8 +5,11 @@ using System.Text;
 
 namespace Noir.Equation
 {
-	public class EquationNode
+	public abstract class EquationValue
 	{
+		public abstract bool IsNumeric { get; }
+		public abstract bool IsString { get; }
+		
 
 	}
 }

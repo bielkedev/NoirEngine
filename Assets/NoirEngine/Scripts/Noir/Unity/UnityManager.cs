@@ -41,11 +41,11 @@ namespace Noir.Unity
 		public GameObject _BacklogPanel;
 		public Button _BacklogReturnButton;
 		public ScrollRect _BacklogScroll;
-		public GameObject _BacklogContent;
+		public RectTransform _BacklogViewport;
+		public RectTransform _BacklogContent;
 		public GameObject _BacklogDialogueLog;
 
 		private Vector2 sBacklogContentSize;
-		private RectTransform sBacklogContentRectTransform;
 
 		public void addBacklogDialogueLog(string sDialogueText)
 		{
@@ -58,12 +58,12 @@ namespace Noir.Unity
 			float nHeight = sText.cachedTextGenerator.GetPreferredHeight(sDialogueText, sText.GetGenerationSettings(sBacklogContentSize));
 
 			sRectTransform.sizeDelta = new Vector2(sRectTransform.sizeDelta.x, nHeight);
-			sRectTransform.SetParent(this.sBacklogContentRectTransform, false);
-			sRectTransform.Translate(0.0f, -this.sBacklogContentRectTransform.sizeDelta.y, 0.0f, Space.Self);
+			sRectTransform.SetParent(this._BacklogContent, false);
+			sRectTransform.Translate(0.0f, -this._BacklogContent.sizeDelta.y, 0.0f, Space.Self);
 
 			sText.text = sDialogueText;
 
-			this.sBacklogContentRectTransform.sizeDelta = new Vector2(this.sBacklogContentRectTransform.sizeDelta.x, this.sBacklogContentRectTransform.sizeDelta.y + nHeight);
+			this._BacklogContent.sizeDelta = new Vector2(this._BacklogContent.sizeDelta.x, this._BacklogContent.sizeDelta.y + nHeight);
 			this._BacklogScroll.verticalNormalizedPosition = 0.0f;
 		}
 
@@ -88,12 +88,11 @@ namespace Noir.Unity
 				this._BacklogButton.onClick.AddListener(this.OnBacklog);
 				this._MenuReturnButton.onClick.AddListener(this.OnReturn);
 				this._BacklogReturnButton.onClick.AddListener(this.OnReturn);
-				
-				this.sBacklogContentRectTransform = this._BacklogContent.GetComponent<RectTransform>();
 
-				Vector3[] vCorner = new Vector3[4];
-				this.sBacklogContentRectTransform.GetWorldCorners(vCorner);
-				this.sBacklogContentSize.x = Math.Abs(vCorner[0].x - vCorner[2].x);
+				this.sBacklogContentSize.x = Screen.width +
+					this._BacklogScroll.GetComponent<RectTransform>().sizeDelta.x +
+					this._BacklogViewport.sizeDelta.x +
+					this._BacklogContent.sizeDelta.x;
 				this.sBacklogContentSize.y = 0;
 			}
 
