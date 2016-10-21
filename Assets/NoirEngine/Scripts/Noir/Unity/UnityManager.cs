@@ -99,6 +99,16 @@ namespace Noir.Unity
 			UIManager.clearNameText();
 			UIManager.clearDialogueText();
 
+			/*
+				테스트가 필요하다면 여기부터
+			*/
+			
+			//...
+
+			/*
+				여기까지
+			*/
+
 			ScriptRuntime.gotoScript(this._ScriptFilePath, null);
 			ScriptRuntime.runScript();
 		}

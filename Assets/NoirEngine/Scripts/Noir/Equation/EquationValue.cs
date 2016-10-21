@@ -9,7 +9,5 @@ namespace Noir.Equation
 	{
 		public abstract bool IsNumeric { get; }
 		public abstract bool IsString { get; }
-		
-
 	}
 }
