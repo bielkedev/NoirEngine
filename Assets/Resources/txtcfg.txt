@@ -1,0 +1,184 @@
+*text_def
+[fontdefault
+	face         = "SeoulHangangEB.ttf"
+	rubyface     = "SeoulHangangEB.ttf"
+	left         = "$45 * g.ratio"
+	top          = "$250 * g.ratio"
+	width        = "$550 * g.ratio"
+	height       = "$105 * g.ratio"
+	size         = "$15 * g.ratio"
+	rubysize     = "$11 * g.ratio"
+	spacetop     = "$-2 * g.ratio"
+	spacemiddle  = "$0 * g.ratio"
+	spacebottom  = "$-2 * g.ratio"
+	color        = "0xFFFFFF"
+	shadowcolor  = "0x000000"
+	outlinecolor = "0x000000"
+	align        = "left"
+	style        = "shadow"
+	vertical     = "0"
+	hung         = "1"
+	stack        = "0"
+	rendered     = "1"
+
+]
+// 디폴트의 메세지 층의 폰트 설정을 fontdefault 태그로 설정한 것에 초기화한다
+[fontinit]
+
+// 시나리오 텍스트가 나타나는 모습과 사라져 가는 모습의 설정 (읽어 진행하고 있을 때)
+[scetween mode="init" type="in" ]
+[scetween mode="add"  type="in"  param="alpha" ease="none"          diff="-255"                  msec="0" delay="15"]
+[scetween mode="init" type="out"]
+[scetween mode="add"  type="out" param="alpha" ease="easeout_quart" diff="-255"                  msec="0" delay="0"]
+
+// 시나리오 텍스트가 나타나는 모습과 사라져 가는 모습의 설정 (일시적으로 비표시가 될 때)
+[scetween mode="init" type="show" ]
+[scetween mode="add"  type="show" param="alpha" ease="none" diff="-255" msec="400" delay="0"]
+[scetween mode="init" type="hide"]
+[scetween mode="add"  type="hide" param="alpha" ease="none" diff="-255" msec="400" delay="0"]
+
+// 백 로그, 되감을 때에 전의 페이지가 나타나는 모습의 설정
+[scetween mode="init" type="backlog_down_in" ]
+[scetween mode="add"  type="backlog_down_in"  param="top"   ease="easeout_sine" diff="$-120 * g.vratio / 100" msec="400" delay="0"]
+[scetween mode="add"  type="backlog_down_in"  param="alpha" ease="none"         diff= "-255" msec="400" delay="0"]
+// 백 로그, 되감을 때에 지금 표시하고 있는 페이지가 사라져 가는 모습의 설정
+[scetween mode="init" type="backlog_down_out"]
+[scetween mode="add"  type="backlog_down_out" param="top"   ease="easeout_sine" diff="$120 * g.vratio / 100" msec="400" delay="0"]
+[scetween mode="add"  type="backlog_down_out" param="alpha" ease="none"         diff="-255" msec="400" delay="0"]
+// 백 로그, 보낼 때에 다음의 페이지가 나타나는 모습의 설정
+[scetween mode="init" type="backlog_up_in"   ]
+[scetween mode="add"  type="backlog_up_in"    param="top"   ease="easeout_sine" diff="$120 * g.vratio / 100" msec="400" delay="0"]
+[scetween mode="add"  type="backlog_up_in"    param="alpha" ease="none"         diff="-255" msec="400" delay="0"]
+// 백 로그, 보낼 때에 지금 표시하고 있는 페이지가 사라져 가는 모습의 설정
+[scetween mode="init" type="backlog_up_out"  ]
+[scetween mode="add"  type="backlog_up_out"   param="top"   ease="easeout_sine" diff="$-120 * g.vratio / 100" msec="400" delay="0"]
+[scetween mode="add"  type="backlog_up_out"   param="alpha" ease="none"         diff= "-255" msec="400" delay="0"]
+
+[return]
+
+// ---------------------------------------------------------------------------------------------
+//  본문 설정용 써브루틴(call 태그로 복수의 장소로부터 불려 가서 사용된다)
+// ---------------------------------------------------------------------------------------------
+*text_init
+
+// 클릭 대기 그리후의 설정
+/*
+//   층 90번을 클릭 대기 그리후로서 이용한다
+[lyc id="90" file="$g.imagepath + 'glyph'"]
+//   뒤화면에 읽힌 그리후 화상을, 겉(표) 화면에 등장시킨다
+[flip]
+//   점멸 애니메이션을 트인을 이용해 표현한다
+//   층에 트인의 설정을 하는 경우,
+//   우선 lytweendel로 전회 설정한 트인을 삭제한다
+//   (lyc를 실시하면 자동적으로 lytweendel 한 것이  되기 위해,
+//    본래 여기에서는 필요없지만, 실행하도록(듯이) 습관 지어
+//    두는 편이 미스가 적다)
+[lytweendel id="90"]
+[lytween id="90" param="alpha"  ease="none" from="0"  to="255" msec="1000" yoyo="-1"]
+[lytween id="90" param="xscale" ease="none" from="70" to="100" msec="1000" yoyo="-1"]
+[lytween id="90" param="yscale" ease="none" from="70" to="100" msec="1000" yoyo="-1"]
+//   그리후 화상을 읽어들인 층을 그리프 레이어로서 설정한다
+//   텍스트의 말미에 추적시켜, 깨끗이 보이도록(듯이) 7 픽셀하에 늦춘다
+[glyph layer="90" homing="1" top="7"]
+*/
+// 이쪽은 애니메이션그리후의 예
+[var name="i" data="0"]
+[loop estimate="$i < 30"]
+	[if estimate="$i == 0"]
+		// 제일 처음은 mode="init" 로 해야 한다
+		[anime id="90" mode="init" file="blueglyph/glyph0" xscale="$g.hratio" yscale="$g.hratio"]
+	[/if]
+	[if estimate="$i != 0"]
+		// 다음에서는 mode="add" 로 한다
+		[anime id="90" mode="add" file="$'blueglyph/glyph' + i" time="$i * 33" xscale="$g.hratio" yscale="$g.hratio"]
+	[/if]
+	[var name="i" data="$i + 1"]
+[/loop]
+// 최종 프레임의 계속 시간을 설정한다
+[anime id="90" mode="end" time="$i * 33"]
+
+// 층을 그리후로서 취급하도록(듯이) 설정한다
+[if estimate="$g.hratio == 100"]
+	// 위치 조정 불요
+	[glyph layer="90" homing="1"]
+[else]
+	// 위치 조정 필요
+	[glyph layer="90" homing="1" top="18"]
+[/if]
+
+// 메세지 윈도우 일시 소거 버튼 설치(button 매크로를 사용하고 있습니다)
+[button id="85" rollout="$g.imagepath + 'button_x'" rollover="$g.imagepath + 'button_x_o'" clickablethreshold="128" file="main.iet" label="hidein" call="1"]
+[lyprop id="85" left="$450 * g.hratio / 100"]
+// 오토 모드 버튼 설치(button 매크로를 사용하고 있습니다)
+[button id="86" rollout="$g.imagepath + 'button_allow'" rollover="$g.imagepath + 'button_allow_o'" clickablethreshold="128" file="main.iet" label="automodein" call="1"]
+[lyprop id="86" left="$420 * g.hratio / 100"]
+
+// 오토 모드에 넣도록(듯이) 한다
+[automode allow="1"]
+
+// 텍스트 일시 소거 기능을 사용할 수 있도록(듯이) 한다
+//   층 80번을 메세지 윈도우로서 이용한다
+[lyc id="80" file="$g.imagepath + 'UI/mw1'"]
+// [lyprop id="80" left="10" top="10"]
+//   0.5초간 걸쳐 용명 한다
+[trans type="1" time="500"]
+//   메세지 윈도우 화상과 버튼 화상을 읽어들인 층을
+//   메세지 윈도우 층으로서 설정한다
+//   (설정해 두면, 텍스트 일시 소거시에, 함께 비표시가 된다)
+[hide allow="1" window="80,85,86"]
+
+// 백 로그를 볼 수 있도록(듯이) 한다
+[backlog allow="1"] // 엔진 내장의 백 로그를 이용하는 경우는 이쪽
+// [call file="backlog" label="enable"] // 스크립트로 실장한 자기 부담 백 로그의 샘플을 이용하는 경우는 이쪽
+// 지금부터 표시하는 시나리오 텍스트를 백 로그에 보존하도록(듯이) 한다
+[writebacklog mode="1"]
+
+// 오른쪽 클릭 메뉴에 넣도록(듯이) 한다
+// (Windows에서는 오른쪽 클릭, iOS에서는 2 개손가락 탭 하면, rclick.iet가 자동적으로 불려 간다)
+[rclick allow="1"]
+
+// 오토 세이브를 유효하게 한다
+[autosave allow="1"]
+
+// 써브루틴은 반드시 return 태그로 끝난다
+[return]
+
+
+
+// ---------------------------------------------------------------------------------------------
+*text_drop
+[chgmsg]
+[fontdefault
+	face         = "SeoulHangangEB.ttf"
+	rubyface     = "SeoulHangangEB.ttf"
+	left         = "$0 * g.ratio"
+	top          = "$50 * g.ratio"
+	width        = "$568 * g.ratio"
+	height       = "$200 * g.ratio"
+	size         = "$16 * g.ratio"
+	rubysize     = "0"
+	kerning      = "0"
+	spacetop     = "0"
+	spacemiddle  = "0"
+	spacebottom  = "0"
+	color        = "0xFFFFFF"
+	shadowcolor  = "0x000000"
+	outlinecolor = "0x323232"
+	align        = "center"
+	style        = "single"
+	vertical     = "0"
+	hung         = "1"
+	rendered     = "1"
+]
+[scetween mode="init"  type="show"]
+[scetween mode="init" type="hide"]
+[scetween mode="init" type="in" ]
+[scetween mode="add"  type="in"  param="top"   ease="easeout_quad"  diff="$-30 * g.ratio" msec="400" delay="5" randomdelay="1"]
+[scetween mode="add"  type="in"  param="xscale"   ease="easeout_quad"  diff="$-30 * g.ratio" msec="400" delay="5" randomdelay="1"]
+[scetween mode="add"  type="in"  param="alpha" ease="none"          diff="$-255" msec="100" delay="5" randomdelay="1"]
+[scetween mode="init" type="out"]
+[scetween mode="add"  type="out" param="top"   ease="easein_quad"  diff="800 * g.ratio"  msec="1000" delay="10" randomdelay="1"]
+//[scetween mode="add"  type="out"  param="xscale"   ease="none"  diff="400 * g.ratio" msec="700" delay="1" randomdelay="1"]
+//[scetween mode="add"  type="out" param="alpha" ease="easeout_quart" diff="$-255" msec="700" delay="1" randomdelay="1"]
+[fontinit][rp]
+[return]

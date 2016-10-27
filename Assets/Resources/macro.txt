@@ -1,0 +1,213 @@
+// ---------------------------------------------------------------------------------------------
+*bg
+	//[bg file="" type="" time="" rule="" scale="" top="" left=""]
+	//[bg file="" type="1" time="" scale=""] ←타입1에 top left값 안 써도 되면 이렇게 써도 됨.
+	//file	bg폴더 안에 있는 이미지명				필수
+	//type	타입. 0은 직각, 1은 크로스페이드, 2는 유니버설		필수
+	//time	말 그대로 타임.						필수
+	//rule	마스킹 파일의 이름					1일시 안써도 됨
+	//scale 이미지 크기 비율					필수.
+	//top	위							필수아님
+	//left	옆							필수아님
+
+	[lyc id="1" file="$g.bgpath + file"]
+	[lyprop id="1" left="$left" top="$top" xscale="$scale" yscale="$scale"]
+	[trans type="$type" time="$time" rule="$g.maskpath + rule" vague="32"]
+	[return]
+
+*bg2
+	//bg2는 배경이 여러 레이어이거나 아니면 이펙트용으로 쓰는 id2값의 bg. trans값은 제거했음.
+	//[bg2 file="" scale="" top="" left="" alpha=""]
+	//[bg2 file="" scale="" alpha=""] ←타입1에 top left값 안 써도 되면 이렇게 써도 됨.
+	//file	bg폴더 안에 있는 이미지명				필수
+	//scale 이미지 크기 비율					필수.
+	//top	위							필수아님
+	//left	옆							필수아님
+
+	[lyc id="2" file="$g.bgpath + file"]
+	[lyprop id="2" left="$left" top="$top" xscale="$scale" yscale="$scale" alpha="%alpha"]
+	[return]
+
+
+*lytscale
+	//id	레이어 id
+	//ease	이징 값.
+	//from	시작값
+	//to	끝값
+	//time	시간
+
+	[lytween id="$id" param="xscale" ease="$ease" from="$from" to="$to" time="$time" sync="0"]
+	[lytween id="$id" param="yscale" ease="$ease" from="$from" to="$to" time="$time" sync="1"]
+	[return]
+
+*lyopt
+	//[lyopt id="" left="$" top="$" scale="100"]
+	//id	레이어 id	필수
+	//left	x값.		필수 아님
+	//top	y값		필수 아님
+	//scale 배율값		필수
+
+	[lyprop id="$id" left="$left" top="$top" xscale="$scale" yscale="$scale"]
+	[return]
+
+*trans2easy
+	//rule	마스킹 종류
+	//time	몇초에 걸쳐 (후략)
+	//file	배경 파일 이름
+	//left	x
+	//top	y
+	//scale 확대/축소 배율
+	//[trans2easy file="" time="" rule="" left="" top="" scale=""]
+
+	[lydel id="1"][lydel id="2"][lydel id="3"][lydel id="4"][lydel id="5"][lydel id="6"][lydel id="7"][lydel id="8"][lydel id="9"]
+	[trans type="2" time="$time" rule="$g.maskpath + rule" vague="32"]
+	[wait time="500"]
+	[lyc id="1" file="$g.bgpath + file"]
+	[lyprop id="1" left="$left" top="$top" xscale="$scale" yscale="$scale"]
+	[trans type="2" time="$time" rule="$g.maskpath + rule" vague="32"]
+	[return]
+
+*scgmovex
+	//id	작동을 가할 레이어 아이디
+	//from	초기값과 도착값. (동일)
+	//to1	움직일때 처음 갈 포인트
+	//to2	움직일때 두번째로 갈 포인트
+	//time	시간.
+	//loop	루프 횟수. 가령 1일경우 to1로 한번, to2로 한번 이동 후 from으로 돌아감
+	//[scgmovex id="" from="" to1="" to2="" time="" loop=""]
+	
+	[var name="scgmovex_loop" data="0"]
+	[lytween id="$id" param="left" from="$from" to="$to1" time="$time" sync="1"]
+	[loop estimate="$scgmovex_loop < $loop + 1"]
+		[lytween id="$id" param="left" from="$to1" to="$to2" time="$time" sync="1"]
+		[lytween id="$id" param="left" from="$to2" to="$to1" time="$time" sync="1"]
+		[var name="scgmovex_loop" data="$scgmovex_loop + 1"]
+	[/loop]
+	[lytween id="$id" param="left" from="$to1" to="$from" time="$time" sync="1"]
+	[return]
+
+*scgmovey
+	//id	작동을 가할 레이어 아이디
+	//from	초기값과 도착값. (동일)
+	//to	도중에 멈출때 포인트. (가령 점프를 한다면 다 올라갔다 이제 내려갈때/피크의 좌표)
+	//time	시간.
+	//[scgmovey id="" from="" to="" time=""]
+
+	[lytween id="$id" param="top" from="$from" to="$to" time="$time" sync="1"]
+	[lytween id="$id" param="top" from="$to" to="$from" time="$time" sync="1"]
+	[return]
+
+*scgcut2
+	//id	작동을 가할 레이어 아이디
+	
+	
+	[lyc id="$id" file="$g.imagepath + 'cutin/cutin02'"]
+	[lyopt id="$id" left="$675" top="$-100" scale="100"]
+	[lytween id="$id" param="top" from="$-100" to="$0" time="300" sync="0" ]
+	[trans type="1" time="300" ]
+	[lyc id="8" file="$g.imagepath + 'chr/freya'"]
+	[lyprop id ="8" left ="$677" top ="$-170" clip ="320,0,296,1500"]
+	[trans type="1" time="500" ]
+	[return]
+
+// ---------------------------------------------------------------------------------------------
+//스탠딩cg
+*seres
+	[lyc id="5" file="$g.imagepath + 'chr/knight'"]
+	[return]
+
+*lithia
+	[lyc id="6" file="$g.imagepath + 'chr/lithia'"]
+	[return]
+
+*sophia
+	[lyc id="7" file="$g.imagepath + 'chr/sophia'"]
+	[return]
+
+*freya
+	[lyc id="8" file="$g.imagepath + 'chr/freya'"]
+	[return]
+
+*witch
+	[lyc id="9" file="$g.imagepath + 'chr/witch'"]
+	[return]
+
+// ---------------------------------------------------------------------------------------------
+//SCG 위치
+//*
+//[lithia][lyopt id="6" left="$125" top="$-170" scale="100"]
+//[bg file="bedroom" type="1" time="300" scale="85" top="$-228" left="$-384"]
+
+// ---------------------------------------------------------------------------------------------
+//레이어 한번에 제거. 뒤에 trans 명령어 사용해야 함.
+*ClearChr
+	[lydel id="5"][lydel id="6"][lydel id="7"][lydel id="8"][lydel id="9"][lydel id="10"]
+	[return]
+
+*ClearBg
+	[lydel id="1"][lydel id="2"]
+	[return]
+
+// ---------------------------------------------------------------------------------------------
+//대사창
+*mwout
+[lyprop id="80" visible="0"]
+[trans type="1" time="500"]
+[return]
+
+*mwin
+[lyprop id="80" visible="1"]
+[trans type="1" time="500"]
+[return]
+
+// ---------------------------------------------------------------------------------------------
+//이름
+*세레스
+[font color="0xf2aa7f"]세레스[/font][rt]
+[var name="ntag" data="1"]
+[return]
+
+*리시아
+[font color="0xdc4e4a"]리시아[/font][rt]
+[var name="ntag" data="1"]
+[return]
+
+*소피아
+[font color="0xbbd2f3"]소피아[/font][rt]
+[var name="ntag" data="1"]
+[return]
+
+*프레이야
+[font color="bdacdd"]프레이야[/font][rt]
+[var name="ntag" data="1"]
+[return]
+
+*나이첼
+[font color="0xfe869c"]나이첼[/font][rt]
+[var name="ntag" data="1"]
+[return]
+
+*이름모름
+???[rt]
+[var name="ntag" data="1"]
+[return]
+
+*nontag
+	[if estimate="$ntag == 1"]
+		[rt]
+		[return]
+	[else]
+		[return]
+	[/if]
+
+//이름표 이미지 태그
+//	[lyc id="88" file="$g.imagepath + 'ntag/'+$id"]
+//	[lyprop id="88" left="$3" top="$223"][trans type="0"]
+//	[font color="0xffffff"]
+//	[return]
+
+// ---------------------------------------------------------------------------------------------
+//귀찮음의 결정체
+*trans300
+	[trans type="1" time="300"]
+	[return]

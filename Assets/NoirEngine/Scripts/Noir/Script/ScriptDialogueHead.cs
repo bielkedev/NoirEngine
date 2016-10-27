@@ -15,8 +15,8 @@ namespace Noir.Script
 
 		public override void runScript()
 		{
-			if(ScriptAutoInsertManager.LineHeadScript != null)
-				ScriptRuntime.callScript(ScriptAutoInsertManager.LineHeadScript, null);
+			if(!ScriptRuntime.CurrentScript.IsMacro && ScriptAutoInsertManager.LineHeadScript != null)
+				ScriptRuntime.callScript(ScriptAutoInsertManager.LineHeadScript);
 		}
 	}
 }

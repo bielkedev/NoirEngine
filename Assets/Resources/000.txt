@@ -12,27 +12,27 @@
 [writebacklog mode="1"]
 [backlog clear="1"]
 
-[bg file="event1_1.png" type="1" time="1500" scale="100"]
+[bg file="event1_1" type="1" time="1500" scale="100"]
 [call file="txtcfg" label="text_def"]
 [call file="txtcfg"label="text_init"]
 
 [mwin]
 
 옛날 옛적, 느와르 대륙의 북쪽 탑에는 누구보다도 아름다운 마녀가 살고 있었습니다.
-[bg file="event1_2.png" type="1" time="700" scale="100"]
+[bg file="event1_2" type="1" time="700" scale="100"]
 마녀는 누구보다도 강했고, 누구보다도 아름다웠기에… 많은 사람들의 사랑을 받았습니다.
 마녀는 이전부터 느와르 대륙의 세 국가에게 풍년을 가져오거나, 마물을 퇴치해주며 답례를 받으며 밀월 관계를 가지고 있었습니다.
 세 국가의 백성들은 마녀를 칭송했고, 온 대륙에는 북쪽 탑의 마녀를 모르는 사람이 없었습니다.
-[bg file="event1_3.png" type="1" time="700" scale="100"]
+[bg file="event1_3" type="1" time="700" scale="100"]
 끝나지 않을 것 같은 사랑을 받고 있던 마녀였지만, 그 행복은 오래가지 않았습니다. 
-[bg file="event1_4.png" type="1" time="700" scale="100"]
+[bg file="event1_4" type="1" time="700" scale="100"]
 세 국가에는 아름다운 공주님들이 탄생했고, 그 공주님들이 성장해 나갈 때마다… 많은 사람들이 공주들에게 관심을 가지기 시작했습니다. 
-[bg file="event1_5.png" type="1" time="700" scale="100"]
+[bg file="event1_5" type="1" time="700" scale="100"]
 곧이어 사람들은 마녀를 칭송하기보다는 공주님들의 성품과 미모를 칭송하기 시작했고, 사람들에게 도움을 주던 마녀는 분노에 차기 시작했습니다.
 그리고 어느 날, 마녀는 공주들을 납치하고… 자신이 살고 있는 북쪽 탑에 공주들을 가뒀습니다. 
-[bg file="event1_6.png" type="1" time="700" scale="100"]
+[bg file="event1_6" type="1" time="700" scale="100"]
 국가들은 그에 분노하며, 많은 기사를 모집했고… 북쪽 탑을 공략하기 위해서 정벌대를 파견했지만, 1층부터 드래곤이 공격을 해오는 북쪽 탑을 공략할 수 있는 사람은 없었습니다.
-[bg file="event1_7.png" type="1" time="700" scale="100"]
+[bg file="event1_7" type="1" time="700" scale="100"]
 그리고… 그렇게 시간은 흘러…
 공주들이 탑에 갖힌지 6개월이 지났습니다.
 

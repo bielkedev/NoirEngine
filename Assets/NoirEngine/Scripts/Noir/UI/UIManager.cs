@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Noir.Unity;
+﻿using Noir.Unity;
+using UnityEngine;
 
 namespace Noir.UI
 {
@@ -31,10 +28,21 @@ namespace Noir.UI
 		{
 			UIManager.sUnityManager._DialogueText.text += sDialogueText;
 		}
-
+		
 		public static void appendBacklogDialogueLog(string sBacklogText)
 		{
 			UIManager.sUnityManager.addBacklogDialogueLog(sBacklogText);
+		}
+
+		public static void forceUpdateScreen()
+		{
+			Camera.current.Render();
+		}
+
+		public static void updateLayerState()
+		{
+			foreach (var sPair in Layer.NamedLayerEnumerable)
+				sPair.Value.markUpdate();
 		}
 	}
 }

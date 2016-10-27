@@ -29,5 +29,10 @@ namespace Noir.Equation
 		{
 			EquationVariable.sVariableList[sVariableName] = sNewValue;
 		}
+
+		public static void deleteVar(string sVariableName)
+		{
+			EquationVariable.sVariableList.Remove(sVariableName);
+		}
 	}
 }

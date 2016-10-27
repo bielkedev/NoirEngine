@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Noir.UI;
 using Noir.Util;
 
 namespace Noir.Script
@@ -15,6 +16,7 @@ namespace Noir.Script
 
 		public override void runScript()
 		{
+			UIManager.updateLayerState();
 			ScriptRuntime.suspendScript();
 		}
 	}

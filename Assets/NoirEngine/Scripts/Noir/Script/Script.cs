@@ -16,24 +16,39 @@ namespace Noir.Script
 		private static Regex sCRLFMatcher = new Regex("\\r\\n", RegexOptions.Compiled);
 		private static Regex sIndentationMatcher = new Regex("^(?:(?!\\n)\\s)+", RegexOptions.Compiled | RegexOptions.Multiline);
 		private static Regex sCommentMatcher = new Regex("(?:\\/\\/.*)|(?:\\/\\*(?:(?!\\*\\/)[\\s\\S])*\\*\\/)", RegexOptions.Compiled);
-
-		public Script ScriptBody { get { return this.sScriptBody; } }
+		
+		public bool IsMacro { get { return this.bMacro; } }
+		public Script ParentScript { get { return this.sParentScript; } }
 		public List<ScriptLine> ScriptLineList { get { return this.sScriptLineList; } }
-		public Dictionary<string, int> RegionList { get { return this.sRegionList; } }
+		public Dictionary<string, int> ScriptRegionList { get { return this.sScriptRegionList; } }
 
-		private Script sScriptBody;
+		private bool bMacro;
+		private Script sParentScript;
 		private List<ScriptLine> sScriptLineList;
-		private Dictionary<string, int> sRegionList;
+		private Dictionary<string, int> sScriptRegionList = new Dictionary<string, int>();
+
+		/// <summary>
+		/// 특정 스크립트 객체를 부모로 하는 파생 스크립트 객체를 생성합니다.
+		/// </summary>
+		/// <param name="sNewParentScript">부모 스크립트 객체입니다.</param>
+		/// <param name="sNewScriptLineList">파생 스크립트의 명령줄 리스트입니다.</param>
+		public Script(Script sNewParentScript, List<ScriptLine> sNewScriptLineList)
+		{
+			this.bMacro = false;
+			this.sParentScript = sNewParentScript;
+			this.sScriptLineList = sNewScriptLineList;
+		}
 
 		/// <summary>
 		/// 스크립트 객체를 스크립트 파일로부터 생성합니다.
 		/// </summary>
 		/// <param name="sScriptFilePath">대상 스크립트 파일의 경로입니다.</param>
-		public Script(string sScriptFilePath)
+		/// <param name="bIsMacro">매크로 여부입니다.</param>
+		public Script(string sScriptFilePath, bool bIsMacro = false)
 		{
-			this.sScriptBody = this;
+			this.bMacro = bIsMacro;
+			this.sParentScript = this;
 			this.sScriptLineList = new List<ScriptLine>();
-			this.sRegionList = new Dictionary<string, int>();
 
 			var sAsset = Resources.Load<TextAsset>(sScriptFilePath);
 
@@ -69,7 +84,7 @@ namespace Noir.Script
 				else if(sParser.tryMatchChar('*')) //구역 지정자입니다.
 				{
 					sParser.skipWhile(1);
-					this.sRegionList.Add(sParser.mergeUntil("\n"), this.sScriptLineList.Count);
+					this.sScriptRegionList.Add(sParser.mergeUntil("\n"), this.sScriptLineList.Count);
 					sParser.skipWhile(1);
 				}
 				else if(sParser.tryMatchChar('[')) //커맨드입니다.
@@ -120,18 +135,6 @@ namespace Noir.Script
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// 스크립트 객체를 원본 스크립트 객체로부터 생성합니다.
-		/// </summary>
-		/// <param name="sNewParentScript">원본 스크립트 객체입니다.</param>
-		/// <param name="sNewScriptLineLine">원본 스크립트를 대체할 새로운 명령입니다.</param>
-		public Script(Script sNewParentScript, List<ScriptLine> sNewScriptLineLine)
-		{
-			this.sScriptBody = sNewParentScript;
-			this.sScriptLineList = sNewScriptLineLine;
-			this.sRegionList = sNewParentScript.RegionList;
 		}
 
 		/// <summary>

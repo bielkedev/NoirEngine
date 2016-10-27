@@ -19,11 +19,20 @@ namespace Noir.Unity
 			Conceal
 		}
 
+		[Header("Optimization")]
+		public int _TargetFPS;
+
 		[Header("Debug")]
 		public ErrorReportType _ErrorReportType;
-
+		
 		[Header("Script")]
 		public string _ScriptFilePath;
+		public string[] _MacroScriptFilePath;
+
+		[Header("Layer")]
+		public RectTransform _LayerPanel;
+		public GameObject _NamedLayerPrefab;
+		public Material _NamedLayerMaterial;
 
 		[Header("Front UI")]
 		public GameObject _FrontPanel;
@@ -46,13 +55,15 @@ namespace Noir.Unity
 		public GameObject _BacklogDialogueLog;
 
 		private Vector2 sBacklogContentSize;
-
+		
 		public void addBacklogDialogueLog(string sDialogueText)
 		{
 			if (string.IsNullOrEmpty(sDialogueText.Trim()))
 				return;
 
 			GameObject sDialogueLog = GameObject.Instantiate<GameObject>(this._BacklogDialogueLog);
+			sDialogueLog.name = "Backlog element";
+
 			RectTransform sRectTransform = sDialogueLog.GetComponent<RectTransform>();
 			Text sText = sDialogueLog.GetComponent<Text>();
 			float nHeight = sText.cachedTextGenerator.GetPreferredHeight(sDialogueText, sText.GetGenerationSettings(sBacklogContentSize));
@@ -66,17 +77,27 @@ namespace Noir.Unity
 			this._BacklogContent.sizeDelta = new Vector2(this._BacklogContent.sizeDelta.x, this._BacklogContent.sizeDelta.y + nHeight);
 			this._BacklogScroll.verticalNormalizedPosition = 0.0f;
 		}
-
+		
 		private void Start()
 		{
-			UIManager.UnityManagerObject = this;
-
 			//에러 핸들러 등록
 			ScriptError.ErrorEvent += this.OnError;
 
 			//모듈 초기화
+			Application.targetFrameRate = this._TargetFPS;
+
 			EquationVariable.initEquationVariable();
 			ScriptTagManager.initTagHandler();
+
+			UIManager.UnityManagerObject = this;
+			Layer.LayerPanel = this._LayerPanel;
+			Layer.NamedLayerPrefab = this._NamedLayerPrefab;
+			Layer.NamedLayerMaterial = this._NamedLayerMaterial;
+
+			foreach (var sMacroScriptFilePath in this._MacroScriptFilePath)
+				Macro.addMacroScript(sMacroScriptFilePath);
+
+			ScriptRuntime.gotoScript(ScriptRuntime.loadScript(this._ScriptFilePath));
 
 			//유니티 오브젝트 초기화
 			{
@@ -102,14 +123,14 @@ namespace Noir.Unity
 			/*
 				테스트가 필요하다면 여기부터
 			*/
-			
-			//...
+
+			//테스트...
 
 			/*
 				여기까지
 			*/
 
-			ScriptRuntime.gotoScript(this._ScriptFilePath, null);
+			//스크립트 실행
 			ScriptRuntime.runScript();
 		}
 

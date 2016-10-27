@@ -1,7 +1,7 @@
 *001_1
 [rp]
 [&autoinsert target="lineend" command="@[rp]"]
-[&autoinsert target="linehead" command="nontag"]
+[&autoinsert target="linehead" command="[nontag]"]
 //[&autoinsert target="blankline" command="[rp]"]
 [automode allow="1"]
 [hide allow="1"]
@@ -13,12 +13,12 @@
 //BCG 평야
 //BGM
 //나중에 타임 3000로 바꿔놓을것
-[bg file="0cb.png" type="1" time="3000" scale="100"]
+[bg file="0cb" type="1" time="3000" scale="100"]
 [wait time="500" ]
 //나중에 타임 1500으로 바꿔놓을것.
-[bg file="field2.png" type="1" time="1500" scale="65" top="$-228" left="$-384"]
+[bg file="field2" type="1" time="1500" scale="65" top="$-228" left="$-384"]
 
-[lyc id="2" file="$g.bgpath + 'field2.png'"]
+[lyc id="2" file="$g.bgpath + 'field2'"]
 [lyprop id="2" left="$-384" top="$-228" xscale="65" yscale="65" alpha="0"]
 [trans type="0"]
 
@@ -32,7 +32,7 @@
 [lytween id="2" param="yscale" from="70" to="75" time="300" sync="0"]
 [lytween id="2" param="top" from="$-278" to="$-178" time="300" sync="1"]
 
-[lyc id="3" file="$g.bgpath + 'field2.png'"]
+[lyc id="3" file="$g.bgpath + 'field2'"]
 [lyprop id="3" left="$-384" top="$-178" xscale="55" yscale="55" alpha="0"]
 [trans type="0"]
 
@@ -115,9 +115,9 @@
 
 [mwout]
 [lydel id="1"]
-[trans type="2" time="1000" rule="$g.maskpath + '72.png'" vague="32" ]
+[trans type="2" time="1000" rule="$g.maskpath + '72'" vague="32" ]
 [wait time="500" ]
-[bg file="field.png" type="2" time="1000" rule="72.png" scale="65" top="$-228" left="$-384"]
+[bg file="field" type="2" time="1000" rule="72" scale="65" top="$-228" left="$-384"]
 [mwin]
 
 어느 정도 시간이 흘렀을까?
@@ -208,9 +208,9 @@
 
 [mwout]
 [lydel id="1"]
-[trans type="2" time="1000" rule="$g.maskpath + '72.png'" vague="32" ]
+[trans type="2" time="1000" rule="$g.maskpath + '72'" vague="32" ]
 [wait time="500" ]
-[bg file="field.png" type="2" time="1000" rule="72.png" scale="65" top="$-228" left="$-384"]
+[bg file="field" type="2" time="1000" rule="72" scale="65" top="$-228" left="$-384"]
 [mwin]
 
 //BCG 탑의 뒤편.노끈이 있는 장소.
@@ -278,9 +278,9 @@
 //SE 철갑옷이 벽면에 부딪히는 소리
 [mwout]
 [lydel id="1"]
-[trans type="2" time="1000" rule="$g.maskpath + '01.png'" vague="32" ]
+[trans type="2" time="1000" rule="$g.maskpath + '01'" vague="32" ]
 [wait time="500" ]
-[bg file="sky.png" type="2" time="1000" rule="01.png" scale="100"]
+[bg file="sky" type="2" time="1000" rule="01" scale="100"]
 [mwin]
 [세레스]“겨우… 도착한 것 같다.”
 노끈이 연결된 곳은 탑의 최정상이라고 생각했지만, 위에 창문이 하나 더 있는 걸로 봐서는… 바로 그 아래층인 것 같다.
@@ -295,9 +295,9 @@
 
 [mwout]
 [lydel id="1"]
-[trans type="2" time="3 00" rule="$g.maskpath + '02.png'" vague="32" ]
+[trans type="2" time="3 00" rule="$g.maskpath + '02'" vague="32" ]
 [wait time="100" ]
-[bg file="bedroom.png" type="2" time="300" rule="02.png" scale="65" top="$-228" left="$-384"]
+[bg file="bedroom" type="2" time="300" rule="02" scale="65" top="$-228" left="$-384"]
 [mwin]
 그렇게 결심을 하고 창문을 넘어서… 롱소드를 뽑아 든다.
 그런데…
@@ -332,12 +332,12 @@
 [lydel id="11"]
 [trans type="1" time="500" ]
 [lyc id="1" file="$g.imagepath + 'bg/bedroom'"]
-[lyc id="6" file="$g.imagepath + 'chr/lithia.png'"]
+[lyc id="6" file="$g.imagepath + 'chr/lithia'"]
 [lyc id="21" file="$g.imagepath + 'cutin/cutin01_1'"]
 [lyc id="22" file="$g.imagepath + 'cutin/cutin01_2'"]
 [lyopt id="1" left="$100" top="$0" scale="120"]
 [lyopt id="6" left="$140" top="$100" scale="120"]
-//[bg file="bedroom.png" type="2" time="300" rule="02.png" scale="65" top="$-52" left="$-96"]
+//[bg file="bedroom" type="2" time="300" rule="02" scale="65" top="$-52" left="$-96"]
 [lytween id="1" param="left" from="$100" to="$70" time="8000" sync="0"]
 [lytween id="6" param="left" from="$140" to="$70" time="8000" sync="0"]
 [trans type="1" time="500" ]
@@ -346,7 +346,7 @@
 보석을 박은 것만 같은 푸른 눈동자.
 [lytweendel id = "1"][lytweendel id = "6"]
 [lyc id="1" file="$g.imagepath + 'bg/bedroom'"]
-[lyc id="6" file="$g.imagepath + 'chr/lithia.png'"]
+[lyc id="6" file="$g.imagepath + 'chr/lithia'"]
 [lyprop id="1" xscale="120" yscale="120" left="$-20" top="$-300"]
 [lyprop id="6" xscale="120" yscale="120" left="$-70" top="$-350"]
 [lytween id="1" param="left" from="$-20" to="$10" time="8000" sync="0"]
@@ -356,14 +356,14 @@
 [lytweendel id = "1"][lytweendel id = "6"]
 [lydel id="21"][lydel id="22"]
 [lithia][lyopt id="6" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" top="$-228" left="$-384"]
+[bg file="bedroom" type="1" time="300" scale="85" top="$-228" left="$-384"]
 [세레스]“리, 리시아 카서스 공주?!”
 카서스 제국의 공주가 여기에 있다고?! 
 [리시아]“내, 내 이름을 알고 있다는 거는… 카서스 제국에서 보낸 거야?”
 [세레스]“그것보다 어째서 공주님이 여기에…!!!”
 [리시아]“그, 그게…!”
 마녀에게 감금되어 있을 게 분명한 공주가 어째서 만화책을 보면서 과자를…?
-[lyc id="1" file="$g.imagepath + 'bg/bedroom.png'"]
+[lyc id="1" file="$g.imagepath + 'bg/bedroom'"]
 [lyopt id="1" left="$-384" top="$-228" scale="65"]
 [lithia][sophia][freya]
 [lyopt id="6" left="$600" top="$-200" scale="80"]
@@ -380,14 +380,14 @@
 각각 에노스 신국의 프레이야 에노스 공주와 레벨리온 연방의 소피아 레벨리온 공주.
 [ClearChr]
 [freya][lyopt id="8" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-154" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-154" top="$-228"]
 [프레이야]“기사…?”
 [ClearChr]
 [sophia][lyopt id="7" left="$125" top="$-170" scale="100"]
 [lyopt id="1" left="$-584" top="$-228" scale="85"][trans300]
-//[bg file="bedroom.png" type="1" time="300" scale="85" left="$-804 top="$-228"]
+//[bg file="bedroom" type="1" time="300" scale="85" left="$-804 top="$-228"]
 [소피아]“나, 납치범?!”
-[lyc id="1" file="$g.imagepath + 'bg/bedroom.png'"]
+[lyc id="1" file="$g.imagepath + 'bg/bedroom'"]
 [lyopt id="1" left="$-384" top="$-228" scale="65"]
 [lithia][sophia][freya]
 [lyopt id="6" left="$440" top="$-200" scale="80"]
@@ -397,16 +397,16 @@
 [세레스]“납치범이 아닙니다…! 저는 카서스 제국의 기사인 세렌 카레아드.공주님들을 구하러 왔습니다.”
 [ClearChr]
 [lithia][lyopt id="6" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-590" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-590" top="$-228"]
 [lytween id="6" ]
 [lytween id="6" param="top" from="$-170" to="$-180" time="$50" sync="1"]
 [lytween id="6" param="top" from="$-180" to="$-170" time="$50" sync="1"]
 [리시아]“기, 기사라고?!”
 [ClearChr]
 [freya][lyopt id="8" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-154" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-154" top="$-228"]
 [프레이야]“기사님이 여자아이?”
-[lyc id="1" file="$g.imagepath + 'bg/bedroom.png'"]
+[lyc id="1" file="$g.imagepath + 'bg/bedroom'"]
 [lyopt id="1" left="$-384" top="$-228" scale="65"]
 [lithia][sophia][freya]
 [lyopt id="6" left="$440" top="$-200" scale="80"]
@@ -423,16 +423,16 @@
 
 [mwout]
 [ClearChr][ClearBg]
-[trans type="2" time="1000" rule="$g.maskpath + '72.png'" vague="32" ]
-//[trans type="2" time="1500" rule="data/mask/12.png" vague="32" ]
-//[bg file="eyecatch.png" type="2" time="1500" rule="11.png" scale="100"]
-//[lydel id="1"][trans type="2" time="1500" rule="data/mask/11.png" vague="32" ]
+[trans type="2" time="1000" rule="$g.maskpath + '72'" vague="32" ]
+//[trans type="2" time="1500" rule="data/mask/12" vague="32" ]
+//[bg file="eyecatch" type="2" time="1500" rule="11" scale="100"]
+//[lydel id="1"][trans type="2" time="1500" rule="data/mask/11" vague="32" ]
 //페이드 아웃 
 //하단부터 기사 SCG 표시 시작
-[lyc id="1" file="$g.imagepath + 'bg/bedroom.png'"]
+[lyc id="1" file="$g.imagepath + 'bg/bedroom'"]
 [lyopt id="1" left="$-384" top="$-228" scale="65"]
 [seres][lyopt id="5" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="2" time="1500" rule="72.png" scale="85" top="$-228" left="$-384"]
+[bg file="bedroom" type="2" time="1500" rule="72" scale="85" top="$-228" left="$-384"]
 [mwin]
 …
 [세레스]“그래서 결국은 탑과 연결되어 있는 노끈…으로 여기까지 올라올 수밖에 없었습니다.”
@@ -441,10 +441,10 @@
 [sophia][freya]
 [lyopt id="7" left="$270" top="$-260" scale="70"]
 [lyopt id="8" left="$0" top="$-260" scale="70"]
-[bg file="bedroom.png" type="1" time="300" scale="70" top="$-228" left="$-384"]
+[bg file="bedroom" type="1" time="300" scale="70" top="$-228" left="$-384"]
 [프레이야]“…지금까지 노끈을 발견한 사람들은 있었지만, 그걸 사용한 건 처음이야.”
 [소피아]“그리고 여기까지 그걸 사용해서 올라오신 걸 보면… 보통 기사분이 아니에요.”
-[lyc id="3" file="$g.imagepath + 'cutin/cutin02.png'"]
+[lyc id="3" file="$g.imagepath + 'cutin/cutin02'"]
 [lyopt id="3" left="$0" top="$-100"]
 [lyprop id ="3" left ="0" top ="$-100" xscale = "100" yscale = "100"]
 [lytween id="3" param="top" from="$-100" to="$0" time="300" sync="0" ]
@@ -458,13 +458,13 @@
 [lithia][freya]
 [lyopt id="6" left="$-50" top="$-260" scale="80"]
 [lyopt id="8" left="$350" top="$-260" scale="80"]
-[bg file="bedroom.png" type="1" time="300" scale="90" top="$-338" left="$-100"]
+[bg file="bedroom" type="1" time="300" scale="90" top="$-338" left="$-100"]
 
 [프레이야]“리아.그러고 보니까 침대에서는 과자를 먹지 말라고 내가….”
 [리시아]“그, 그것보다 아버님이 보낸 기사가 여자였어?”
 
 [ClearChr]
-[bg file="bedroom.png" type="1" time="300" scale="65" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="65" left="$-384" top="$-228"]
 [seres][lyopt id="5" left="$125" top="$-170" scale="100"]
 [trans300]
 
@@ -474,14 +474,14 @@
 [sophia][freya]
 [lyopt id="7" left="$270" top="$-260" scale="70"]
 [lyopt id="8" left="$0" top="$-260" scale="70"]
-[bg file="bedroom.png" type="1" time="300" scale="70" top="$-228" left="$-384"]
+[bg file="bedroom" type="1" time="300" scale="70" top="$-228" left="$-384"]
 
 [소피아]“이전부터 여자 기사는 드문 분들이었지만, 이렇게 탑을 공략하셨을 거라고는 생각도 못했어요.”
 [프레이야]“지금까지는 모든 기사가 실패했으니까.그렇지만, 여기까지 올라올 거라고는 생각도 못했어.”
 
 [ClearChr]
 [seres][lyopt id="5" left="$125" top="$-260" scale="80"]
-[bg file="bedroom.png" type="1" time="300" scale="65" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="65" left="$-384" top="$-228"]
 
 [세레스]“어느 정도는 여자기사가 드물다는 점에 동의합니다만….”
 제국에서 기사라고 불릴 수 있는 사람들은 많지 않다.
@@ -490,7 +490,7 @@
 
 [ClearChr]
 [sophia][lyopt id="7" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-384" top="$-228"]
 
 [소피아]“아, 기사님을 믿지 못한다 거나 그러는 건 아니에요.”
 [소피아]“뭐라고 해야할까… 조금 동경하게 되네요.”
@@ -498,13 +498,13 @@
 
 [ClearChr]
 [freya][lyopt id="8" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-384" top="$-228"]
 
 [프레이야]“조금은 신기할지도.”
 
 [ClearChr]
 [lithia][lyopt id="6" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-384" top="$-228"]
 
 [리시아]“벼, 별로… 기대 같은 걸 걸고 있는 건 아니거든!”
 
@@ -512,7 +512,7 @@
 [lithia][sophia]
 [lyopt id="6" left="$-50" top="$-260" scale="80"]
 [lyopt id="7" left="$350" top="$-260" scale="80"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-384" top="$-228"]
 
 [소피아]“어머, 리아가 이렇게까지 관심을 보이는 일은 없었는데…?”
 [lytween id="6" param="top" from="$-260" to="$-270" time="$50" sync="1"]
@@ -525,33 +525,33 @@
 [lyopt id="6" left="$440" top="$-260" scale="80"]
 [lyopt id="7" left="$120" top="$-260" scale="80"]
 [lyopt id="8" left="$-130" top="$-260" scale="80"]
-[bg file="bedroom.png" type="1" time="300" scale="65" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="65" left="$-384" top="$-228"]
 
 왕국에서는 공주들이 마녀에게 납치를 당하고, 학대를 받고 있는지는 아닌지 걱정을 하고 있는데… 아무리 봐도 평화로운 생활을 하고 있다.
 오히려 탑에서 나갈 생각이 없는 것 같은데….
 
 [ClearChr]
 [seres][lyopt id="5" left="$125" top="$-260" scale="80"]
-[bg file="bedroom.png" type="1" time="300" scale="65" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="65" left="$-384" top="$-228"]
 
 [세레스]“다른 것보다도… 공주님들은 마녀에게 납치되셨던 게 아닌가요?”
 
 [ClearChr]
 [freya][lyopt id="8" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-384" top="$-228"]
 
 [프레이야]“…”
 
 [ClearChr]
 [lithia][lyopt id="6" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-384" top="$-228"]
 
 [리시아]“……”
 공주들은 눈치를 살피기를 계속.
 
 [ClearChr]
 [sophia][lyopt id="7" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="bedroom" type="1" time="300" scale="85" left="$-384" top="$-228"]
 
 [소피아]“으음… 그러니까요.”
 그리고 아무래도 성격이 유순해 보이는 소피아 공주가 설명을 시작한다.
@@ -562,8 +562,8 @@
 //BCG 성 내부
 [mwout]
 [ClearChr][ClearBg]
-[trans type="2" time="1500" rule="$g.maskpath + '23.png'" vague="32" ]
-[bg file="castle.png" type="2" time="1500" rule="23.png" scale="65" top="$-228" left="$-384"]
+[trans type="2" time="1500" rule="$g.maskpath + '23'" vague="32" ]
+[bg file="castle" type="2" time="1500" rule="23" scale="65" top="$-228" left="$-384"]
 [mwin]
 [lithia][lyopt id="6" left="$-200" top="$-300" scale="70"]
 [lytween id="6" param="left" from="$-200" to="$-180" time="$300" sync="0"]
@@ -580,7 +580,7 @@
 [리시아]“으으… 소피….”
 [ClearChr]
 [freya][lyopt id="8" left="$155" top="$-170" scale="100"]
-[bg file="castle.png" type="1" time="300" scale="85" left="$-384" top="$-228"]
+[bg file="castle" type="1" time="300" scale="85" left="$-384" top="$-228"]
 [trans300]
 [프레이야]“리시아, 요즘 너무 만화만 보고 있는 것 같아.”
 
@@ -642,15 +642,15 @@
 [mwout]
 [ClearChr][trans300]
 //페이드 아웃 짧게
-[trans2easy file="castle.png" time="1000" rule="83.png" left="$-384" top="$-200" scale="120"]
+[trans2easy file="castle" time="1000" rule="83" left="$-384" top="$-200" scale="120"]
 //하단 나이첼의 얼굴이 가려져서 표현됨
-[lyc id="10" file="$g.imagepath + 'chr/witch_big2.png'"]
+[lyc id="10" file="$g.imagepath + 'chr/witch_big2'"]
 [trans type="1" time="300"]
 [mwin]
 [이름모름]“냥?”
 [mwout]
 [lydel id="10"]
-[trans2easy file="castle.png" time="1000" rule="83.png" left="$-384" top="$-228" scale="65"]
+[trans2easy file="castle" time="1000" rule="83" left="$-384" top="$-228" scale="65"]
 [mwin]
 [lithia][sophia][freya][witch]
 [lyopt id="6" left="$-300" top="$-300" scale="70"]
@@ -668,11 +668,11 @@
 [나이첼]“냥! 그런 재미있는 일이라면 받겠다냥!”
 //파도무늬 움직이기 트랜지션…?
 [mwout]
-[ClearChr][ClearBg][trans type="2" time="1000" rule="$g.maskpath + '24.png'" vague="32" ]
+[ClearChr][ClearBg][trans type="2" time="1000" rule="$g.maskpath + '24'" vague="32" ]
 [wait time="500"]
 
 [sophia][lyopt id="7" left="$125" top="$-170" scale="100"]
-[bg file="bedroom.png" type="2" time="1000" rule="24.png" scale="85" left="$-154" top="$-228"]
+[bg file="bedroom" type="2" time="1000" rule="24" scale="85" left="$-154" top="$-228"]
 [mwin]
 [소피아]“일단 나이첼이 그렇게 해서 성밖에 있는 자신의 북쪽 탑에서 잠시 숨겨주는 걸로 되었는데….”
 [ClearChr]
@@ -703,7 +703,7 @@
 //과거 회상.세피아 톤 필터 먹일수 있으면 먹이기
 //BCG 마녀의 옥탑방
 [mwout]
-[trans2easy file="witchroom.png" time="1000" rule="23.png" left="$-384" top="$-228" scale="65"]
+[trans2easy file="witchroom" time="1000" rule="23" left="$-384" top="$-228" scale="65"]
 
 [lithia][sophia][freya][witch]
 [lyopt id="6" left="$-300" top="$-300" scale="70"]
@@ -725,11 +725,11 @@
 [scgmovey id="6" from="$-300" to="$-310" time="100"]
 [리시아]“냥냥 마녀?!”
 [ClearChr]
-[lyc id="10" file="$g.imagepath + 'chr/witch_big.png'"]
+[lyc id="10" file="$g.imagepath + 'chr/witch_big'"]
 [lyopt id="1" left="$-380" top="$-200" scale="120"]
-[anime id="12" mode="init"  file="$g.imagepath + 'cutin/cutin03_1.png'"]
-[anime id="12" mode="add" file="$g.imagepath + 'cutin/cutin03_2.png'" time="150"]
-[anime id="12" mode="add" file="$g.imagepath + 'cutin/cutin03_3.png'" time="300"]
+[anime id="12" mode="init"  file="$g.imagepath + 'cutin/cutin03_1'"]
+[anime id="12" mode="add" file="$g.imagepath + 'cutin/cutin03_2'" time="150"]
+[anime id="12" mode="add" file="$g.imagepath + 'cutin/cutin03_3'" time="300"]
 [anime id="12" mode="end"					    time="450"]
 [trans300]
 //하단 대사 화면 중간에 표시
@@ -803,7 +803,7 @@
 //다시 파도무늬 페이드아웃
 //색 원래 톤
 [mwout]
-[trans2easy file="bedroom.png" time="1000" rule="24.png" left="$-154" top="$-228" scale="85"]
+[trans2easy file="bedroom" time="1000" rule="24" left="$-154" top="$-228" scale="85"]
 [sophia][lyopt id="7" left="$125" top="$-170" scale="100"][trans300]
 [mwin]
 //BCG 침실
@@ -847,10 +847,10 @@
 //파도무늬 페이드아웃->인
 [mwout]
 [ClearChr][ClearBg]
-[trans type="2" time="1500" rule="$g.maskpath + '23.png'" vague="32" ]
-[bg file="sky.png" type="2" time="1500" rule="23.png" scale="100"]
+[trans type="2" time="1500" rule="$g.maskpath + '23'" vague="32" ]
+[bg file="sky" type="2" time="1500" rule="23" scale="100"]
 [mwin]
-[lyc id="3" file="$g.imagepath + 'cutin/cutin02.png'"]
+[lyc id="3" file="$g.imagepath + 'cutin/cutin02'"]
 [lyopt id="3" left="$0" top="$-100" scale="100"]
 [lyprop id ="3" left ="0" top ="$-100" xscale = "100" yscale = "100"]
 [lytween id="3" param="top" from="$-100" to="$0" time="300" sync="0" ]
@@ -860,7 +860,7 @@
 [trans300]
 [소피아]“리, 리, 리시아!!!”
 [소피아]“살려줘요!!!”
-[lyc id="4" file="$g.imagepath + 'cutin/cutin02.png'"]
+[lyc id="4" file="$g.imagepath + 'cutin/cutin02'"]
 [lyopt id="4" left="$980" top="$-100" scale="100"]
 [lytween id="4" param="top" from="$-100" to="$0" time="300" sync="0" ]
 [trans300]
@@ -868,7 +868,7 @@
 [trans type="1" time="500" ]
 [리시아]“소피? 그렇게 한 손, 한 손 내려가기 시작한다면… 아무런 문제도 없을 것 같은데?”
 [소피아]“소, 손이 떨려서 떨어질 것 같은데요!!!”
-[lyc id="5" file="$g.imagepath + 'cutin/cutin02.png'"]
+[lyc id="5" file="$g.imagepath + 'cutin/cutin02'"]
 [lyopt id="5" left="$675" top="$-100" scale="100"]
 [lytween id="5" param="top" from="$-100" to="$0" time="300" sync="0" ]
 [trans300]
@@ -888,7 +888,7 @@
 
 
 [mwout]
-[trans2easy file="bedroom.png" time="1000" rule="24.png" left="$-154" top="$-228" scale="85"]
+[trans2easy file="bedroom" time="1000" rule="24" left="$-154" top="$-228" scale="85"]
 [sophia][lyopt id="7" left="$125" top="$-170" scale="100"][trans300]
 [mwin]
 [소피아]“그때는 정말로 잘못하면 죽는 줄 알았어요….”
@@ -917,7 +917,7 @@
 [리시아]“그, 그렇게 한심한 표정으로 보면… 내가 부끄러워서 죽을 것만 같잖아…!”
 [소피아]“리아는 한번 그렇게 당해보는 편이 좋아요.”
 [리시아]“소, 소피… 눈이 무서워…….”
-[소피아]“리아….” [무서운 눈] //흔한 얀데레 표정.죽은눈 + 웃은 표정
+[소피아]“리아….” //흔한 얀데레 표정.죽은눈 + 웃은 표정
 [리시아]“으으으….”
 [ClearChr]
 [freya][lyopt id="8" left="$125" top="$-170" scale="100"]
@@ -1047,13 +1047,13 @@
 [lyopt id="1" left="$-384" top="$-228" scale="95"][trans300]
 [세레스]“네, 그러면 내일부터 탑을 공략하기로 하시죠.”
 [ClearChr]
-[lyc id="10" file="$g.imagepath + 'chr/lithia_big.png'"]
+[lyc id="10" file="$g.imagepath + 'chr/lithia_big'"]
 [lyopt id="1" left="$-380" top="$-200" scale="120"][trans300]
 [리시아]“그러면 내일 아침에 바로 던전 입구에 집합!”
 [ClearChr][trans300]
 그렇게, 공주들… 아니, 소녀라고 불리는 편이 가까운 그녀들과 같이 탑안에서의 생활을 시작한다.
 \Girls and Tower.
 [mwout]
-[bg file="0cb.png" type="1" time="3000" scale="100"] 
+[bg file="0cb" type="1" time="3000" scale="100"] 
 //페이드 아웃
 [reset]

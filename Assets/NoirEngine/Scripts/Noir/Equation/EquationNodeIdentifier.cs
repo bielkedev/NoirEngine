@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Noir.Script;
 
 namespace Noir.Equation
 {
@@ -26,18 +27,23 @@ namespace Noir.Equation
 		{
 			sOperatorList.Add((Stack<EquationValue> sStack) =>
 			{
-				string sVariableValue = EquationVariable.getVar(this.sValue);
+				string sVariableValue = null;
 
-				if(sVariableValue == null)
+				if (!ScriptRuntime.CurrentScript.IsMacro || !Macro.getCurrrentVariable().TryGetValue(this.sValue, out sVariableValue))
+					sVariableValue = null;
+
+				if (sVariableValue == null)
+					sVariableValue = EquationVariable.getVar(this.sValue);
+
+				if (sVariableValue == null)
 				{
-					sStack.Push(new EquationValueNumber(0f));
-					EquationVariable.setVar(sVariableValue, "0");
+					sStack.Push(new EquationValueString(""));
 					return;
 				}
 
 				float nValue;
 
-				if(float.TryParse(sVariableValue, out nValue))
+				if (float.TryParse(sVariableValue, out nValue))
 				{
 					sStack.Push(new EquationValueNumber(nValue));
 					return;
