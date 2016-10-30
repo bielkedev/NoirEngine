@@ -52,7 +52,7 @@ namespace Noir.Unity
 		public ScrollRect _BacklogScroll;
 		public RectTransform _BacklogViewport;
 		public RectTransform _BacklogContent;
-		public GameObject _BacklogDialogueLog;
+		public GameObject _DialogueLogPrefab;
 
 		private Vector2 sBacklogContentSize;
 		
@@ -61,7 +61,7 @@ namespace Noir.Unity
 			if (string.IsNullOrEmpty(sDialogueText.Trim()))
 				return;
 
-			GameObject sDialogueLog = GameObject.Instantiate<GameObject>(this._BacklogDialogueLog);
+			GameObject sDialogueLog = GameObject.Instantiate<GameObject>(this._DialogueLogPrefab);
 			sDialogueLog.name = "Backlog element";
 
 			RectTransform sRectTransform = sDialogueLog.GetComponent<RectTransform>();

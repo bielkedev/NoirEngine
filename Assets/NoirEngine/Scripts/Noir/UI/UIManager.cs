@@ -38,11 +38,5 @@ namespace Noir.UI
 		{
 			Camera.current.Render();
 		}
-
-		public static void updateLayerState()
-		{
-			foreach (var sPair in Layer.NamedLayerEnumerable)
-				sPair.Value.markUpdate();
-		}
 	}
 }

@@ -29,6 +29,7 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("var", ScriptTagManager.varHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lytweendel", ScriptTagManager.lytweendelHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lytween", ScriptTagManager.lytweenHandler);
+
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -120,7 +121,7 @@ namespace Noir.Script
 
 			if (sLayer == null)
 				sLayer = new Layer(sID);
-			
+
 			string sFile = sTag.getAttribute("file");
 
 			if (string.IsNullOrEmpty(sFile))
@@ -587,15 +588,36 @@ namespace Noir.Script
 			if (string.IsNullOrEmpty(sType))
 				return;
 
-			switch(sType)
+			switch (sType)
 			{
 				case "0":
-				UIManager.forceUpdateScreen();
+				{
+					foreach (Layer sLayer in Layer.NeedUpdateLayerEnumerable)
+						sLayer.applyLayerProperties();
+
+					Layer.clearNeedUpdateLayerList();
+					UIManager.forceUpdateScreen();
+				}
 				return;
-
 				case "1":
+				{
+					foreach (Layer sLayer in Layer.NeedUpdateLayerEnumerable) ;
 
+					Layer.clearNeedUpdateLayerList();
+				}
 				break;
+				case "2":
+				{
+					foreach (Layer sLayer in Layer.NeedUpdateLayerEnumerable) ;
+
+					Layer.clearNeedUpdateLayerList();
+				}
+				break;
+				default:
+				{
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, sType + "은(는) 잘못된 속성입니다. '0', '1', '2' 중 하나여야합니다.", sTag);
+				}
+				return;
 			}
 		}
 	}
