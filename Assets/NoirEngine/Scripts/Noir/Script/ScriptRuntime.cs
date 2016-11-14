@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Noir.Unity;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Noir.Script
 {
@@ -263,6 +261,10 @@ namespace Noir.Script
 		/// </summary>
 		public static void suspendScript()
 		{
+			foreach (Layer sLayer in Layer.NeedUpdateLayerEnumerable)
+				sLayer.applyLayerProperties();
+
+			Layer.clearNeedUpdateLayerList();
 			ScriptRuntime.bSuspendScript = true;
 		}
 

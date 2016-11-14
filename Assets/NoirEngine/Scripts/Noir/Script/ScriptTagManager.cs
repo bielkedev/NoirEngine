@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Noir.Equation;
 using Noir.UI;
 using Noir.Unity;
+using Noir.Unity.Live2D;
 using Noir.Util;
 
 namespace Noir.Script
@@ -35,6 +36,9 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("elseif", ScriptTagManager.elseifHandler);
 			ScriptTagManager.sTagHandlerMap.Add("else", ScriptTagManager.elseHandler);
 			ScriptTagManager.sTagHandlerMap.Add("/if", ScriptTagManager._ifHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lycl2d", ScriptTagManager.lycl2dHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lymotionl2d", ScriptTagManager.lymotionl2dHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lymotionstopl2d", ScriptTagManager.lymotionstopl2dHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -770,6 +774,97 @@ namespace Noir.Script
 		private static void _ifHandler(ScriptTag sTag)
 		{
 			ScriptBranch.popBranch();
+		}
+
+		private static void lycl2dHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			{
+				Layer sLayer = Layer.getLayer(sID);
+
+				if (sLayer != null)
+					sLayer.deleteLayer();
+			}
+
+			Live2DLayer sLive2DLayer = new Live2DLayer(sID);
+
+			string sFile = sTag.getAttribute("file");
+
+			if (string.IsNullOrEmpty(sFile))
+				return;
+
+			string sIdle = sTag.getAttribute("idle");
+
+			if (string.IsNullOrEmpty(sIdle))
+				return;
+
+			UnityEngine.Sprite sMaskSprite = null;
+
+			string sMask;
+
+			if (!string.IsNullOrEmpty(sMask = sTag.getAttribute("mask", false)) && (sMaskSprite = SpriteManager.loadSprite(sMask)) == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sMask + "'에 스프라이트가 없습니다.", sTag);
+				return;
+			}
+
+			sLive2DLayer.setLayerSprite(sFile, sIdle, sMaskSprite);
+			sLive2DLayer.markAsNeedUpdate();
+		}
+
+		private static void lymotionl2dHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
+				return;
+			}
+
+			string sMotion = sTag.getAttribute("motion");
+
+			if (string.IsNullOrEmpty(sMotion))
+				return;
+
+			bool bLoop = false;
+			string sLoop = sTag.getAttribute("loop", false);
+
+			if(!string.IsNullOrEmpty(sLoop))
+			{
+				float nLoop;
+				bLoop = float.TryParse(sLoop, out nLoop) && nLoop != 0f;
+			}
+
+			if(!sLayer.Controller.startMotion(sMotion, bLoop))
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sMotion + "'은(는) 존재하지 않는 모션입니다.", sTag);
+		}
+
+		private static void lymotionstopl2dHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
+				return;
+			}
+
+			sLayer.Controller.startIdleMotion();
 		}
 	}
 }

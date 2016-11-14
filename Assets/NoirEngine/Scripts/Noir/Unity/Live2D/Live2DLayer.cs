@@ -14,14 +14,11 @@ namespace Noir.Unity.Live2D
 		public Live2DController Controller { get { return this.sLive2DController; } }
 
 		private Live2DController sLive2DController;
-		private string sLive2DModelJsonPath;
-		private string sIdleMotionName;
 
 		public Live2DLayer(string sLayerName) : base(sLayerName, Live2DLayer.sNamedLive2DLayerPrefab)
 		{
-			this.sLive2DController = this.sNamedLayer.GetComponent<Live2DController>();
-
-			this.sLive2DController._RenderCamera = Live2DLayer.sRenderCamera;
+			(this.sLive2DController = this.sNamedLayer.GetComponent<Live2DController>())._RenderCamera = Live2DLayer.sRenderCamera;
+			this.sLive2DController._RawImageMaterial = Layer.sNamedLayerMaterial;
 		}
 
 		public override void setLayerSprite(Sprite sMainSprite, Sprite sMaskSprite, bool bUpdateInstantly = false)
@@ -29,8 +26,12 @@ namespace Noir.Unity.Live2D
 			return;
 		}
 
-		public void setLayerSprite(string sLive2DModelJsonPath, string sIdleMotionName, Sprite sMaskSprite, bool bUpdateInstantly = false)
+		public void setLayerSprite(string sNewLive2DModelJsonPath, string sNewIdleMotionName, Sprite sMaskSprite, bool bUpdateInstantly = false)
 		{
+			this.sLive2DController._Live2DModelJsonPath = sNewLive2DModelJsonPath;
+			this.sLive2DController._IdleMotionName = sNewIdleMotionName;
+			this.sLive2DController.initializeController();
+
 			if (bUpdateInstantly)
 			{
 				this.sNamedLayerImage.material.SetTexture("_MaskTex", sMaskSprite == null ? null : sMaskSprite.texture);

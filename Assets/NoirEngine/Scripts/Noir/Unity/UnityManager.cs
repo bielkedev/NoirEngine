@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Noir.Equation;
+﻿using Noir.Equation;
 using Noir.Script;
 using Noir.UI;
+using Noir.Unity.Live2D;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,6 +30,10 @@ namespace Noir.Unity
 		public RectTransform _LayerPanel;
 		public GameObject _NamedLayerPrefab;
 		public Material _NamedLayerMaterial;
+
+		[Header("Live2D Layer")]
+		public GameObject _NamedLive2DLayerPrefab;
+		public Camera _RenderCamera;
 
 		[Header("Front UI")]
 		public GameObject _FrontPanel;
@@ -94,6 +95,8 @@ namespace Noir.Unity
 			Layer.LayerPanel = this._LayerPanel;
 			Layer.NamedLayerPrefab = this._NamedLayerPrefab;
 			Layer.NamedLayerMaterial = this._NamedLayerMaterial;
+			Live2DLayer.NamedLive2DLayerPrefab = this._NamedLive2DLayerPrefab;
+			Live2DLayer.RenderCamera = this._RenderCamera;
 
 			foreach (var sMacroScriptFilePath in this._MacroScriptFilePath)
 				Macro.addMacroScript(sMacroScriptFilePath);

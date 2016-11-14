@@ -170,8 +170,6 @@ namespace Noir.Unity.Live2D
 			for (int nIndex = 0, nVisibleLen = sModelSetting.GetInitPartsVisibleNum(); nIndex < nVisibleLen; ++nIndex)
 				this.sLive2DModelUnity.setPartsOpacity(sModelSetting.GetInitPartsVisibleID(nIndex), sModelSetting.GetInitPartsVisibleValue(nIndex));
 
-			//TODO : Add the layout parameter settings.
-
 			return true;
 		}
 		

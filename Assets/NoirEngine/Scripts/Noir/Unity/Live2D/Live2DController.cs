@@ -6,6 +6,8 @@ namespace Noir.Unity.Live2D
 	[RequireComponent(typeof(AudioSource), typeof(RawImage))]
 	public class Live2DController : MonoBehaviour
 	{
+		private static Live2DController sCurrentRenderingController = null;
+
 		[Header("Live2D Model")]
 		public string _Live2DModelJsonPath;
 		public string _IdleMotionName;
@@ -30,12 +32,15 @@ namespace Noir.Unity.Live2D
 		private RenderTexture sRenderTexture;
 		private Live2DCharacter sLive2DCharacter = new Live2DCharacter();
 
-		public bool initializeController()
+		private void Awake()
 		{
 			this.sAudioSource = this.gameObject.GetComponent<AudioSource>();
 			this.sRawImage = this.gameObject.GetComponent<RawImage>();
 			this.sRenderTexture = RenderTexture.GetTemporary(this._ResolutionWidth, this._ResolutionHeight);
+		}
 
+		public bool initializeController()
+		{
 			if (!this.sLive2DCharacter.loadLiveCharacter(this._Live2DModelJsonPath))
 				return false;
 
@@ -49,6 +54,9 @@ namespace Noir.Unity.Live2D
 
 		private void Update()
 		{
+			if (this.sLive2DCharacter.Model == null)
+				return;
+
 			if (this.sLive2DCharacter.ExpressionManager.isFinished())
 			{
 				if (this.bExpressionLoop)
@@ -70,8 +78,14 @@ namespace Noir.Unity.Live2D
 
 		private void OnRenderObject()
 		{
+			if (this.sLive2DCharacter.Model == null)
+				return;
+
 			if (Camera.current == this._RenderCamera)
 			{
+				if (sCurrentRenderingController != this)
+					return;
+
 				float nCameraHeight = this._RenderCamera.orthographicSize * 2f;
 				float nCanvasHeight = this.sLive2DCharacter.Model.getCanvasHeight();
 
@@ -88,8 +102,12 @@ namespace Noir.Unity.Live2D
 			}
 			else
 			{
+				sCurrentRenderingController = this;
+
 				this._RenderCamera.targetTexture = this.sRenderTexture;
 				this._RenderCamera.Render();
+
+				sCurrentRenderingController = null;
 
 				this.sRawImage.material.mainTexture = this.sRenderTexture;
 				this.sRawImage.SetMaterialDirty();

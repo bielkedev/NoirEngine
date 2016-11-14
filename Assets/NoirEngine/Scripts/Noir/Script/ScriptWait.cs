@@ -16,10 +16,6 @@ namespace Noir.Script
 
 		public override void runScript()
 		{
-			foreach (Layer sLayer in Layer.NeedUpdateLayerEnumerable)
-				sLayer.applyLayerProperties();
-
-			Layer.clearNeedUpdateLayerList();
 			ScriptRuntime.suspendScript();
 		}
 	}
