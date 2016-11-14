@@ -1,0 +1,68 @@
+{
+	"type": "Live2D Model Setting",
+	"name": "nachael",
+	"model": "nachael.moc",
+	"textures": [
+		"nachael.2048/texture_00.png",
+		"nachael.2048/texture_01.png",
+		"nachael.2048/texture_02.png",
+		"nachael.2048/texture_03.png"
+	],
+	"physics":"nachael.physics.json",
+	"expressions":
+	[
+		{"name":"f01","file":"expressions/f01.exp.json"},
+		{"name":"f02","file":"expressions/f02.exp.json"},
+		{"name":"f03","file":"expressions/f03.exp.json"},
+		{"name":"f04","file":"expressions/f04.exp.json"},
+		{"name":"f05","file":"expressions/f05.exp.json"},
+		{"name":"f06","file":"expressions/f06.exp.json"},
+		{"name":"f07","file":"expressions/f07.exp.json"},
+		{"name":"f08","file":"expressions/f08.exp.json"},
+		{"name":"f09","file":"expressions/f09.exp.json"},
+		{"name":"f10","file":"expressions/f10.exp.json"}
+	],
+	"motions":
+	{
+		"idle":
+		[
+			{"file":"motions/idle01.mtn"},
+			{"file":"motions/idle02.mtn"}
+		],
+		"idle_mouth":
+		[
+			{"file":"motions/idle01mouth.mtn"},
+			{"file":"motions/idle02mouth.mtn"}
+		],
+		"idle_angry":
+		[
+			{"file":"motions/idle02angry.mtn"}
+		],
+		"idle_sad":
+		[
+			{"file":"motions/idle01sad.mtn"}
+		],
+		"question":
+		[
+			{"file":"motions/question01.mtn"}
+		],
+		"sample":
+		[
+			{"file":"motions/sample02.mtn"},
+			{"file":"motions/sample03.mtn"},
+			{"file":"motions/sample04.mtn"}
+		],
+		"shy":
+		[
+			{"file":"motions/shy01.mtn"}
+		],
+		"smile":
+		[
+			{"file":"motions/smile01.mtn"}
+		],
+		"surprise":
+		[
+			{"file":"motions/surprise01.mtn"}
+		]
+	}
+}

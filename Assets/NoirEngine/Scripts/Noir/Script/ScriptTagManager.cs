@@ -13,6 +13,7 @@ namespace Noir.Script
 
 		private static Random sRandom = new Random();
 		private static Dictionary<string, ScriptTagHandler> sTagHandlerMap = new Dictionary<string, ScriptTagHandler>();
+		private static string[] vIfBranchDelimitTagName = new string[] { "if", "elseif", "else", "/if" };
 
 		public static void initTagHandler()
 		{
@@ -29,7 +30,11 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("var", ScriptTagManager.varHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lytweendel", ScriptTagManager.lytweendelHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lytween", ScriptTagManager.lytweenHandler);
-
+			//ScriptTagManager.sTagHandlerMap.Add("trans", ScriptTagManager.transHandler);
+			ScriptTagManager.sTagHandlerMap.Add("if", ScriptTagManager.ifHandler);
+			ScriptTagManager.sTagHandlerMap.Add("elseif", ScriptTagManager.elseifHandler);
+			ScriptTagManager.sTagHandlerMap.Add("else", ScriptTagManager.elseHandler);
+			ScriptTagManager.sTagHandlerMap.Add("/if", ScriptTagManager._ifHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -144,6 +149,7 @@ namespace Noir.Script
 			}
 
 			sLayer.setLayerSprite(sMainSprite, sMaskSprite);
+			sLayer.markAsNeedUpdate();
 		}
 
 		private static void lydelHandler(ScriptTag sTag)
@@ -153,14 +159,9 @@ namespace Noir.Script
 			if (!string.IsNullOrEmpty(sID))
 			{
 				Layer sLayer = Layer.getLayer(sID);
-
-				if (sLayer == null)
-				{
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
-					return;
-				}
-
-				sLayer.deleteLayer();
+				
+				if (sLayer != null)
+					sLayer.deleteLayer();
 			}
 		}
 
@@ -304,6 +305,8 @@ namespace Noir.Script
 					sLayer.setVisible(nValue);
 				else
 					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
+
+			sLayer.markAsNeedUpdate();
 		}
 
 		private static void lytweendelHandler(ScriptTag sTag)
@@ -619,6 +622,154 @@ namespace Noir.Script
 				}
 				return;
 			}
+		}
+
+		private static void ifHandler(ScriptTag sTag)
+		{
+			ScriptBranch.pushBranch();
+
+			string sEstimate = sTag.getAttribute("estimate");
+
+			if (string.IsNullOrEmpty(sEstimate))
+				return;
+
+			float nValue;
+
+			if (!float.TryParse(sEstimate, out nValue))
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, sEstimate + "은(는) 숫자가 아닙니다.", sTag);
+				return;
+			}
+
+			if (nValue != 0f)
+				ScriptBranch.IsCurrentBranching = true;
+			else
+			{
+				int nCount = 0;
+
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				{
+					if (sTagName == "if")
+					{
+						++nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (sTagName == "/if")
+					{
+						if (nCount <= 0)
+							break;
+
+						--nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (nCount <= 0)
+						break;
+				}
+			}
+		}
+
+		private static void elseifHandler(ScriptTag sTag)
+		{
+			if (ScriptBranch.IsCurrentBranching)
+			{
+				int nCount = 0;
+
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				{
+					if (sTagName == "if")
+					{
+						++nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (sTagName == "/if")
+					{
+						if (nCount <= 0)
+							break;
+
+						--nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (nCount <= 0)
+						break;
+				}
+
+				return;
+			}
+
+			string sEstimate = sTag.getAttribute("estimate");
+
+			if (string.IsNullOrEmpty(sEstimate))
+				return;
+
+			float nValue;
+
+			if (!float.TryParse(sEstimate, out nValue))
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, sEstimate + "은(는) 숫자가 아닙니다.", sTag);
+				return;
+			}
+
+			if (nValue != 0f)
+				ScriptBranch.IsCurrentBranching = true;
+			else
+			{
+				int nCount = 0;
+
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				{
+					if (sTagName == "if")
+					{
+						++nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (sTagName == "/if")
+					{
+						if (nCount <= 0)
+							break;
+
+						--nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (nCount <= 0)
+						break;
+				}
+			}
+		}
+
+		private static void elseHandler(ScriptTag sTag)
+		{
+			if (ScriptBranch.IsCurrentBranching)
+			{
+				int nCount = 0;
+
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				{
+					if (sTagName == "if")
+					{
+						++nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (sTagName == "/if")
+					{
+						if (nCount <= 0)
+							break;
+
+						--nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else if (nCount <= 0)
+						break;
+				}
+
+				return;
+			}
+
+			ScriptBranch.IsCurrentBranching = true;
+		}
+
+		private static void _ifHandler(ScriptTag sTag)
+		{
+			ScriptBranch.popBranch();
 		}
 	}
 }

@@ -72,7 +72,7 @@ namespace Noir.Script
 		{
 			int nLineIndex = 0;
 
-			if(string.IsNullOrEmpty(sLabelName) || sScript.ScriptRegionList.TryGetValue(sLabelName, out nLineIndex))
+			if (string.IsNullOrEmpty(sLabelName) || sScript.ScriptRegionList.TryGetValue(sLabelName, out nLineIndex))
 			{
 				ScriptRuntime.nCurrentLineIndex = nLineIndex;
 				ScriptRuntime.sCurrentScript = sScript;
@@ -200,7 +200,7 @@ namespace Noir.Script
 
 			return false;
 		}
-		
+
 		/// <summary>
 		/// 마지막으로 스크립트를 호출했던 위치로 되돌아갑니다. 호출스택을 되감습니다. 돌아갈 곳이 없다면 스크립팅을 종료합니다.
 		/// </summary>
@@ -264,6 +264,43 @@ namespace Noir.Script
 		public static void suspendScript()
 		{
 			ScriptRuntime.bSuspendScript = true;
+		}
+
+		public static void skipScript(int nCount)
+		{
+			ScriptRuntime.nCurrentLineIndex += nCount;
+		}
+
+		public static bool skipScript(string sDelimitTagName)
+		{
+			while (ScriptRuntime.nCurrentLineIndex < ScriptRuntime.sCurrentScript.ScriptLineList.Count)
+			{
+				ScriptTag sTag = ScriptRuntime.sCurrentScript.ScriptLineList[ScriptRuntime.nCurrentLineIndex] as ScriptTag;
+
+				if (sTag != null && sTag.Name == sDelimitTagName)
+					return true;
+
+				++ScriptRuntime.nCurrentLineIndex;
+			}
+
+			return false;
+		}
+
+		public static string skipScript(string[] sDelimitTagName)
+		{
+			while (ScriptRuntime.nCurrentLineIndex < ScriptRuntime.sCurrentScript.ScriptLineList.Count)
+			{
+				ScriptTag sTag = ScriptRuntime.sCurrentScript.ScriptLineList[ScriptRuntime.nCurrentLineIndex] as ScriptTag;
+
+				if (sTag != null)
+					foreach (string sName in sDelimitTagName)
+						if (sTag.Name == sName)
+							return sName;
+
+				++ScriptRuntime.nCurrentLineIndex;
+			}
+
+			return null;
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
 using System.Collections.Generic;
 
 namespace Noir.Unity
@@ -53,24 +52,24 @@ namespace Noir.Unity
 		public static IEnumerable<KeyValuePair<string, Layer>> NamedLayerEnumerable { get { return Layer.sLayerMap; } }
 		public static IEnumerable<Layer> NeedUpdateLayerEnumerable { get { return Layer.sNeedUpdateLayerSet; } }
 
-		private static RectTransform sLayerPanel;
-		private static GameObject sNamedLayerPrefab;
-		private static Material sNamedLayerMaterial;
-		private static Dictionary<string, Layer> sLayerMap = new Dictionary<string, Layer>();
-		private static SortedList<string, Layer> sLayerList = new SortedList<string, Layer>();
-		private static HashSet<Layer> sNeedUpdateLayerSet = new HashSet<Layer>();
-		
+		protected static RectTransform sLayerPanel;
+		protected static GameObject sNamedLayerPrefab;
+		protected static Material sNamedLayerMaterial;
+		protected static Dictionary<string, Layer> sLayerMap = new Dictionary<string, Layer>();
+		protected static SortedList<string, Layer> sLayerList = new SortedList<string, Layer>();
+		protected static HashSet<Layer> sNeedUpdateLayerSet = new HashSet<Layer>();
+
 		public string LayerName { get { return this.sNamedLayer.name; } }
 		public GameObject NamedLayer { get { return this.sNamedLayer; } }
 		public RawImage Image { get { return this.sNamedLayerImage; } }
 		public RectTransform Transform { get { return this.sNamedLayerTransform; } }
 
-		private GameObject sNamedLayer;
-		private RawImage sNamedLayerImage;
-		private RectTransform sNamedLayerTransform;
-		private LayerProperties sLayerProperties = new LayerProperties(null, null);
-		private LayerPropertiesDirty sLayerPropertiesDirty = new LayerPropertiesDirty();
-		private List<LayerTween> sLayerTweenList = new List<LayerTween>();
+		protected GameObject sNamedLayer;
+		protected RawImage sNamedLayerImage;
+		protected RectTransform sNamedLayerTransform;
+		protected LayerProperties sLayerProperties = new LayerProperties(null, null);
+		protected LayerPropertiesDirty sLayerPropertiesDirty = new LayerPropertiesDirty();
+		protected List<LayerTween> sLayerTweenList = new List<LayerTween>();
 
 		public static Layer getLayer(string sLayerName)
 		{
@@ -90,7 +89,17 @@ namespace Noir.Unity
 			Layer.sLayerMap.Add((this.sNamedLayer = GameObject.Instantiate(Layer.sNamedLayerPrefab)).name = sLayerName, this);
 			Layer.sLayerList.Add(sLayerName, this);
 
-			this.sNamedLayerImage = this.sNamedLayer.GetComponent<RawImage>();
+			(this.sNamedLayerImage = this.sNamedLayer.GetComponent<RawImage>()).material = GameObject.Instantiate<Material>(Layer.sNamedLayerMaterial);
+			(this.sNamedLayerTransform = this.sNamedLayer.GetComponent<RectTransform>()).SetParent(Layer.sLayerPanel, false);
+			this.sNamedLayerTransform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(sLayerName));
+		}
+
+		protected Layer(string sLayerName, GameObject sNamedLayerPrefab)
+		{
+			Layer.sLayerMap.Add((this.sNamedLayer = GameObject.Instantiate(sNamedLayerPrefab)).name = sLayerName, this);
+			Layer.sLayerList.Add(sLayerName, this);
+
+			(this.sNamedLayerImage = this.sNamedLayer.GetComponent<RawImage>()).material = GameObject.Instantiate<Material>(Layer.sNamedLayerMaterial);
 			(this.sNamedLayerTransform = this.sNamedLayer.GetComponent<RectTransform>()).SetParent(Layer.sLayerPanel, false);
 			this.sNamedLayerTransform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(sLayerName));
 		}
@@ -115,77 +124,182 @@ namespace Noir.Unity
 			this.sLayerTweenList.Clear();
 		}
 
-		public void setLayerSprite(Sprite sMainSprite, Sprite sMaskSprite)
+		public virtual void setLayerSprite(Sprite sMainSprite, Sprite sMaskSprite, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.sMainSprite = sMainSprite;
-			this.sLayerProperties.sMaskSprite = sMaskSprite;
-			this.sLayerPropertiesDirty.bSpriteDirty = true;
+			if (bUpdateInstantly)
+			{
+				this.sNamedLayerImage.material.SetTexture("_MainTex", sMainSprite == null ? null : sMainSprite.texture);
+				this.sNamedLayerImage.material.SetTexture("_MaskTex", sMaskSprite == null ? null : sMaskSprite.texture);
+				this.sNamedLayerImage.SetMaterialDirty();
+
+				if (sMainSprite != null)
+				{
+					Vector2 sSize;
+					sSize.x = sMainSprite.texture.width;
+					sSize.y = sMainSprite.texture.height;
+
+					this.sNamedLayerTransform.sizeDelta = sSize;
+				}
+			}
+			else
+			{
+				this.sLayerProperties.sMainSprite = sMainSprite;
+				this.sLayerProperties.sMaskSprite = sMaskSprite;
+				this.sLayerPropertiesDirty.bSpriteDirty = true;
+			}
 		}
 
-		public void setPosX(float nNewX)
+		public void setPosX(float nNewX, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.sPosition.x = nNewX;
-			this.sLayerPropertiesDirty.bPositionDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector3 sPosition = this.sNamedLayerTransform.localPosition;
+				sPosition.x = nNewX;
+				this.sNamedLayerTransform.localPosition = sPosition;
+			}
+			else
+			{
+				this.sLayerProperties.sPosition.x = nNewX;
+				this.sLayerPropertiesDirty.bPositionDirty = true;
+			}
 		}
 
-		public void setPosY(float nNewY)
+		public void setPosY(float nNewY, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.sPosition.y = nNewY;
-			this.sLayerPropertiesDirty.bPositionDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector3 sPosition = this.sNamedLayerTransform.localPosition;
+				sPosition.y = nNewY;
+				this.sNamedLayerTransform.localPosition = sPosition;
+			}
+			else
+			{
+				this.sLayerProperties.sPosition.y = nNewY;
+				this.sLayerPropertiesDirty.bPositionDirty = true;
+			}
 		}
 
-		public void setAlpha(float nAlpha)
+		public void setAlpha(float nAlpha, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.nAlpha = nAlpha / 255f;
-			this.sLayerPropertiesDirty.bAlphaDirty = true;
+			if (bUpdateInstantly)
+				this.sNamedLayerImage.material.SetFloat("_Alpha", nAlpha / 255f);
+			else
+			{
+				this.sLayerProperties.nAlpha = nAlpha / 255f;
+				this.sLayerPropertiesDirty.bAlphaDirty = true;
+			}
 		}
 
-		public void setAnchorX(float nNewAnchorX)
+		public void setAnchorX(float nNewAnchorX, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.sAnchor.x = nNewAnchorX;
-			this.sLayerPropertiesDirty.bAnchorDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector2 sPivot = this.sNamedLayerTransform.pivot;
+				sPivot.x = nNewAnchorX;
+				this.sNamedLayerTransform.pivot = sPivot;
+			}
+			else
+			{
+				this.sLayerProperties.sAnchor.x = nNewAnchorX;
+				this.sLayerPropertiesDirty.bAnchorDirty = true;
+			}
 		}
 
-		public void setAnchorY(float nNewAnchorY)
+		public void setAnchorY(float nNewAnchorY, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.sAnchor.y = nNewAnchorY;
-			this.sLayerPropertiesDirty.bAnchorDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector2 sPivot = this.sNamedLayerTransform.pivot;
+				sPivot.y = nNewAnchorY;
+				this.sNamedLayerTransform.pivot = sPivot;
+			}
+			else
+			{
+				this.sLayerProperties.sAnchor.y = nNewAnchorY;
+				this.sLayerPropertiesDirty.bAnchorDirty = true;
+			}
 		}
 
-		public void setScaleX(float nNewScaleX)
+		public void setScaleX(float nNewScaleX, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.sScale.x = nNewScaleX / 100f;
-			this.sLayerPropertiesDirty.bScaleDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector3 sScale = this.sNamedLayerTransform.localScale;
+				sScale.x = Mathf.Sign(sScale.x) * Mathf.Abs(nNewScaleX / 100f);
+				this.sNamedLayerTransform.localScale = sScale;
+			}
+			else
+			{
+				this.sLayerProperties.sScale.x = nNewScaleX / 100f;
+				this.sLayerPropertiesDirty.bScaleDirty = true;
+			}
 		}
 
-		public void setScaleY(float nNewScaleY)
+		public void setScaleY(float nNewScaleY, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.sScale.y = nNewScaleY / 100f;
-			this.sLayerPropertiesDirty.bScaleDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector3 sScale = this.sNamedLayerTransform.localScale;
+				sScale.y = Mathf.Sign(sScale.y) * Mathf.Abs(nNewScaleY / 100f);
+				this.sNamedLayerTransform.localScale = sScale;
+			}
+			else
+			{
+				this.sLayerProperties.sScale.y = nNewScaleY / 100f;
+				this.sLayerPropertiesDirty.bScaleDirty = true;
+			}
 		}
 
-		public void setRotate(float nNewAngle)
+		public void setRotate(float nNewAngle, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.nRotation = nNewAngle;
-			this.sLayerPropertiesDirty.bRotationDirty = true;
+			if (bUpdateInstantly)
+				this.sNamedLayerTransform.localRotation = Quaternion.Euler(0f, 0f, nNewAngle);
+			else
+			{
+				this.sLayerProperties.nRotation = nNewAngle;
+				this.sLayerPropertiesDirty.bRotationDirty = true;
+			}
 		}
 
-		public void setReverseX(float nNewReverseX)
+		public void setReverseX(float nNewReverseX, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.bReverseX = nNewReverseX != 0.0f;
-			this.sLayerPropertiesDirty.bReverseDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector3 sScale = this.sNamedLayerTransform.localScale;
+				sScale.x = nNewReverseX != 0.0f ? -Mathf.Abs(sScale.x) : Mathf.Abs(sScale.x);
+				this.sNamedLayerTransform.localScale = sScale;
+			}
+			else
+			{
+				this.sLayerProperties.bReverseX = nNewReverseX != 0.0f;
+				this.sLayerPropertiesDirty.bReverseDirty = true;
+			}
 		}
 
-		public void setReverseY(float nNewReverseY)
+		public void setReverseY(float nNewReverseY, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.bReverseY = nNewReverseY != 0.0f;
-			this.sLayerPropertiesDirty.bReverseDirty = true;
+			if (bUpdateInstantly)
+			{
+				Vector3 sScale = this.sNamedLayerTransform.localScale;
+				sScale.y = nNewReverseY != 0.0f ? -Mathf.Abs(sScale.y) : Mathf.Abs(sScale.y);
+				this.sNamedLayerTransform.localScale = sScale;
+			}
+			else
+			{
+				this.sLayerProperties.bReverseY = nNewReverseY != 0.0f;
+				this.sLayerPropertiesDirty.bReverseDirty = true;
+			}
 		}
 
-		public void setVisible(float nNewVisible)
+		public void setVisible(float nNewVisible, bool bUpdateInstantly = false)
 		{
-			this.sLayerProperties.bVisible = nNewVisible != 0f;
-			this.sLayerPropertiesDirty.bVisibleDirty = true;
+			if (bUpdateInstantly)
+				this.sNamedLayer.SetActive(nNewVisible != 0f);
+			else
+			{
+				this.sLayerProperties.bVisible = nNewVisible != 0f;
+				this.sLayerPropertiesDirty.bVisibleDirty = true;
+			}
 		}
 
 		public void deleteLayer()
@@ -197,16 +311,16 @@ namespace Noir.Unity
 			GameObject.Destroy(this.sNamedLayer);
 		}
 
-		public void applyLayerProperties()
+		public virtual void applyLayerProperties()
 		{
 			//Apply sprite
-			if(this.sLayerPropertiesDirty.bSpriteDirty)
+			if (this.sLayerPropertiesDirty.bSpriteDirty)
 			{
-				Material sNewMaterial = GameObject.Instantiate(Layer.sNamedLayerMaterial);
-				sNewMaterial.SetTexture("_MainTex", this.sLayerProperties.sMainSprite == null ? null : this.sLayerProperties.sMainSprite.texture);
-				sNewMaterial.SetTexture("_MaskTex", this.sLayerProperties.sMaskSprite == null ? null : this.sLayerProperties.sMaskSprite.texture);
+				this.sNamedLayerImage.material.SetTexture("_MainTex", this.sLayerProperties.sMainSprite == null ? null : this.sLayerProperties.sMainSprite.texture);
+				this.sNamedLayerImage.material.SetTexture("_MaskTex", this.sLayerProperties.sMaskSprite == null ? null : this.sLayerProperties.sMaskSprite.texture);
+				this.sNamedLayerImage.SetMaterialDirty();
 
-				if(this.sLayerProperties.sMainSprite != null)
+				if (this.sLayerProperties.sMainSprite != null)
 				{
 					Vector2 sSize;
 					sSize.x = this.sLayerProperties.sMainSprite.texture.width;
@@ -214,13 +328,12 @@ namespace Noir.Unity
 
 					this.sNamedLayerTransform.sizeDelta = sSize;
 				}
-
-				this.sNamedLayerImage.material = sNewMaterial;
+				
 				this.sLayerPropertiesDirty.bSpriteDirty = false;
 			}
 
 			//Apply position
-			if(this.sLayerPropertiesDirty.bPositionDirty)
+			if (this.sLayerPropertiesDirty.bPositionDirty)
 			{
 				this.sNamedLayerTransform.localPosition = this.sLayerProperties.sPosition;
 				this.sLayerPropertiesDirty.bPositionDirty = false;
@@ -237,29 +350,29 @@ namespace Noir.Unity
 			if (this.sLayerPropertiesDirty.bScaleDirty)
 			{
 				Vector3 sScale = this.sNamedLayerTransform.localScale;
-				sScale.x = Mathf.Abs(this.sLayerProperties.sScale.x) * Mathf.Sign(sScale.x);
-				sScale.y = Mathf.Abs(this.sLayerProperties.sScale.y) * Mathf.Sign(sScale.y);
+				sScale.x = Mathf.Sign(sScale.x) * Mathf.Abs(this.sLayerProperties.sScale.x);
+				sScale.y = Mathf.Sign(sScale.y) * Mathf.Abs(this.sLayerProperties.sScale.y);
 
 				this.sNamedLayerTransform.localScale = sScale;
 				this.sLayerPropertiesDirty.bScaleDirty = false;
 			}
 
 			//Apply alpha
-			if(this.sLayerPropertiesDirty.bAlphaDirty)
+			if (this.sLayerPropertiesDirty.bAlphaDirty)
 			{
 				this.sNamedLayerImage.material.SetFloat("_Alpha", this.sLayerProperties.nAlpha);
 				this.sLayerPropertiesDirty.bAlphaDirty = false;
 			}
 
 			//Apply rotation
-			if(this.sLayerPropertiesDirty.bRotationDirty)
+			if (this.sLayerPropertiesDirty.bRotationDirty)
 			{
 				this.sNamedLayerTransform.localRotation = Quaternion.Euler(0f, 0f, this.sLayerProperties.nRotation);
 				this.sLayerPropertiesDirty.bRotationDirty = false;
 			}
-			
+
 			//Apply reverse
-			if(this.sLayerPropertiesDirty.bReverseDirty)
+			if (this.sLayerPropertiesDirty.bReverseDirty)
 			{
 				Vector3 sScale = this.sNamedLayerTransform.localScale;
 				sScale.x = this.sLayerProperties.bReverseX ? Mathf.Abs(sScale.x) : -Mathf.Abs(sScale.x);
@@ -270,14 +383,14 @@ namespace Noir.Unity
 			}
 
 			//Apply visible
-			if(this.sLayerPropertiesDirty.bVisibleDirty)
+			if (this.sLayerPropertiesDirty.bVisibleDirty)
 			{
 				this.sNamedLayer.SetActive(this.sLayerProperties.bVisible);
 				this.sLayerPropertiesDirty.bVisibleDirty = false;
 			}
 		}
-		
-		public void makeAsNeedUpdate()
+
+		public void markAsNeedUpdate()
 		{
 			Layer.sNeedUpdateLayerSet.Add(this);
 		}

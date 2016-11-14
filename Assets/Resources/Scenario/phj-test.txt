@@ -3,13 +3,3 @@
 	2016.10.09
 	Created by PHJ.
 */
-
-//normal : 203
-//highlight : 255
-//pressed : 129
-//disabled : 83
-
-[lyc id="test" file="chr/slime01"]
-[lytween id="test" param="left" from="-500" to="500" ease="easeinout_elastic" yoyo="-1" time="666"]
-[lytween id="test" param="top" from="-250" to="250" ease="easeinout_elastic" yoyo="-1" time="666"]
-[lytween id="test" param="alpha" from="0" to="255" ease="easeout_quart" yoyo="5" time="250" delete="1"]

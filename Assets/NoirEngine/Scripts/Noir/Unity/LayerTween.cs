@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Noir.Unity
 {
-	public delegate void LayerPropertiesModifier(float nValue);
+	public delegate void LayerPropertiesModifier(float nValue, bool bUpdateInstantly);
 
 	public struct LayerTweenData
 	{
@@ -42,17 +42,12 @@ namespace Noir.Unity
 					for (;;)
 					{
 						this.nRunningTime = 0f;
-						this.fPropModifier(this.sTweenData.nValueBegin);
-						yield return null;
 
 						while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 						{
-							this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration));
+							this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 							yield return null;
 						}
-
-						this.fPropModifier(this.sTweenData.nValueEnd);
-						yield return null;
 					}
 				}
 				else
@@ -60,17 +55,12 @@ namespace Noir.Unity
 					for (; this.sTweenData.nLoop > 0; --this.sTweenData.nLoop)
 					{
 						this.nRunningTime = 0f;
-						this.fPropModifier(this.sTweenData.nValueBegin);
-						yield return null;
 
 						while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 						{
-							this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration));
+							this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 							yield return null;
 						}
-
-						this.fPropModifier(this.sTweenData.nValueEnd);
-						yield return null;
 					}
 				}
 			}
@@ -78,67 +68,43 @@ namespace Noir.Unity
 			{
 				for (;;)
 				{
-					this.fPropModifier(this.sTweenData.nValueBegin);
-					yield return null;
-
 					while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration));
+						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
-
-					this.fPropModifier(this.sTweenData.nValueEnd);
-					yield return null;
 
 					while ((this.nRunningTime -= Time.deltaTime) >= 0)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration));
+						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
-
-					this.fPropModifier(this.sTweenData.nValueBegin);
-					yield return null;
 				}
 			}
 			else if (this.sTweenData.nYoyo > 0)
 			{
 				for (; this.sTweenData.nYoyo > 0; --this.sTweenData.nYoyo)
 				{
-					this.fPropModifier(this.sTweenData.nValueBegin);
-					yield return null;
-
 					while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration));
+						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
-
-					this.fPropModifier(this.sTweenData.nValueEnd);
-					yield return null;
-
+					
 					while ((this.nRunningTime -= Time.deltaTime) >= 0)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration));
+						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
-
-					this.fPropModifier(this.sTweenData.nValueBegin);
-					yield return null;
 				}
 			}
 			else
 			{
-				this.fPropModifier(this.sTweenData.nValueBegin);
-				yield return null;
-
 				while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 				{
-					this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration));
+					this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 					yield return null;
 				}
-
-				this.fPropModifier(this.sTweenData.nValueEnd);
-				yield return null;
 			}
 
 			if (this.sTweenData.bDelete)

@@ -88,6 +88,7 @@ namespace Noir.Unity
 
 			EquationVariable.initEquationVariable();
 			ScriptTagManager.initTagHandler();
+			ScriptBranch.initBranch();
 
 			UIManager.UnityManagerObject = this;
 			Layer.LayerPanel = this._LayerPanel;
