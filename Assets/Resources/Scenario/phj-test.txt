@@ -5,9 +5,22 @@
 */
 
 [lycl2d id="haru" file="live2d/haru/haru.model.json" idle="idle"]
-[lyprop id="haru" left="200"]
-[lymotionl2d id="haru" motion="tap_body" loop="1"]
+[lyprop id="haru" left="-350"]
+[lymotionl2d id="haru" motion="tap_body"]
 
-[lycl2d id="nachael" file="live2d/nachael/nachael.model.json" idle="idle"]
-[lyprop id="nachael" left="-200"]
-[lymotionl2d id="nachael" motion="sample" loop="1"]
+//[lycl2d id="nachael2" file="live2d/nachael/nachael.model.json" idle="idle"]
+//[lyprop id="nachael2" left="-150"]
+//[lymotionl2d id="nachael2" motion="sample"]
+
+[lycl2d id="nachael3" file="live2d/nachael/nachael.model.json" idle="idle"]
+[lymotionl2d id="nachael3" motion="sample"]
+
+//[lycl2d id="nachael4" file="live2d/nachael/nachael.model.json" idle="idle"]
+//[lyprop id="nachael4" left="150"]
+//[lymotionl2d id="nachael4" motion="sample"]
+
+[lycl2d id="nachael5" file="live2d/nachael/nachael.model.json" idle="idle"]
+[lyprop id="nachael5" left="350"]
+[lymotionl2d id="nachael5" motion="sample"]
+
+테스트...
