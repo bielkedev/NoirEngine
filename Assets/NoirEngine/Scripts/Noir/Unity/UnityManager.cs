@@ -51,7 +51,6 @@ namespace Noir.Unity
 		public GameObject _BacklogPanel;
 		public Button _BacklogReturnButton;
 		public ScrollRect _BacklogScroll;
-		public RectTransform _BacklogViewport;
 		public RectTransform _BacklogContent;
 		public GameObject _DialogueLogPrefab;
 
@@ -70,9 +69,9 @@ namespace Noir.Unity
 			float nHeight = sText.cachedTextGenerator.GetPreferredHeight(sDialogueText, sText.GetGenerationSettings(sBacklogContentSize));
 
 			sRectTransform.sizeDelta = new Vector2(sRectTransform.sizeDelta.x, nHeight);
-			sRectTransform.SetParent(this._BacklogContent, false);
 			sRectTransform.Translate(0.0f, -this._BacklogContent.sizeDelta.y, 0.0f, Space.Self);
-
+			sRectTransform.SetParent(this._BacklogContent, false);
+			
 			sText.text = sDialogueText;
 
 			this._BacklogContent.sizeDelta = new Vector2(this._BacklogContent.sizeDelta.x, this._BacklogContent.sizeDelta.y + nHeight);
@@ -90,6 +89,7 @@ namespace Noir.Unity
 			EquationVariable.initEquationVariable();
 			ScriptTagManager.initTagHandler();
 			ScriptBranch.initBranch();
+			live2d.Live2D.init();
 
 			UIManager.UnityManagerObject = this;
 			Layer.LayerPanel = this._LayerPanel;
@@ -114,10 +114,7 @@ namespace Noir.Unity
 				this._MenuReturnButton.onClick.AddListener(this.OnReturn);
 				this._BacklogReturnButton.onClick.AddListener(this.OnReturn);
 
-				this.sBacklogContentSize.x = Screen.width +
-					this._BacklogScroll.GetComponent<RectTransform>().sizeDelta.x +
-					this._BacklogViewport.sizeDelta.x +
-					this._BacklogContent.sizeDelta.x;
+				this.sBacklogContentSize = this._BacklogContent.rect.size;
 				this.sBacklogContentSize.y = 0;
 			}
 
@@ -136,6 +133,13 @@ namespace Noir.Unity
 
 			//스크립트 실행
 			ScriptRuntime.runScript();
+		}
+
+		private void OnDestroy()
+		{
+			//파괴할거 여기서 파괴!
+			live2d.Live2D.dispose();
+			CacheManager.releaseCacheAll();
 		}
 
 		private void OnError(ref ScriptError.Error sError)
