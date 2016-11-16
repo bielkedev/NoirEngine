@@ -866,29 +866,5 @@ namespace Noir.Script
 
 			sLayer.Controller.startIdleMotion();
 		}
-
-		private static void animHandler(ScriptTag sTag)
-		{
-			string sID = sTag.getAttribute("id");
-
-			if (string.IsNullOrEmpty(sID))
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
-
-			if(sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
-				return;
-			}
-
-			if(sLayer is Live2DLayer)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) Live2D 레이어입니다. 일반 레이어를 지정하세요.", sTag);
-				return;
-			}
-
-
-		}
 	}
 }

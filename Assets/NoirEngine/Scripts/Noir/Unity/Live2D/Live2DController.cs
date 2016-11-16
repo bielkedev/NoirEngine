@@ -1,5 +1,4 @@
-﻿using Noir.UI;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Noir.Unity.Live2D
@@ -42,12 +41,7 @@ namespace Noir.Unity.Live2D
 
 		public bool initializeController()
 		{
-			Live2DSharedData sSharedData = CacheManager.Live2DSharedDataCache[this._Live2DModelJsonPath];
-
-			if (sSharedData == null)
-				CacheManager.Live2DSharedDataCache.addCache(this._Live2DModelJsonPath, sSharedData = new Live2DSharedData(this._Live2DModelJsonPath));
-
-			if (!this.sLive2DCharacter.loadLiveCharacter(sSharedData))
+			if (!this.sLive2DCharacter.loadLiveCharacter(this._Live2DModelJsonPath))
 				return false;
 
 			this.sRawImage.material = GameObject.Instantiate<Material>(_RawImageMaterial);

@@ -4,16 +4,56 @@ using System.Collections.Generic;
 
 namespace Noir.Unity
 {
-	public abstract class Layer
+	public struct LayerProperties
 	{
-		public static GameObject LayerMaskPrefab { set { Layer.sLayerMaskPrefab = value; } }
+		public Sprite sMainSprite;
+		public Sprite sMaskSprite;
+		public Vector2 sPosition;
+		public Vector2 sAnchor;
+		public Vector2 sScale;
+		public float nAlpha;
+		public float nRotation;
+		public bool bReverseX;
+		public bool bReverseY;
+		public bool bVisible;
+
+		public LayerProperties(Sprite sNewMainSprite, Sprite sNewMaskSprite)
+		{
+			this.sMainSprite = sNewMainSprite;
+			this.sMaskSprite = sNewMaskSprite;
+			this.sPosition = new Vector2(0f, 0f);
+			this.sAnchor = new Vector2(.5f, .5f);
+			this.sScale = new Vector2(1f, 1f);
+			this.nAlpha = 1f;
+			this.nRotation = 0f;
+			this.bReverseX = false;
+			this.bReverseY = false;
+			this.bVisible = true;
+		}
+	}
+
+	public struct LayerPropertiesDirty
+	{
+		public bool bSpriteDirty;
+		public bool bPositionDirty;
+		public bool bAnchorDirty;
+		public bool bScaleDirty;
+		public bool bAlphaDirty;
+		public bool bRotationDirty;
+		public bool bReverseDirty;
+		public bool bVisibleDirty;
+	}
+
+	public class Layer
+	{
 		public static RectTransform LayerPanel { set { Layer.sLayerPanel = value; } }
+		public static GameObject NamedLayerPrefab { set { Layer.sNamedLayerPrefab = value; } }
 		public static Material NamedLayerMaterial { set { Layer.sNamedLayerMaterial = value; } }
 		public static IEnumerable<KeyValuePair<string, Layer>> NamedLayerEnumerable { get { return Layer.sLayerMap; } }
 		public static IEnumerable<Layer> NeedUpdateLayerEnumerable { get { return Layer.sNeedUpdateLayerSet; } }
 
-		protected static GameObject sLayerMaskPrefab;
 		protected static RectTransform sLayerPanel;
+		protected static GameObject sNamedLayerPrefab;
 		protected static Material sNamedLayerMaterial;
 		protected static Dictionary<string, Layer> sLayerMap = new Dictionary<string, Layer>();
 		protected static SortedList<string, Layer> sLayerList = new SortedList<string, Layer>();
@@ -23,13 +63,12 @@ namespace Noir.Unity
 		public GameObject NamedLayer { get { return this.sNamedLayer; } }
 		public RawImage Image { get { return this.sNamedLayerImage; } }
 		public RectTransform Transform { get { return this.sNamedLayerTransform; } }
-		public LayerMask Mask { get { return this.sMask; } }
 
 		protected GameObject sNamedLayer;
 		protected RawImage sNamedLayerImage;
 		protected RectTransform sNamedLayerTransform;
-		protected LayerMask sMask;
-		protected LayerState sLayerState = LayerState.Identity;
+		protected LayerProperties sLayerProperties = new LayerProperties(null, null);
+		protected LayerPropertiesDirty sLayerPropertiesDirty = new LayerPropertiesDirty();
 		protected List<LayerTween> sLayerTweenList = new List<LayerTween>();
 
 		public static Layer getLayer(string sLayerName)
@@ -45,15 +84,19 @@ namespace Noir.Unity
 			Layer.sNeedUpdateLayerSet.Clear();
 		}
 
+		public Layer(string sLayerName)
+		{
+			Layer.sLayerMap.Add((this.sNamedLayer = GameObject.Instantiate(Layer.sNamedLayerPrefab)).name = sLayerName, this);
+			Layer.sLayerList.Add(sLayerName, this);
+
+			(this.sNamedLayerImage = this.sNamedLayer.GetComponent<RawImage>()).material = GameObject.Instantiate<Material>(Layer.sNamedLayerMaterial);
+			(this.sNamedLayerTransform = this.sNamedLayer.GetComponent<RectTransform>()).SetParent(Layer.sLayerPanel, false);
+			this.sNamedLayerTransform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(sLayerName));
+		}
+
 		protected Layer(string sLayerName, GameObject sNamedLayerPrefab)
 		{
-			GameObject sMaskObject = GameObject.Instantiate(Layer.sLayerMaskPrefab);
-			this.sNamedLayer = GameObject.Instantiate(sNamedLayerPrefab);
-
-			sMaskObject.transform.SetParent(Layer.sLayerPanel);
-			this.sNamedLayer.transform.SetParent(sMaskObject.transform);
-
-			Layer.sLayerMap.Add(this.sNamedLayer.name = sLayerName, this);
+			Layer.sLayerMap.Add((this.sNamedLayer = GameObject.Instantiate(sNamedLayerPrefab)).name = sLayerName, this);
 			Layer.sLayerList.Add(sLayerName, this);
 
 			(this.sNamedLayerImage = this.sNamedLayer.GetComponent<RawImage>()).material = GameObject.Instantiate<Material>(Layer.sNamedLayerMaterial);
@@ -79,6 +122,31 @@ namespace Noir.Unity
 					sTween.StopAllCoroutines();
 
 			this.sLayerTweenList.Clear();
+		}
+
+		public virtual void setLayerSprite(Sprite sMainSprite, Sprite sMaskSprite, bool bUpdateInstantly = false)
+		{
+			if (bUpdateInstantly)
+			{
+				this.sNamedLayerImage.material.SetTexture("_MainTex", sMainSprite == null ? null : sMainSprite.texture);
+				this.sNamedLayerImage.material.SetTexture("_MaskTex", sMaskSprite == null ? null : sMaskSprite.texture);
+				this.sNamedLayerImage.SetMaterialDirty();
+
+				if (sMainSprite != null)
+				{
+					Vector2 sSize;
+					sSize.x = sMainSprite.texture.width;
+					sSize.y = sMainSprite.texture.height;
+
+					this.sNamedLayerTransform.sizeDelta = sSize;
+				}
+			}
+			else
+			{
+				this.sLayerProperties.sMainSprite = sMainSprite;
+				this.sLayerProperties.sMaskSprite = sMaskSprite;
+				this.sLayerPropertiesDirty.bSpriteDirty = true;
+			}
 		}
 
 		public void setPosX(float nNewX, bool bUpdateInstantly = false)
