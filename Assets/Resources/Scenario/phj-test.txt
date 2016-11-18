@@ -23,4 +23,15 @@
 [lyprop id="nachael5" left="350"]
 [lymotionl2d id="nachael5" motion="sample"]
 
-테스트...
+[var name="i" data="0"]
+[loop estimate="$i < 10"]
+	
+	[var name="j" data="0"]
+	[loop estimate="$j < 10"]
+		[print data="$i + '-' + j + ' '"]
+		[var name="j" data="$j + 1"]
+	[/loop]
+
+	[var name="i" data="$i + 1"]
+
+[/loop]

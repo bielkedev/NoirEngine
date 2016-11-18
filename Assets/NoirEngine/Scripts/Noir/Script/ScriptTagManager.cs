@@ -14,10 +14,13 @@ namespace Noir.Script
 
 		private static Random sRandom = new Random();
 		private static Dictionary<string, ScriptTagHandler> sTagHandlerMap = new Dictionary<string, ScriptTagHandler>();
-		private static string[] vIfBranchDelimitTagName = new string[] { "if", "elseif", "else", "/if" };
+		private static string[] vIfDelimitTagName = new string[] { "if", "elseif", "else", "/if" };
+		private static string[] vLoopDelimitTagName = new string[] { "loop", "/loop" };
 
 		public static void initTagHandler()
 		{
+			ScriptTagManager.sTagHandlerMap.Clear();
+
 			ScriptTagManager.sTagHandlerMap.Add("&autoinsert", ScriptTagManager._autoinsertHandler);
 			ScriptTagManager.sTagHandlerMap.Add("jump", ScriptTagManager.jumpHandler);
 			ScriptTagManager.sTagHandlerMap.Add("call", ScriptTagManager.callHandler);
@@ -39,6 +42,9 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("lycl2d", ScriptTagManager.lycl2dHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lymotionl2d", ScriptTagManager.lymotionl2dHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lymotionstopl2d", ScriptTagManager.lymotionstopl2dHandler);
+			ScriptTagManager.sTagHandlerMap.Add("print", ScriptTagManager.printHandler);
+			ScriptTagManager.sTagHandlerMap.Add("loop", ScriptTagManager.loopHandler);
+			ScriptTagManager.sTagHandlerMap.Add("/loop", ScriptTagManager._loopHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -127,16 +133,22 @@ namespace Noir.Script
 				return;
 
 			Layer sLayer = Layer.getLayer(sID);
+			SpriteLayer sSpriteLayer;
 
 			if (sLayer == null)
-				sLayer = new Layer(sID);
+				sSpriteLayer = new SpriteLayer(sID);
+			else if((sSpriteLayer = sLayer as SpriteLayer) == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 존재하는 Live2D/Animated 레이어입니다.", sTag);
+				return;
+			}
 
 			string sFile = sTag.getAttribute("file");
 
 			if (string.IsNullOrEmpty(sFile))
 				return;
 
-			UnityEngine.Sprite sMainSprite = SpriteManager.loadSprite(sFile);
+			UnityEngine.Sprite sMainSprite = CacheManager.loadSprite(sFile);
 
 			if (sMainSprite == null)
 			{
@@ -146,14 +158,15 @@ namespace Noir.Script
 
 			UnityEngine.Sprite sMaskSprite = null;
 
-			if (!string.IsNullOrEmpty(sFile = sTag.getAttribute("mask", false)) && (sMaskSprite = SpriteManager.loadSprite(sFile)) == null)
+			if (!string.IsNullOrEmpty(sFile = sTag.getAttribute("mask", false)) && (sMaskSprite = CacheManager.loadSprite(sFile)) == null)
 			{
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFile + "'에 스프라이트가 없습니다.", sTag);
 				return;
 			}
 
-			sLayer.setLayerSprite(sMainSprite, sMaskSprite);
-			sLayer.markAsNeedUpdate();
+			sSpriteLayer.setSprite(sMainSprite);
+			sSpriteLayer.setMask(sMaskSprite);
+			sSpriteLayer.markAsNeedUpdate();
 		}
 
 		private static void lydelHandler(ScriptTag sTag)
@@ -163,7 +176,7 @@ namespace Noir.Script
 			if (!string.IsNullOrEmpty(sID))
 			{
 				Layer sLayer = Layer.getLayer(sID);
-				
+
 				if (sLayer != null)
 					sLayer.deleteLayer();
 			}
@@ -346,7 +359,7 @@ namespace Noir.Script
 				return;
 			}
 
-			LayerPropertiesModifier fModifier;
+			LayerStateModifier fModifier;
 
 			string sValue = sTag.getAttribute("param");
 
@@ -630,8 +643,6 @@ namespace Noir.Script
 
 		private static void ifHandler(ScriptTag sTag)
 		{
-			ScriptBranch.pushBranch();
-
 			string sEstimate = sTag.getAttribute("estimate");
 
 			if (string.IsNullOrEmpty(sEstimate))
@@ -645,13 +656,15 @@ namespace Noir.Script
 				return;
 			}
 
+			ScriptBranch.pushBranch();
+
 			if (nValue != 0f)
 				ScriptBranch.IsCurrentBranching = true;
 			else
 			{
 				int nCount = 0;
 
-				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
 					{
@@ -678,7 +691,7 @@ namespace Noir.Script
 			{
 				int nCount = 0;
 
-				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
 					{
@@ -719,7 +732,7 @@ namespace Noir.Script
 			{
 				int nCount = 0;
 
-				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
 					{
@@ -746,7 +759,7 @@ namespace Noir.Script
 			{
 				int nCount = 0;
 
-				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfBranchDelimitTagName))
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
 					{
@@ -783,15 +796,15 @@ namespace Noir.Script
 			if (string.IsNullOrEmpty(sID))
 				return;
 
-			{
-				Layer sLayer = Layer.getLayer(sID);
+			Layer sLayer = Layer.getLayer(sID);
 
-				if (sLayer != null)
-					sLayer.deleteLayer();
+			if(sLayer != null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 존재하는 레이어입니다.", sTag);
+				return;
 			}
 
 			Live2DLayer sLive2DLayer = new Live2DLayer(sID);
-
 			string sFile = sTag.getAttribute("file");
 
 			if (string.IsNullOrEmpty(sFile))
@@ -806,13 +819,13 @@ namespace Noir.Script
 
 			string sMask;
 
-			if (!string.IsNullOrEmpty(sMask = sTag.getAttribute("mask", false)) && (sMaskSprite = SpriteManager.loadSprite(sMask)) == null)
-			{
+			if (!string.IsNullOrEmpty(sMask = sTag.getAttribute("mask", false)) && (sMaskSprite = CacheManager.loadSprite(sMask)) == null)
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sMask + "'에 스프라이트가 없습니다.", sTag);
-				return;
-			}
 
-			sLive2DLayer.setLayerSprite(sFile, sIdle, sMaskSprite);
+			if (!sLive2DLayer.setModel(sFile, sIdle))
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFile + "'에 Live2D 모델이 없거나 손상되었습니다.", sTag);
+
+			sLive2DLayer.setMask(sMaskSprite);
 			sLive2DLayer.markAsNeedUpdate();
 		}
 
@@ -839,13 +852,13 @@ namespace Noir.Script
 			bool bLoop = false;
 			string sLoop = sTag.getAttribute("loop", false);
 
-			if(!string.IsNullOrEmpty(sLoop))
+			if (!string.IsNullOrEmpty(sLoop))
 			{
 				float nLoop;
 				bLoop = float.TryParse(sLoop, out nLoop) && nLoop != 0f;
 			}
 
-			if(!sLayer.Controller.startMotion(sMotion, bLoop))
+			if (!sLayer.Controller.startMotion(sMotion, bLoop))
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sMotion + "'은(는) 존재하지 않는 모션입니다.", sTag);
 		}
 
@@ -873,22 +886,89 @@ namespace Noir.Script
 
 			if (string.IsNullOrEmpty(sID))
 				return;
+			
+		}
 
-			Layer sLayer = Layer.getLayer(sID);
+		private static void printHandler(ScriptTag sTag)
+		{
+			string sData = sTag.getAttribute("data");
 
-			if(sLayer == null)
+			if (string.IsNullOrEmpty(sData))
+				return;
+
+			UIManager.appendDialogueText(sData);
+		}
+
+		private static void loopHandler(ScriptTag sTag)
+		{
+			string sEstimate = sTag.getAttribute("estimate");
+
+			if (string.IsNullOrEmpty(sEstimate))
+				return;
+
+			float nEstimate;
+
+			if(!float.TryParse(sEstimate, out nEstimate))
 			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sEstimate + "'은(는) 숫자가 아닙니다.", sTag);
 				return;
 			}
 
-			if(sLayer is Live2DLayer)
+			ScriptLoop.pushLoop();
+
+			if (nEstimate == 0f)
 			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) Live2D 레이어입니다. 일반 레이어를 지정하세요.", sTag);
-				return;
+				int nCount = 0;
+
+				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vLoopDelimitTagName); sTag != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vLoopDelimitTagName))
+				{
+					if (sTagName == "loop")
+					{
+						++nCount;
+						ScriptRuntime.skipScript(1);
+					}
+					else
+					{
+						if (nCount <= 0)
+							break;
+
+						--nCount;
+						ScriptRuntime.skipScript(1);
+					}
+				}
+			}
+			else
+				ScriptLoop.IsCurrentLooping = true;
+		}
+
+		private static void _loopHandler(ScriptTag sTag)
+		{
+			if(ScriptLoop.IsCurrentLooping)
+			{
+				int nCount = 0;
+
+				ScriptRuntime.skipScriptBack("/loop");
+				ScriptRuntime.skipScriptBack(1);
+
+				for (string sTagName = ScriptRuntime.skipScriptBack(ScriptTagManager.vLoopDelimitTagName); sTag != null; sTagName = ScriptRuntime.skipScriptBack(ScriptTagManager.vLoopDelimitTagName))
+				{
+					if(sTagName == "/loop")
+					{
+						++nCount;
+						ScriptRuntime.skipScriptBack(1);
+					}
+					else
+					{
+						if (nCount <= 0)
+							break;
+
+						--nCount;
+						ScriptRuntime.skipScriptBack(1);
+					}
+				}
 			}
 
-
+			ScriptLoop.popLoop();
 		}
 	}
 }

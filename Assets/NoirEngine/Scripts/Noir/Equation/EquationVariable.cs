@@ -11,6 +11,8 @@ namespace Noir.Equation
 
 		public static void initEquationVariable()
 		{
+			EquationVariable.sVariableList.Clear();
+
 			EquationVariable.sVariableList.Add("s.engineversion", "0.0.1a");
 			EquationVariable.sVariableList.Add("s.datapath", "Scenario");
 			EquationVariable.sVariableList.Add("s.savepath", "Save");

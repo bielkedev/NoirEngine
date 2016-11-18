@@ -17,7 +17,6 @@ namespace Noir.Unity.Live2D
 		public int _ResolutionWidth;
 		public int _ResolutionHeight;
 		public Camera _RenderCamera;
-		public Material _RawImageMaterial;
 
 		public string CurrentExpressionName { get { return this.sCurrentExpressionName; } }
 		public string CurrentMotionName { get { return this.sCurrentMotionName; } }
@@ -42,6 +41,8 @@ namespace Noir.Unity.Live2D
 
 		public bool initializeController()
 		{
+			this.sRawImage.texture = this.sRenderTexture;
+
 			Live2DSharedData sSharedData = CacheManager.Live2DSharedDataCache[this._Live2DModelJsonPath];
 
 			if (sSharedData == null)
@@ -49,9 +50,7 @@ namespace Noir.Unity.Live2D
 
 			if (!this.sLive2DCharacter.loadLiveCharacter(sSharedData))
 				return false;
-
-			this.sRawImage.material = GameObject.Instantiate<Material>(_RawImageMaterial);
-
+			
 			this.startIdleExpression();
 			this.startIdleMotion();
 
@@ -114,9 +113,6 @@ namespace Noir.Unity.Live2D
 				this._RenderCamera.Render();
 
 				sCurrentRenderingController = null;
-
-				this.sRawImage.material.mainTexture = this.sRenderTexture;
-				this.sRawImage.SetMaterialDirty();
 			}
 		}
 

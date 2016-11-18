@@ -304,5 +304,46 @@ namespace Noir.Script
 
 			return null;
 		}
+
+		public static void skipScriptBack(int nCount)
+		{
+			if ((ScriptRuntime.nCurrentLineIndex -= nCount) < 0)
+				ScriptRuntime.nCurrentLineIndex = 0;
+		}
+
+		public static bool skipScriptBack(string sDelimitTagName)
+		{
+			if (ScriptRuntime.CurrentScript.ScriptLineList.Count > 0 && ScriptRuntime.nCurrentLineIndex >= ScriptRuntime.CurrentScript.ScriptLineList.Count)
+				ScriptRuntime.nCurrentLineIndex = ScriptRuntime.CurrentScript.ScriptLineList.Count - 1;
+
+			while (ScriptRuntime.nCurrentLineIndex >= 0 && ScriptRuntime.nCurrentLineIndex < ScriptRuntime.CurrentScript.ScriptLineList.Count)
+			{
+				ScriptTag sTag = ScriptRuntime.sCurrentScript.ScriptLineList[ScriptRuntime.nCurrentLineIndex] as ScriptTag;
+
+				if (sTag != null && sTag.Name == sDelimitTagName)
+					return true;
+
+				--ScriptRuntime.nCurrentLineIndex;
+			}
+
+			return false;
+		}
+
+		public static string skipScriptBack(string[] sDelimitTagName)
+		{
+			while (ScriptRuntime.nCurrentLineIndex >= 0 && ScriptRuntime.nCurrentLineIndex < ScriptRuntime.CurrentScript.ScriptLineList.Count)
+			{
+				ScriptTag sTag = ScriptRuntime.sCurrentScript.ScriptLineList[ScriptRuntime.nCurrentLineIndex] as ScriptTag;
+
+				if (sTag != null)
+					foreach (string sName in sDelimitTagName)
+						if (sTag.Name == sName)
+							return sName;
+
+				--ScriptRuntime.nCurrentLineIndex;
+			}
+
+			return null;
+		}
 	}
 }

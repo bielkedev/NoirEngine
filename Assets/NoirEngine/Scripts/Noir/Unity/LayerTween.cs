@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Noir.Unity
 {
-	public delegate void LayerPropertiesModifier(float nValue, bool bUpdateInstantly);
+	public delegate void LayerStateModifier(float nValue, bool bUpdateInstantly);
 
 	public struct LayerTweenData
 	{
@@ -22,11 +22,11 @@ namespace Noir.Unity
 	{
 		public Layer _Layer { set { this.sLayer = value; } }
 		public LayerTweenData _LayerTweenData { set { this.sTweenData = value; } }
-		public LayerPropertiesModifier _LayerPropertiesModifier { set { this.fPropModifier = value; } }
+		public LayerStateModifier _LayerStateModifier { set { this.fStateModifier = value; } }
 
 		private Layer sLayer;
 		private LayerTweenData sTweenData;
-		private LayerPropertiesModifier fPropModifier;
+		private LayerStateModifier fStateModifier;
 		private float nRunningTime;
 
 		public IEnumerator runTween()
@@ -45,7 +45,7 @@ namespace Noir.Unity
 
 						while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 						{
-							this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+							this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 							yield return null;
 						}
 					}
@@ -58,7 +58,7 @@ namespace Noir.Unity
 
 						while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 						{
-							this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+							this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 							yield return null;
 						}
 					}
@@ -70,13 +70,13 @@ namespace Noir.Unity
 				{
 					while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 
 					while ((this.nRunningTime -= Time.deltaTime) >= 0)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 				}
@@ -87,13 +87,13 @@ namespace Noir.Unity
 				{
 					while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 					
 					while ((this.nRunningTime -= Time.deltaTime) >= 0)
 					{
-						this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 				}
@@ -102,7 +102,7 @@ namespace Noir.Unity
 			{
 				while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 				{
-					this.fPropModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+					this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 					yield return null;
 				}
 			}

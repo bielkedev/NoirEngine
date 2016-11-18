@@ -28,12 +28,18 @@ namespace Noir.Unity
 
 		[Header("Layer")]
 		public RectTransform _LayerPanel;
-		public GameObject _NamedLayerPrefab;
-		public Material _NamedLayerMaterial;
+		public Material _LayerMaterial;
+		public GameObject _LayerClipperPrefab;
+
+		[Header("Sprite Layer")]
+		public GameObject _SpriteLayerPrefab;
 
 		[Header("Live2D Layer")]
-		public GameObject _NamedLive2DLayerPrefab;
+		public GameObject _Live2DLayerPrefab;
 		public Camera _RenderCamera;
+
+		[Header("Animated Layer")]
+		public GameObject _AnimatedLayerPrefab;
 
 		[Header("Front UI")]
 		public GameObject _FrontPanel;
@@ -85,18 +91,28 @@ namespace Noir.Unity
 
 			//모듈 초기화
 			Application.targetFrameRate = this._TargetFPS;
+			UIManager.UnityManagerObject = this;
 
 			EquationVariable.initEquationVariable();
 			ScriptTagManager.initTagHandler();
 			ScriptBranch.initBranch();
+			ScriptLoop.initLoop();
 			live2d.Live2D.init();
 
-			UIManager.UnityManagerObject = this;
+			//Layer
 			Layer.LayerPanel = this._LayerPanel;
-			Layer.NamedLayerPrefab = this._NamedLayerPrefab;
-			Layer.NamedLayerMaterial = this._NamedLayerMaterial;
-			Live2DLayer.NamedLive2DLayerPrefab = this._NamedLive2DLayerPrefab;
+			Layer.LayerMaterial = this._LayerMaterial;
+			LayerClipper.LayerClipperPrefab = this._LayerClipperPrefab;
+
+			//Sprite Layer
+			SpriteLayer.SpriteLayerPrefab = this._SpriteLayerPrefab;
+
+			//Live2D Layer
+			Live2DLayer.Live2DLayerPrefab = this._Live2DLayerPrefab;
 			Live2DLayer.RenderCamera = this._RenderCamera;
+
+			//Animated Layer
+			AnimatedLayer.AnimatedLayerPrefab = this._AnimatedLayerPrefab;
 
 			foreach (var sMacroScriptFilePath in this._MacroScriptFilePath)
 				Macro.addMacroScript(sMacroScriptFilePath);
