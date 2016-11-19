@@ -17,7 +17,6 @@ namespace Noir.Script
 		public static Script CurrentScript { get { return ScriptRuntime.sCurrentScript; } }
 
 		private static Stack<ScriptCall> sScriptCallStack = new Stack<ScriptCall>();
-		private static Dictionary<string, Script> sScriptMap = new Dictionary<string, Script>();
 
 		/// <summary>
 		/// 스크립트 진행을 멈출지 결정하는 플래그입니다.
@@ -31,23 +30,6 @@ namespace Noir.Script
 		/// 현재 실행중인 스크립트 객체입니다.
 		/// </summary>
 		private static Script sCurrentScript = null;
-
-		/// <summary>
-		/// 특정 스크립트를 로드 후 캐싱합니다. 이미 로드되어있다면 캐싱된 스크립트 객체를 불러옵니다.
-		/// </summary>
-		/// <param name="sNewScriptPath">로드할 스크립트 파일 경로입니다.</param>
-		/// <returns>로드된 스크립트 객체입니다.</returns>
-		public static Script loadScript(string sNewScriptPath)
-		{
-			Script sResult;
-
-			if (ScriptRuntime.sScriptMap.TryGetValue(sNewScriptPath, out sResult))
-				return sResult;
-
-			ScriptRuntime.sScriptMap.Add(sNewScriptPath, sResult = new Script(sNewScriptPath));
-
-			return sResult;
-		}
 
 		/// <summary>
 		/// 특정 스크립트의 특정 부분으로 점프합니다.
@@ -89,7 +71,7 @@ namespace Noir.Script
 		/// <returns>성공 여부입니다.</returns>
 		public static bool gotoScript(string sScriptFile, string sLabelName)
 		{
-			Script sTargetScript = string.IsNullOrEmpty(sScriptFile) ? null : ScriptRuntime.loadScript(sScriptFile);
+			Script sTargetScript = string.IsNullOrEmpty(sScriptFile) ? null : CacheManager.loadScript(sScriptFile);
 
 			if (sTargetScript == null)
 			{
@@ -169,7 +151,7 @@ namespace Noir.Script
 		/// <returns>성공 여부입니다.</returns>
 		public static bool callScript(string sScriptFile, string sLabelName)
 		{
-			Script sTargetScript = string.IsNullOrEmpty(sScriptFile) ? null : ScriptRuntime.loadScript(sScriptFile);
+			Script sTargetScript = string.IsNullOrEmpty(sScriptFile) ? null : CacheManager.loadScript(sScriptFile);
 
 			if (sTargetScript == null)
 			{

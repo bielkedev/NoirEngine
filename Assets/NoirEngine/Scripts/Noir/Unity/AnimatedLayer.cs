@@ -9,16 +9,24 @@ namespace Noir.Unity
 
 		private static GameObject sAnimatedLayerPrefab;
 
+		private AnimationController sAnimationController;
 		private List<KeyValuePair<Sprite, float>> sMainSpriteList = new List<KeyValuePair<Sprite, float>>();
 
 		public AnimatedLayer(string sLayerName) : base(sLayerName, AnimatedLayer.sAnimatedLayerPrefab)
 		{
-			//Empty.
+			(this.sAnimationController = this.sLayerObject.GetComponent<AnimationController>())._SpriteList = this.sMainSpriteList;
 		}
 
 		public void addLayerSprite(Sprite sNewMainSprite, float nTime)
 		{
 			this.sMainSpriteList.Add(new KeyValuePair<Sprite, float>(sNewMainSprite, nTime));
+		}
+
+		public void updateLayerSprite()
+		{
+			this.sAnimationController.StopAllCoroutines();
+			this.sAnimationController._SpriteNum = this.sMainSpriteList.Count;
+			this.sAnimationController.StartCoroutine(this.sAnimationController.startAnimation());
 		}
 	}
 }

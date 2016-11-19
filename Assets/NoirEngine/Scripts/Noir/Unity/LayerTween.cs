@@ -62,6 +62,8 @@ namespace Noir.Unity
 							yield return null;
 						}
 					}
+
+					this.fStateModifier(this.sTweenData.nValueEnd, true);
 				}
 			}
 			else if (this.sTweenData.nYoyo == -1)
@@ -97,6 +99,8 @@ namespace Noir.Unity
 						yield return null;
 					}
 				}
+
+				this.fStateModifier(this.sTweenData.nValueBegin, true);
 			}
 			else
 			{
@@ -105,12 +109,17 @@ namespace Noir.Unity
 					this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 					yield return null;
 				}
+
+				this.fStateModifier(this.sTweenData.nValueEnd, true);
 			}
 
 			if (this.sTweenData.bDelete)
 				this.sLayer.deleteLayer();
 			else
+			{
+				this.sLayer.removeLayerTween(this);
 				GameObject.Destroy(this);
+			}
 		}
 	}
 }

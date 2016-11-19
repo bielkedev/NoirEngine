@@ -4,34 +4,8 @@
 	Created by PHJ.
 */
 
-[lycl2d id="haru" file="live2d/haru/haru.model.json" idle="idle"]
-[lyprop id="haru" left="-350"]
-[lymotionl2d id="haru" motion="tap_body"]
+[lycl2d id="nachael" file="live2d/nachael/nachael.model.json" idle="idle"]
 
-//[lycl2d id="nachael2" file="live2d/nachael/nachael.model.json" idle="idle"]
-//[lyprop id="nachael2" left="-150"]
-//[lymotionl2d id="nachael2" motion="sample"]
+[waittime time="1000" input="0"]
 
-[lycl2d id="nachael3" file="live2d/nachael/nachael.model.json" idle="idle"]
-[lymotionl2d id="nachael3" motion="sample"]
-
-//[lycl2d id="nachael4" file="live2d/nachael/nachael.model.json" idle="idle"]
-//[lyprop id="nachael4" left="150"]
-//[lymotionl2d id="nachael4" motion="sample"]
-
-[lycl2d id="nachael5" file="live2d/nachael/nachael.model.json" idle="idle"]
-[lyprop id="nachael5" left="350"]
-[lymotionl2d id="nachael5" motion="sample"]
-
-[var name="i" data="0"]
-[loop estimate="$i < 10"]
-	
-	[var name="j" data="0"]
-	[loop estimate="$j < 10"]
-		[print data="$i + '-' + j + ' '"]
-		[var name="j" data="$j + 1"]
-	[/loop]
-
-	[var name="i" data="$i + 1"]
-
-[/loop]
+[lymotionl2d id="nachael" motion=""]

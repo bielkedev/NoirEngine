@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace Noir.Unity
 {
+	[RequireComponent(typeof(WaitManager))]
 	public class UnityManager : MonoBehaviour
 	{
 		public enum ErrorReportType
@@ -60,7 +61,13 @@ namespace Noir.Unity
 		public RectTransform _BacklogContent;
 		public GameObject _DialogueLogPrefab;
 
+		private WaitManager sWaitManager;
 		private Vector2 sBacklogContentSize;
+
+		public void waitForObject(int nInputType, IWaitableObject sWaitableObject)
+		{
+			this.sWaitManager.startWait(nInputType, sWaitableObject);
+		}
 		
 		public void addBacklogDialogueLog(string sDialogueText)
 		{
@@ -84,7 +91,7 @@ namespace Noir.Unity
 			this._BacklogScroll.verticalNormalizedPosition = 0.0f;
 		}
 		
-		private void Start()
+		private void Awake()
 		{
 			//에러 핸들러 등록
 			ScriptError.ErrorEvent += this.OnError;
@@ -117,7 +124,7 @@ namespace Noir.Unity
 			foreach (var sMacroScriptFilePath in this._MacroScriptFilePath)
 				Macro.addMacroScript(sMacroScriptFilePath);
 
-			ScriptRuntime.gotoScript(ScriptRuntime.loadScript(this._ScriptFilePath));
+			ScriptRuntime.gotoScript(this._ScriptFilePath, null);
 
 			//유니티 오브젝트 초기화
 			{
@@ -130,6 +137,7 @@ namespace Noir.Unity
 				this._MenuReturnButton.onClick.AddListener(this.OnReturn);
 				this._BacklogReturnButton.onClick.AddListener(this.OnReturn);
 
+				this.sWaitManager = this.gameObject.GetComponent<WaitManager>();
 				this.sBacklogContentSize = this._BacklogContent.rect.size;
 				this.sBacklogContentSize.y = 0;
 			}
@@ -179,7 +187,13 @@ namespace Noir.Unity
 
 		private void OnProceed()
 		{
-			ScriptRuntime.runScript();
+			if(this.sWaitManager.isCanPassWithInput())
+			{
+				if (this.sWaitManager.IsWaiting)
+					this.sWaitManager.passWithInput();
+
+				ScriptRuntime.runScript();
+			}
 		}
 
 		private void OnMenu()

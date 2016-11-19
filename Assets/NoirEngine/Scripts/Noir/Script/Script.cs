@@ -135,6 +135,13 @@ namespace Noir.Script
 			}
 		}
 
+		public void releaseScript()
+		{
+			this.sParentScript = null;
+			this.sScriptLineList = null;
+			this.sScriptRegionList = null;
+		}
+
 		/// <summary>
 		/// 스크립트를 전처리합니다.
 		/// </summary>

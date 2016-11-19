@@ -38,5 +38,10 @@ namespace Noir.UI
 		{
 			Camera.current.Render();
 		}
+
+		public static void waitForObject(int nInputType, IWaitableObject sWaitableObject)
+		{
+			UIManager.sUnityManager.waitForObject(nInputType, sWaitableObject);
+		}
 	}
 }

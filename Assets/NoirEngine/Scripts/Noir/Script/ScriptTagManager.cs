@@ -45,6 +45,11 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("print", ScriptTagManager.printHandler);
 			ScriptTagManager.sTagHandlerMap.Add("loop", ScriptTagManager.loopHandler);
 			ScriptTagManager.sTagHandlerMap.Add("/loop", ScriptTagManager._loopHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lycanim", ScriptTagManager.lycanimHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lyaddanim", ScriptTagManager.lyaddanimHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lyupdateanim", ScriptTagManager.lyupdateanimHandler);
+			ScriptTagManager.sTagHandlerMap.Add("waittime", ScriptTagManager.waittimeHandler);
+			ScriptTagManager.sTagHandlerMap.Add("waittween", ScriptTagManager.waittweenHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -137,7 +142,7 @@ namespace Noir.Script
 
 			if (sLayer == null)
 				sSpriteLayer = new SpriteLayer(sID);
-			else if((sSpriteLayer = sLayer as SpriteLayer) == null)
+			else if ((sSpriteLayer = sLayer as SpriteLayer) == null)
 			{
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 존재하는 Live2D/Animated 레이어입니다.", sTag);
 				return;
@@ -798,7 +803,7 @@ namespace Noir.Script
 
 			Layer sLayer = Layer.getLayer(sID);
 
-			if(sLayer != null)
+			if (sLayer != null)
 			{
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 존재하는 레이어입니다.", sTag);
 				return;
@@ -880,15 +885,6 @@ namespace Noir.Script
 			sLayer.Controller.startIdleMotion();
 		}
 
-		private static void animHandler(ScriptTag sTag)
-		{
-			string sID = sTag.getAttribute("id");
-
-			if (string.IsNullOrEmpty(sID))
-				return;
-			
-		}
-
 		private static void printHandler(ScriptTag sTag)
 		{
 			string sData = sTag.getAttribute("data");
@@ -908,7 +904,7 @@ namespace Noir.Script
 
 			float nEstimate;
 
-			if(!float.TryParse(sEstimate, out nEstimate))
+			if (!float.TryParse(sEstimate, out nEstimate))
 			{
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sEstimate + "'은(는) 숫자가 아닙니다.", sTag);
 				return;
@@ -943,7 +939,7 @@ namespace Noir.Script
 
 		private static void _loopHandler(ScriptTag sTag)
 		{
-			if(ScriptLoop.IsCurrentLooping)
+			if (ScriptLoop.IsCurrentLooping)
 			{
 				int nCount = 0;
 
@@ -952,7 +948,7 @@ namespace Noir.Script
 
 				for (string sTagName = ScriptRuntime.skipScriptBack(ScriptTagManager.vLoopDelimitTagName); sTag != null; sTagName = ScriptRuntime.skipScriptBack(ScriptTagManager.vLoopDelimitTagName))
 				{
-					if(sTagName == "/loop")
+					if (sTagName == "/loop")
 					{
 						++nCount;
 						ScriptRuntime.skipScriptBack(1);
@@ -969,6 +965,153 @@ namespace Noir.Script
 			}
 
 			ScriptLoop.popLoop();
+		}
+
+		private static void lycanimHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer != null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 있는 레이어입니다.", sTag);
+				return;
+			}
+
+			new AnimatedLayer(sID);
+		}
+
+		private static void lyaddanimHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			AnimatedLayer sAnimatedLayer = Layer.getLayer(sID) as AnimatedLayer;
+
+			if (sAnimatedLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) Animated 레이어가 아닙니다.", sTag);
+				return;
+			}
+
+			string sFile = sTag.getAttribute("file");
+
+			if (string.IsNullOrEmpty(sFile))
+				return;
+
+			UnityEngine.Sprite sMainSprite = CacheManager.loadSprite(sFile);
+
+			if (sMainSprite == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFile + "'에 스프라이트가 없습니다.", sTag);
+				return;
+			}
+
+			string sTime = sTag.getAttribute("time");
+
+			if (string.IsNullOrEmpty(sTime))
+				return;
+
+			float nTime;
+
+			if(!float.TryParse(sTime, out nTime))
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sTime + "'은(는) 숫자가 아닙니다.", sTag);
+				return;
+			}
+
+			sAnimatedLayer.addLayerSprite(sMainSprite, nTime * .001f);
+		}
+
+		private static void lyupdateanimHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			AnimatedLayer sAnimatedLayer = Layer.getLayer(sID) as AnimatedLayer;
+
+			if (sAnimatedLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) Animated 레이어가 아닙니다.", sTag);
+				return;
+			}
+
+			sAnimatedLayer.updateLayerSprite();
+		}
+
+		private static void waittimeHandler(ScriptTag sTag)
+		{
+			string sTime = sTag.getAttribute("time");
+
+			if (sTime == null)
+				return;
+
+			float nTime;
+
+			if(!float.TryParse(sTime, out nTime))
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sTime + "'은(는) 숫자가 아닙니다.", sTag);
+				return;
+			}
+
+			string sInput = sTag.getAttribute("input");
+
+			if (sInput == null)
+				return;
+
+			float nInput;
+
+			if (!float.TryParse(sInput, out nInput))
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sInput + "'은(는) 숫자가 아닙니다.", sTag);
+				return;
+			}
+
+			UIManager.waitForObject((int)nInput, new WaitTimeObject(nTime * .001f));
+		}
+
+		private static void waittweenHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sInput = sTag.getAttribute("input");
+
+			if (sInput == null)
+				return;
+
+			float nInput;
+
+			if (!float.TryParse(sInput, out nInput))
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sInput + "'은(는) 숫자가 아닙니다.", sTag);
+				return;
+			}
+
+			UIManager.waitForObject((int)nInput, sLayer);
+		}
+
+		private static void waitmotionHandler(ScriptTag sTag)
+		{
+
 		}
 	}
 }

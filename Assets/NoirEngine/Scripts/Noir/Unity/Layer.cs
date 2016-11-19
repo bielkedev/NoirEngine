@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Noir.Unity
 {
-	public abstract class Layer
+	public abstract class Layer : IWaitableObject
 	{
 		public static RectTransform LayerPanel { set { Layer.sLayerPanel = value; } }
 		public static Material LayerMaterial { set { Layer.sLayerMaterial = value; } }
@@ -64,6 +64,12 @@ namespace Noir.Unity
 			sTween.StartCoroutine(sTween.runTween());
 
 			this.sLayerTweenList.Add(sTween);
+		}
+
+		public void removeLayerTween(LayerTween sLayerTween)
+		{
+			if(sLayerTween != null)
+				this.sLayerTweenList.Remove(sLayerTween);
 		}
 
 		public void removeLayerTweenAll()
@@ -353,6 +359,11 @@ namespace Noir.Unity
 		public void markAsNeedUpdate()
 		{
 			Layer.sNeedUpdateLayerSet.Add(this);
+		}
+
+		bool IWaitableObject.isComplete()
+		{
+			return this.sLayerTweenList.Count == 0;
 		}
 	}
 }
