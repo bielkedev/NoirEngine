@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Noir.Unity
 {
-	public delegate void LayerStateModifier(float nValue, bool bUpdateInstantly);
+	public delegate void LayerStateModifier(Layer sLayer, float nValue, bool bUpdateInstantly);
 
 	public struct LayerTweenData
 	{
@@ -45,7 +45,7 @@ namespace Noir.Unity
 
 						while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 						{
-							this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+							this.fStateModifier(this.sLayer, this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 							yield return null;
 						}
 					}
@@ -58,12 +58,12 @@ namespace Noir.Unity
 
 						while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 						{
-							this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+							this.fStateModifier(this.sLayer, this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 							yield return null;
 						}
 					}
 
-					this.fStateModifier(this.sTweenData.nValueEnd, true);
+					this.fStateModifier(this.sLayer, this.sTweenData.nValueEnd, true);
 				}
 			}
 			else if (this.sTweenData.nYoyo == -1)
@@ -72,13 +72,13 @@ namespace Noir.Unity
 				{
 					while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 					{
-						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sLayer, this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 
 					while ((this.nRunningTime -= Time.deltaTime) >= 0)
 					{
-						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sLayer, this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 				}
@@ -89,28 +89,28 @@ namespace Noir.Unity
 				{
 					while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 					{
-						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sLayer, this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 					
 					while ((this.nRunningTime -= Time.deltaTime) >= 0)
 					{
-						this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+						this.fStateModifier(this.sLayer, this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 						yield return null;
 					}
 				}
 
-				this.fStateModifier(this.sTweenData.nValueBegin, true);
+				this.fStateModifier(this.sLayer, this.sTweenData.nValueBegin, true);
 			}
 			else
 			{
 				while ((this.nRunningTime += Time.deltaTime) <= this.sTweenData.nDuration)
 				{
-					this.fStateModifier(this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
+					this.fStateModifier(this.sLayer, this.sTweenData.fEasingFunc(this.sTweenData.nValueBegin, this.sTweenData.nValueEnd, this.nRunningTime / this.sTweenData.nDuration), true);
 					yield return null;
 				}
 
-				this.fStateModifier(this.sTweenData.nValueEnd, true);
+				this.fStateModifier(this.sLayer, this.sTweenData.nValueEnd, true);
 			}
 
 			if (this.sTweenData.bDelete)

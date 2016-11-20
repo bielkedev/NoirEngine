@@ -12,6 +12,15 @@ namespace Noir.Unity
 		private AnimationController sAnimationController;
 		private List<KeyValuePair<Sprite, float>> sMainSpriteList = new List<KeyValuePair<Sprite, float>>();
 
+		public AnimatedLayer(AnimatedLayer sAnimatedLayer) : base(sAnimatedLayer)
+		{
+			this.sAnimationController = this.sLayerObject.GetComponent<AnimationController>();
+			this.sAnimationController._SpriteList = this.sMainSpriteList;
+
+			foreach (var sPair in sAnimatedLayer.sMainSpriteList)
+				this.sMainSpriteList.Add(sPair);
+		}
+
 		public AnimatedLayer(string sLayerName) : base(sLayerName, AnimatedLayer.sAnimatedLayerPrefab)
 		{
 			(this.sAnimationController = this.sLayerObject.GetComponent<AnimationController>())._SpriteList = this.sMainSpriteList;

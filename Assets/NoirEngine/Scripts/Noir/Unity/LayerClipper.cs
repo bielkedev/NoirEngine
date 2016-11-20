@@ -9,6 +9,7 @@ namespace Noir.Unity
 
 		private static GameObject sLayerClipperPrefab;
 
+		public GameObject Object { get { return this.sClipperObject; } }
 		public RectTransform Transform { get { return this.sClipperTransform; } }
 		public Rect Region { get { return this.sClipperTransform.rect; } }
 		public bool Enabled { get { return this.sClipperMask.enabled; } set { this.sClipperMask.enabled = value; } }
@@ -17,6 +18,14 @@ namespace Noir.Unity
 		private RectTransform sClipperTransform;
 		private RectMask2D sClipperMask;
 		private Layer sClippingLayer;
+
+		public LayerClipper(GameObject sNewClipperObject, Layer sNewClippingLayer)
+		{
+			this.sClipperObject = sNewClipperObject;
+			this.sClipperTransform = this.sClipperObject.GetComponent<RectTransform>();
+			this.sClipperMask = this.sClipperObject.GetComponent<RectMask2D>();
+			this.sClippingLayer = sNewClippingLayer;
+		}
 
 		public LayerClipper(Layer sNewClippingLayer, bool bNewEnabled)
 		{

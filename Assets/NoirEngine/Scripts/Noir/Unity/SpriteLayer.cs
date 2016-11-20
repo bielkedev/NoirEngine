@@ -11,6 +11,11 @@ namespace Noir.Unity
 		private Sprite sSprite;
 		private bool bSpriteDirty;
 
+		public SpriteLayer(SpriteLayer sSpriteLayer) : base(sSpriteLayer)
+		{
+			//Empty.
+		}
+
 		public SpriteLayer(string sLayerName) : base(sLayerName, SpriteLayer.sSpriteLayerPrefab)
 		{
 			//Empty.
@@ -22,6 +27,9 @@ namespace Noir.Unity
 			{
 				this.sLayerImage.material.SetTexture("_MainTex", (this.sSprite = sNewSprite) == null ? null : this.sSprite.texture);
 				this.sLayerImage.SetMaterialDirty();
+
+				if (this.sSprite != null)
+					this.sLayerTransform.sizeDelta = this.sSprite.textureRect.size;
 			}
 			else
 			{
@@ -39,6 +47,9 @@ namespace Noir.Unity
 			{
 				this.sLayerImage.material.SetTexture("_MainTex", this.sSprite == null ? null : this.sSprite.texture);
 				this.sLayerImage.SetMaterialDirty();
+
+				if (this.sSprite != null)
+					this.sLayerTransform.sizeDelta = this.sSprite.textureRect.size;
 			}
 		}
 	}

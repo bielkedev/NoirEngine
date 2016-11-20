@@ -36,7 +36,7 @@ namespace Noir.UI
 
 		public static void forceUpdateScreen()
 		{
-			Camera.current.Render();
+			Camera.main.Render();
 		}
 
 		public static void waitForObject(int nInputType, IWaitableObject sWaitableObject)

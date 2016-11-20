@@ -5,7 +5,13 @@
 */
 
 [lycl2d id="nachael" file="live2d/nachael/nachael.model.json" idle="idle"]
+[lytween id="nachael" param="left" ease="linear" from="-500" to="500" time="1000" yoyo="-1"]
 
-[waittime time="1000" input="0"]
+[lyc id="test01" file="chr/slime02"]
+[lytween id="test01" param="top" ease="linear" from="-300" to="300" time="1000" yoyo="-1"]
 
-[lymotionl2d id="nachael" motion=""]
+[loop estimate="1"]
+	[waittween id="nachael" input="1"]
+	[test id="nachael"]
+	[test id="test01"]
+[/loop]

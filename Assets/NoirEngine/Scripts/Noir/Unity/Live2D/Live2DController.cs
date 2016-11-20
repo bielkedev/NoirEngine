@@ -1,11 +1,10 @@
-﻿using Noir.UI;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Noir.Unity.Live2D
 {
 	[RequireComponent(typeof(AudioSource), typeof(RawImage))]
-	public class Live2DController : MonoBehaviour
+	public class Live2DController : MonoBehaviour, IWaitableObject
 	{
 		private static Live2DController sCurrentRenderingController = null;
 
@@ -135,19 +134,26 @@ namespace Noir.Unity.Live2D
 		{
 			this.bExpressionLoop = bLoop;
 
-			if ((this.sCurrentExpressionName = sExpressionName) == null)
+			if (sExpressionName == null)
 			{
+				this.sCurrentExpressionName = null;
 				this.sLive2DCharacter.idleExpression();
 				return true;
 			}
 
-			return this.sLive2DCharacter.startExpression(this.sCurrentExpressionName);
+			if (this.sLive2DCharacter.startExpression(sExpressionName))
+			{
+				this.sCurrentExpressionName = sExpressionName;
+				return true;
+			}
+
+			return false;
 		}
 
 		public bool startMotion(string sMotionName, bool bLoop)
 		{
 			AudioClip sAudioClip;
-			bool bResult = this.sLive2DCharacter.startMotion(this.sCurrentMotionName = sMotionName, out sAudioClip);
+			bool bResult = this.sLive2DCharacter.startMotion(sMotionName, out sAudioClip);
 
 			if (sAudioClip != null)
 			{
@@ -157,7 +163,15 @@ namespace Noir.Unity.Live2D
 
 			this.bMotionLoop = bLoop;
 
+			if (bResult)
+				this.sCurrentMotionName = sMotionName;
+
 			return bResult;
+		}
+
+		bool IWaitableObject.isComplete()
+		{
+			return this.sCurrentMotionName == this._IdleMotionName;
 		}
 	}
 }

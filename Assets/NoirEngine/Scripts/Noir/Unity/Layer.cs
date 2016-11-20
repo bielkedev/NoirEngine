@@ -42,6 +42,60 @@ namespace Noir.Unity
 			Layer.sNeedUpdateLayerSet.Clear();
 		}
 
+		public static void setPosX(Layer sLayer, float nValue, bool bUpdateInstantly)
+		{
+			sLayer.setPosX(nValue, bUpdateInstantly);
+		}
+
+		public static void setPosY(Layer sLayer, float nValue, bool bUpdateInstantly)
+		{
+			sLayer.setPosY(nValue, bUpdateInstantly);
+		}
+
+		public static void setAlpha(Layer sLayer, float nValue, bool bUpdateInstantly)
+		{
+			sLayer.setAlpha(nValue, bUpdateInstantly);
+		}
+
+		public static void setScaleX(Layer sLayer, float nValue, bool bUpdateInstantly)
+		{
+			sLayer.setScaleX(nValue, bUpdateInstantly);
+		}
+
+		public static void setScaleY(Layer sLayer, float nValue, bool bUpdateInstantly)
+		{
+			sLayer.setScaleY(nValue, bUpdateInstantly);
+		}
+
+		public static void setRotate(Layer sLayer, float nValue, bool bUpdateInstantly)
+		{
+			sLayer.setRotate(nValue, bUpdateInstantly);
+		}
+
+		protected Layer(Layer sLayer)
+		{
+			GameObject sClipperObject = GameObject.Instantiate(sLayer.sLayerClipper.Object);
+
+			foreach (Transform sTransform in sClipperObject.transform)
+				this.sLayerObject = sTransform.gameObject;
+			
+			this.sLayerTransform = this.sLayerObject.GetComponent<RectTransform>();
+			this.sLayerImage = this.sLayerObject.GetComponent<RawImage>();
+			this.sLayerClipper = new LayerClipper(sClipperObject, this);
+
+			foreach (LayerTween sLayerTween in this.sLayerObject.GetComponents<LayerTween>())
+			{
+				sLayerTween.StopAllCoroutines();
+				GameObject.Destroy(sLayerTween);
+			}
+
+			Layer.sLayerMap.Add(this.sLayerObject.name = sLayer.LayerName + '\n', this);
+			Layer.sLayerList.Add(this.sLayerObject.name, this);
+
+			this.sLayerClipper.Transform.SetParent(Layer.sLayerPanel, false);
+			this.sLayerClipper.Transform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(this.sLayerObject.name));
+		}
+
 		protected Layer(string sLayerName, GameObject sLayerPrefab)
 		{
 			this.sLayerTransform = (this.sLayerObject = GameObject.Instantiate(sLayerPrefab)).GetComponent<RectTransform>();
@@ -69,14 +123,21 @@ namespace Noir.Unity
 		public void removeLayerTween(LayerTween sLayerTween)
 		{
 			if(sLayerTween != null)
+			{
+				sLayerTween.StopAllCoroutines();
 				this.sLayerTweenList.Remove(sLayerTween);
+				GameObject.Destroy(sLayerTween);
+			}
 		}
 
 		public void removeLayerTweenAll()
 		{
 			foreach (var sTween in this.sLayerTweenList)
 				if (sTween != null)
+				{
 					sTween.StopAllCoroutines();
+					GameObject.Destroy(sTween);
+				}
 
 			this.sLayerTweenList.Clear();
 		}

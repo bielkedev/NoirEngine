@@ -14,6 +14,7 @@ namespace Noir.Script
 
 		private static Random sRandom = new Random();
 		private static Dictionary<string, ScriptTagHandler> sTagHandlerMap = new Dictionary<string, ScriptTagHandler>();
+		private static char[] vClipSeparator = new char[] { ',' };
 		private static string[] vIfDelimitTagName = new string[] { "if", "elseif", "else", "/if" };
 		private static string[] vLoopDelimitTagName = new string[] { "loop", "/loop" };
 
@@ -50,6 +51,9 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("lyupdateanim", ScriptTagManager.lyupdateanimHandler);
 			ScriptTagManager.sTagHandlerMap.Add("waittime", ScriptTagManager.waittimeHandler);
 			ScriptTagManager.sTagHandlerMap.Add("waittween", ScriptTagManager.waittweenHandler);
+			ScriptTagManager.sTagHandlerMap.Add("waitmotion", ScriptTagManager.waitmotionHandler);
+			ScriptTagManager.sTagHandlerMap.Add("test", ScriptTagManager.testHandler);
+
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -322,6 +326,43 @@ namespace Noir.Script
 				else
 					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
 
+			if(!string.IsNullOrEmpty(sValue = sTag.getAttribute("clip", false)))
+			{
+				string[] vAttr = sValue.Split(ScriptTagManager.vClipSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+				if (vAttr.Length != 4)
+					sLayer.setClipping(false);
+				else
+				{
+					sLayer.setClipping(true);
+
+					if (vAttr[0].StartsWith("$"))
+						vAttr[0] = new EquationLine(vAttr[0]).evaluateEquation();
+					if (vAttr[1].StartsWith("$"))
+						vAttr[1] = new EquationLine(vAttr[1]).evaluateEquation();
+					if (vAttr[2].StartsWith("$"))
+						vAttr[2] = new EquationLine(vAttr[2]).evaluateEquation();
+					if (vAttr[3].StartsWith("$"))
+						vAttr[3] = new EquationLine(vAttr[3]).evaluateEquation();
+
+					float nX;
+					float nY;
+					float nW;
+					float nH;
+
+					if (!float.TryParse(vAttr[0], out nX))
+						ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + vAttr[0] + "'은(는) 숫자가 아닙니다.", sTag);
+					if (!float.TryParse(vAttr[1], out nY))
+						ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + vAttr[1] + "'은(는) 숫자가 아닙니다.", sTag);
+					if (!float.TryParse(vAttr[2], out nW))
+						ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + vAttr[2] + "'은(는) 숫자가 아닙니다.", sTag);
+					if (!float.TryParse(vAttr[3], out nH))
+						ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + vAttr[3] + "'은(는) 숫자가 아닙니다.", sTag);
+
+					sLayer.setClipper(UnityEngine.Rect.MinMaxRect(nX, nY, nX + nW, nY + nH));
+				}
+			}
+
 			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("visible", false)))
 				if (float.TryParse(sValue, out nValue))
 					sLayer.setVisible(nValue);
@@ -374,27 +415,27 @@ namespace Noir.Script
 			switch (sValue)
 			{
 				case "left":
-				fModifier = sLayer.setPosX;
+				fModifier = Layer.setPosX;
 				break;
 
 				case "top":
-				fModifier = sLayer.setPosY;
+				fModifier = Layer.setPosY;
 				break;
 
 				case "alpha":
-				fModifier = sLayer.setAlpha;
+				fModifier = Layer.setAlpha;
 				break;
 
 				case "xscale":
-				fModifier = sLayer.setScaleX;
+				fModifier = Layer.setScaleX;
 				break;
 
 				case "yscale":
-				fModifier = sLayer.setScaleY;
+				fModifier = Layer.setScaleY;
 				break;
 
 				case "rotate":
-				fModifier = sLayer.setRotate;
+				fModifier = Layer.setRotate;
 				break;
 
 				default:
@@ -626,7 +667,10 @@ namespace Noir.Script
 				return;
 				case "1":
 				{
-					foreach (Layer sLayer in Layer.NeedUpdateLayerEnumerable) ;
+					foreach (Layer sLayer in Layer.NeedUpdateLayerEnumerable)
+					{
+
+					}
 
 					Layer.clearNeedUpdateLayerList();
 				}
@@ -1111,7 +1155,62 @@ namespace Noir.Script
 
 		private static void waitmotionHandler(ScriptTag sTag)
 		{
+			string sID = sTag.getAttribute("id");
 
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			Live2DLayer sLive2DLayer = Layer.getLayer(sID) as Live2DLayer;
+
+			if (sLive2DLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
+				return;
+			}
+
+			string sInput = sTag.getAttribute("input");
+
+			if (sInput == null)
+				return;
+
+			float nInput;
+
+			if (!float.TryParse(sInput, out nInput))
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sInput + "'은(는) 숫자가 아닙니다.", sTag);
+				return;
+			}
+
+			UIManager.waitForObject((int)nInput, sLive2DLayer.Controller);
+		}
+
+		private static void testHandler(ScriptTag sTag)
+		{
+			Layer sLayer = Layer.getLayer(sTag.getAttribute("id"));
+
+			SpriteLayer sSpriteLayer = sLayer as SpriteLayer;
+
+			if (sSpriteLayer != null)
+			{
+				new SpriteLayer(sSpriteLayer);
+				return;
+			}
+
+			Live2DLayer sLive2DLayer = sLayer as Live2DLayer;
+
+			if (sLive2DLayer != null)
+			{
+				new Live2DLayer(sLive2DLayer);
+				return;
+			}
+
+			AnimatedLayer sAnimatedLayer = sLayer as AnimatedLayer;
+
+			if (sAnimatedLayer != null)
+			{
+				new AnimatedLayer(sAnimatedLayer);
+				return;
+			}
 		}
 	}
 }

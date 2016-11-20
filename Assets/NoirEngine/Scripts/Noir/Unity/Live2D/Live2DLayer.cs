@@ -14,6 +14,11 @@ namespace Noir.Unity.Live2D
 		
 		private Live2DController sLive2DController;
 
+		public Live2DLayer(Live2DLayer sLive2DLayer) : base(sLive2DLayer)
+		{
+			this.sLive2DController = this.sLayerObject.GetComponent<Live2DController>();
+		}
+
 		public Live2DLayer(string sLayerName) : base(sLayerName, Live2DLayer.sLive2DLayerPrefab)
 		{
 			(this.sLive2DController = this.sLayerObject.GetComponent<Live2DController>())._RenderCamera = Live2DLayer.sRenderCamera;
