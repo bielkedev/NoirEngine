@@ -7,7 +7,7 @@
 [lycl2d id="nachael" file="live2d/nachael/nachael.model.json" idle="idle"]
 [lytween id="nachael" param="left" ease="linear" from="-500" to="500" time="1000" yoyo="-1"]
 
-[lyc id="test01" file="chr/slime02"]
+[lyc id="test01" file="data/chr/slime02"]
 [lytween id="test01" param="top" ease="linear" from="-300" to="300" time="1000" yoyo="-1"]
 
 [loop estimate="1"]

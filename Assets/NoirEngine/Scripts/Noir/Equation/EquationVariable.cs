@@ -13,7 +13,7 @@ namespace Noir.Equation
 		{
 			EquationVariable.sVariableList.Clear();
 
-			EquationVariable.sVariableList.Add("s.engineversion", "0.0.1a");
+			EquationVariable.sVariableList.Add("s.engineversion", "0.0.1d");
 			EquationVariable.sVariableList.Add("s.datapath", "Scenario");
 			EquationVariable.sVariableList.Add("s.savepath", "Save");
 			EquationVariable.sVariableList.Add("s.bgmvol", "1000");

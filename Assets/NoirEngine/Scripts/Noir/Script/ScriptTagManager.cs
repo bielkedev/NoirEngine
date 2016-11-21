@@ -90,11 +90,6 @@ namespace Noir.Script
 
 			switch (sTarget)
 			{
-				case "blankline":
-				{
-					ScriptAutoInsertManager.setBlackLineTag(sCommand);
-				}
-				return;
 				case "linehead":
 				{
 					ScriptAutoInsertManager.setLineHeadTagList(sCommand);
@@ -107,7 +102,7 @@ namespace Noir.Script
 				return;
 				default:
 				{
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sTarget + "'은(는) 잘못된 값입니다. 'blankline', 'linehead', 'lineend' 중 하나여야합니다.", sTag);
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sTarget + "'은(는) 잘못된 값입니다. 'linehead', 'lineend' 중 하나여야합니다.", sTag);
 				}
 				return;
 			}
@@ -727,20 +722,18 @@ namespace Noir.Script
 				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
-					{
 						++nCount;
-						ScriptRuntime.skipScript(1);
-					}
 					else if (sTagName == "/if")
 					{
 						if (nCount <= 0)
 							break;
 
 						--nCount;
-						ScriptRuntime.skipScript(1);
 					}
 					else if (nCount <= 0)
 						break;
+
+					ScriptRuntime.skipScript(1);
 				}
 			}
 		}
@@ -754,20 +747,18 @@ namespace Noir.Script
 				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
-					{
 						++nCount;
-						ScriptRuntime.skipScript(1);
-					}
 					else if (sTagName == "/if")
 					{
 						if (nCount <= 0)
 							break;
 
 						--nCount;
-						ScriptRuntime.skipScript(1);
 					}
 					else if (nCount <= 0)
 						break;
+
+					ScriptRuntime.skipScript(1);
 				}
 
 				return;
@@ -795,20 +786,19 @@ namespace Noir.Script
 				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
-					{
 						++nCount;
-						ScriptRuntime.skipScript(1);
-					}
 					else if (sTagName == "/if")
 					{
 						if (nCount <= 0)
 							break;
 
 						--nCount;
-						ScriptRuntime.skipScript(1);
 					}
 					else if (nCount <= 0)
 						break;
+
+					ScriptRuntime.skipScript(1);
+
 				}
 			}
 		}
@@ -822,20 +812,18 @@ namespace Noir.Script
 				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName); sTagName != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vIfDelimitTagName))
 				{
 					if (sTagName == "if")
-					{
 						++nCount;
-						ScriptRuntime.skipScript(1);
-					}
 					else if (sTagName == "/if")
 					{
 						if (nCount <= 0)
 							break;
 
 						--nCount;
-						ScriptRuntime.skipScript(1);
 					}
 					else if (nCount <= 0)
 						break;
+
+					ScriptRuntime.skipScript(1);
 				}
 
 				return;
@@ -974,18 +962,16 @@ namespace Noir.Script
 				for (string sTagName = ScriptRuntime.skipScript(ScriptTagManager.vLoopDelimitTagName); sTag != null; sTagName = ScriptRuntime.skipScript(ScriptTagManager.vLoopDelimitTagName))
 				{
 					if (sTagName == "loop")
-					{
 						++nCount;
-						ScriptRuntime.skipScript(1);
-					}
 					else
 					{
 						if (nCount <= 0)
 							break;
 
 						--nCount;
-						ScriptRuntime.skipScript(1);
 					}
+
+					ScriptRuntime.skipScript(1);
 				}
 			}
 			else
@@ -1004,18 +990,16 @@ namespace Noir.Script
 				for (string sTagName = ScriptRuntime.skipScriptBack(ScriptTagManager.vLoopDelimitTagName); sTag != null; sTagName = ScriptRuntime.skipScriptBack(ScriptTagManager.vLoopDelimitTagName))
 				{
 					if (sTagName == "/loop")
-					{
 						++nCount;
-						ScriptRuntime.skipScriptBack(1);
-					}
 					else
 					{
 						if (nCount <= 0)
 							break;
 
 						--nCount;
-						ScriptRuntime.skipScriptBack(1);
 					}
+
+					ScriptRuntime.skipScriptBack(1);
 				}
 			}
 

@@ -168,9 +168,9 @@ namespace Noir.Unity
 		{
 			if (bUpdateInstantly)
 			{
-				Vector3 sPosition = this.sLayerTransform.position;
+				Vector3 sPosition = this.sLayerTransform.localPosition;
 				this.sLayerState.sPosition.x = sPosition.x = nNewX;
-				this.sLayerTransform.position = sPosition;
+				this.sLayerTransform.localPosition = sPosition;
 			}
 			else
 			{
@@ -362,7 +362,7 @@ namespace Noir.Unity
 			//Apply position
 			if (this.sLayerStateDirty.bPosition)
 			{
-				this.sLayerTransform.position = this.sLayerState.sPosition;
+				this.sLayerTransform.localPosition = this.sLayerState.sPosition;
 				this.sLayerStateDirty.bPosition = false;
 			}
 

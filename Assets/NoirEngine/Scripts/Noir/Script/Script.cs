@@ -62,27 +62,12 @@ namespace Noir.Script
 			//스크립트를 처리합니다.
 			while(sParser.IsRemain)
 			{
-				sParser.skipWhitespace("\n");
+				sParser.skipWhitespace();
 
-				if(sParser.tryMatchChar('\n'))
-				{
-					try
-					{
-						this.sScriptLineList.Add(new ScriptBlankLine(sScriptFilePath, sParser));
-						sParser.skipWhitespace("\n");
-
-						if (sParser.tryMatchChar('\n'))
-							sParser.skipWhile(1);
-					}
-					catch(Exception sException)
-					{
-						ScriptError.pushError(ScriptError.ErrorType.ParsingError, sException.Message, sScriptFilePath, sParser.Line);
-					}
-				}
-				else if(sParser.tryMatchChar('*')) //구역 지정자입니다.
+				if(sParser.tryMatchChar('*')) //구역 지정자입니다.
 				{
 					sParser.skipWhile(1);
-					this.sScriptRegionList.Add(sParser.mergeUntil("\n"), this.sScriptLineList.Count);
+					this.sScriptRegionList.Add(sParser.mergeUntil("\n").Trim(), this.sScriptLineList.Count);
 					sParser.skipWhile(1);
 				}
 				else if(sParser.tryMatchChar('[')) //커맨드입니다.
@@ -90,10 +75,6 @@ namespace Noir.Script
 					try
 					{
 						this.sScriptLineList.Add(new ScriptTag(sScriptFilePath, sParser));
-						sParser.skipWhitespace("\n");
-
-						if (sParser.tryMatchChar('\n'))
-							sParser.skipWhile(1);
 					}
 					catch(Exception sException)
 					{
@@ -105,10 +86,6 @@ namespace Noir.Script
 					try
 					{
 						this.sScriptLineList.Add(new ScriptWait(sScriptFilePath, sParser));
-						sParser.skipWhitespace("\n");
-
-						if (sParser.tryMatchChar('\n'))
-							sParser.skipWhile(1);
 					}
 					catch (Exception sException)
 					{
@@ -122,10 +99,6 @@ namespace Noir.Script
 						this.sScriptLineList.Add(new ScriptDialogueHead(sScriptFilePath, sParser));
 						this.sScriptLineList.Add(new ScriptDialogue(sScriptFilePath, sParser));
 						this.sScriptLineList.Add(new ScriptDialogueEnd(sScriptFilePath, sParser));
-						sParser.skipWhitespace("\n");
-
-						if (sParser.tryMatchChar('\n'))
-							sParser.skipWhile(1);
 					}
 					catch (Exception sException)
 					{
