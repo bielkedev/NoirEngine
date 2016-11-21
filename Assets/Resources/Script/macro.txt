@@ -1,0 +1,621 @@
+//
+// ---------------------------------------------------------------------------------------------
+//이미지 관련 매크로
+*bg
+	//[bg file="" type="" time="" rule="" scale="" top="" left="" preset=""]
+	//[bg file="" type="1" time="" scale=""] ←타입1에 top left값 안 써도 되면 이렇게 써도 됨.
+	//[bg file="lvroom.png" type="1" time="" preset=""] preset 값 있음 이렇게. type 값은 1
+	//[bg file="lvroom.png" type="2" time="" rule="" preset=""] preset 값 있고 type 값은 2
+	//[bg preset=""] 새로운 배경을 넣지 않는게 아닌 위치 프리셋 값만 바꾼다면 이렇게
+	//file	bg폴더 안에 있는 이미지명				필수
+	//type	타입. 0은 직각, 1은 크로스페이드, 2는 유니버설		필수아님. 생략시 type=1
+	//time	말 그대로 타임.						필수
+	//rule	마스킹 파일의 이름					1일시 안써도 됨
+	//scale 이미지 크기 비율					필수아님. 생략시 100
+	//top	위							필수아님
+	//left	옆							필수아님
+	//preset귀찮으니 배경 프리셋 여기에도 이용하기로.		필수아님
+	//	xl - 캐릭 xl 크기일때 쓰십셔. l,m,s 동일. 라지 미디엄 스몰임다.
+
+	[var name="bg_preset" data="$preset"]
+	[if estimate="$file != 0"]
+		[lyc id="1" file="$'Data/bg/' + file"]
+	[else]
+	[/if]
+	
+	[if estimate="$bg_preset == 0"]
+		[if estimate="$scale == 0"]
+			[lyprop id="1" left="$left" top="$top" xscale="100" yscale="100"]
+		[elseif estimate="$scale != 0"]
+			[lyprop id="1" left="$left" top="$top" xscale="$scale" yscale="$scale"]
+		[else]
+		[/if]
+	[elseif estimate="$bg_preset == 'xl'"]
+		[lyprop id="1" xscale="$120" yscale="$120"]
+	[elseif estimate="$bg_preset == 'l'"]
+		[lyprop id="1" xscale="$95" yscale="$95"]
+	[elseif estimate="$bg_preset == 'm'"]
+		[lyprop id="1" xscale="$80" yscale="$80"]
+	[elseif estimate="$bg_preset == 's'"]
+		[lyprop id="1" xscale="$65" yscale="$65"]
+	[else]
+	[/if]
+	
+	[if estimate="$time != 0"]
+		[if estimate="$type == 0"]
+			[trans type="1" time="$time" rule="$g.maskpath + rule" vague="32" input="$tr_input_value"]
+		[elseif estimate="$type != 0"]
+			[trans type="$type" time="$time" rule="$g.maskpath + rule" vague="32" input="$tr_input_value"]
+		[else]
+		[/if]
+	[else]
+	[/if]
+	[return]
+
+*bg2
+	//bg2는 배경이 여러 레이어이거나 아니면 이펙트용으로 쓰는 id2값의 bg. trans값은 제거했음.
+	//[bg2 file="" scale="" top="" left="" alpha=""]
+	//[bg2 file="" scale="" alpha=""] ←타입1에 top left값 안 써도 되면 이렇게 써도 됨.
+	//file	bg폴더 안에 있는 이미지명				필수
+	//scale 이미지 크기 비율					필수.
+	//top	위							필수아님
+	//left	옆							필수아님
+
+	[lyc id="2" file="$g.bgpath + file"]
+	[lyprop id="2" left="$left" top="$top" xscale="$scale" yscale="$scale" alpha="%alpha"]
+	[return]
+
+
+*lytscale
+	//id	레이어 id
+	//ease	이징 값.
+	//from	시작값
+	//to	끝값
+	//time	시간
+
+	[lytween id="$id" param="xscale" ease="$ease" from="$from" to="$to" time="$time" sync="0"]
+	[lytween id="$id" param="yscale" ease="$ease" from="$from" to="$to" time="$time" sync="1"]
+	[return]
+
+*lyopt
+	//[lyopt id="" left="$" top="$" scale="100"]
+	//id	레이어 id	필수
+	//left	x값.		필수 아님
+	//top	y값		필수 아님
+	//scale 배율값		필수
+
+	[lyprop id="$id" left="$left" top="$top" xscale="$scale" yscale="$scale"]
+	[if estimate="$scale == 0"]
+		[lyprop id="$id" xscale="100" yscale="100"]
+	[else]
+	[/if]
+	[return]
+
+*trans2easy
+	//rule	마스킹 종류
+	//time	몇초에 걸쳐 (후략)
+	//file	배경 파일 이름
+	//left	x
+	//top	y
+	//scale 확대/축소 배율
+	//[trans2easy file="" time="" rule="" left="" top="" scale="" preset="" wait=""]
+	
+	[var name="tr2e_preset" data="$preset"]
+	[var name="tr2e_wait" data="$wait"]
+	
+	[lydel id="1"][lydel id="2"][lydel id="3"]
+	[lydel id="11"][lydel id="12"][lydel id="13"][lydel id="14"][lydel id="15"][lydel id="16"][lydel id="17"][lydel id="18"][lydel id="19"]
+	[lydel id="25"]
+	[trans type="2" time="$time" rule="$g.maskpath + rule" vague="32" input="$tr_input_value"]
+	
+	[if estimate="$tr2e_wait != 0"]
+		[wait time="tr2e_wait"]
+	[else]
+	[wait time="500"]
+	[/if]
+	
+	[lyc id="1" file="$g.bgpath + file"]
+	
+	[if estimate="$tr2e_preset == 0"]
+		[lyprop id="1" left="$left" top="$top" xscale="$scale" yscale="$scale"]
+	[elseif estimate="$tr2e_preset == 'xl'"]
+		[lyprop id="1" left="$-380" top="$-200" xscale="$120" yscale="$120"]
+	[elseif estimate="$tr2e_preset == 'l'"]
+		[lyprop id="1" left="$-384" top="$-228" xscale="$95" yscale="$95"]
+	[elseif estimate="$tr2e_preset == 'm'"]
+		[lyprop id="1" left="$-384" top="$-228" xscale="$80" yscale="$80"]
+	[elseif estimate="$tr2e_preset == 's'"]
+		[lyprop id="1" left="$-384" top="$-228" xscale="$65" yscale="$65"]
+	[else]
+	[/if]
+	[trans type="2" time="$time" rule="$g.maskpath + rule" vague="32" input="$tr_input_value"]
+	[return]
+
+*scgmovex
+	//id	작동을 가할 레이어 아이디
+	//from	초기값과 도착값. (동일)
+	//val1	움직일때 처음 갈 포인트
+	//val2	움직일때 두번째로 갈 포인트
+	//time	시간.
+	//loop	루프 횟수. 가령 1일경우 to1로 한번, to2로 한번 이동 후 from으로 돌아감
+	//[scgmovex id="" val1="" val2="" time="" loop=""]
+
+	[if estimate="val2 == 0" ]
+		[var name="t.scgmovexid" data="$id"]
+		[var name="t.lycinfo" system="get_layer_info" style="array" id = "$t.scgmovexid"]
+		[var name="t.scgmovexleft" data="$t.lycinfo.left"]
+		[var name="scgmovex_loop" data="0"]
+		[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
+		
+	[elseif estimate="val2 != 0" ]
+		[var name="t.scgmovexid" data="$id"]
+		[var name="t.lycinfo" system="get_layer_info" style="array" id = "$t.scgmovexid"]
+		[var name="t.scgmovexleft" data="$t.lycinfo.left"]
+		[var name="scgmovex_loop" data="0"]
+		[lytween id="$id" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
+		[loop estimate="$scgmovex_loop < $loop + 1"]
+			[lytween id="$id" param="left" from="$to1" to="$to2" time="$time" sync="1"]
+			[lytween id="$id" param="left" from="$to2" to="$to1" time="$time" sync="1"]
+			[var name="scgmovex_loop" data="$scgmovex_loop + 1"]
+		[/loop]
+		[lytween id="$id" param="left" from="$to1" to="$from" time="$time" sync="1"]
+	[else]
+	[/if]
+	[return]
+
+*scgmovey
+	//[scgmovey id="" val="" time=""]
+	//id	작동을 가할 레이어 아이디
+	//val	움직일 픽셀 값. -로 하면 위로 감.
+	//time	시간.
+	[var name="t.scgmoveyid" data="$id"]
+	[var name="t.lycinfo" system="get_layer_info" style="array" id = "$t.scgmoveyid"]
+	[var name="t.scgmoveytop" data="$t.lycinfo.top"]
+	[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop" to="$t.scgmoveytop - val" time="$time" sync="1"]
+	[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop - val" to="$t.scgmoveytop" time="$time" sync="1"]
+	[return]
+
+
+
+*scgcut2
+	//id	작동을 가할 레이어 아이디
+	
+	
+	[lyc id="$id" file="$g.imagepath + 'cutin/cutin02.png'"]
+	[lyopt id="$id" left="$675" top="$-100" scale="100"]
+	[lytween id="$id" param="top" from="$-100" to="$0" time="300" sync="0" ]
+	[trans type="1" time="300" input="$tr_input_value"]
+	[lyc id="8" file="$g.imagepath + 'chr/freya.png'"]
+	[lyprop id ="8" left ="$677" top ="$-170" clip ="320,0,296,1500"]
+	[trans type="1" time="500" input="$tr_input_value"]
+	[return]
+
+*tr_input
+	//input 값 세팅
+	//0	클릭에 인한 스킵 금지
+	//1	클릭으로 스킵 가능
+	//2	이미 읽은 부분은 클릭으로 스킵 가능
+	[var name="tr_input_value" data="$val"]
+	[return]
+
+// ---------------------------------------------------------------------------------------------
+//스탠딩cg
+*seres
+	[lyc id="$seres" file="$g.imagepath + 'chr/knight.png'"]
+	[return]
+
+*lithia
+	[lyc id="$lithia" file="$g.imagepath + 'chr/lithia.png'"]
+	[return]
+
+*sophia
+	[lyc id="$sophia" file="$g.imagepath + 'chr/sophia.png'"]
+	[return]
+
+*freya
+	[lyc id="$freya" file="$g.imagepath + 'chr/freya.png'"]
+	[return]
+
+*witch
+	[lyc id="$witch" file="$g.imagepath + 'chr/witch.png'"]
+	[return]
+
+// ---------------------------------------------------------------------------------------------
+//레이어 한번에 제거. 뒤에 trans 명령어 사용해야 함.
+*ClearChr
+	[lydel id="11"][lydel id="12"][lydel id="13"][lydel id="14"][lydel id="15"][lydel id="16"][lydel id="17"][lydel id="18"][lydel id="19"][lydel id="25"]
+	[return]
+
+*ClearBg
+	[lydel id="1"][lydel id="2"][lydel id="3"]
+	[return]
+
+*ClearCutin
+	[lydel id="4"][lydel id="5"][lydel id="6"][lydel id="7"][lydel id="8"][lydel id="9"][lydel id="10"]
+	[lydel id="31"][lydel id="32"][lydel id="33"][lydel id="34"][lydel id="35"]
+	[return]
+
+// ---------------------------------------------------------------------------------------------
+//대사창
+*mwout
+[lyprop id="80" visible="0"]
+[trans type="1" time="500" input="$tr_input_value"]
+[return]
+
+*mwin
+[lyprop id="80" visible="1"]
+[trans type="1" time="500" input="$tr_input_value"]
+[return]
+
+// ---------------------------------------------------------------------------------------------
+//이름
+*세레스
+	[font color="0xf2aa7f"]세레스[/font][rt]
+	[var name="ntag" data="1"]
+	[return]
+
+*리시아
+	[font color="0xdc4e4a"]리시아[/font][rt]
+	[var name="ntag" data="1"]
+	[return]
+
+*소피아
+	[font color="0xbbd2f3"]소피아[/font][rt]
+	[var name="ntag" data="1"]
+	[return]
+
+*프레이야
+	[font color="bdacdd"]프레이야[/font][rt]
+	[var name="ntag" data="1"]
+	[return]
+
+*나이첼
+	[font color="0xfe869c"]나이첼[/font][rt]
+	[var name="ntag" data="1"]
+	[return]
+
+*이름모름
+???[rt]
+	[var name="ntag" data="1"]
+	[return]
+
+*nontag
+	[if estimate="$ntag == 0"]
+		[rt]
+		[return]
+	[else]
+		[return]
+	[/if]
+
+*clearntag
+	[var name="ntag" data="0"]
+	[return]
+
+//이름표 이미지 태그
+//	[lyc id="88" file="$g.imagepath + 'ntag/'+$id"]
+//	[lyprop id="88" left="$3" top="$223"][trans type="0"]
+//	[font color="0xffffff"]
+//	[return]
+
+// ---------------------------------------------------------------------------------------------
+//귀찮음의 결정체
+*trans0
+	[trans type="0"]
+	[return]
+
+*trans300
+	[trans type="1" time="300" input="$tr_input_value"]
+	[return]
+
+*trans500
+	[trans type="1" time="500" input="$tr_input_value"]
+	[return]
+
+*trans1200
+	[trans type="1" time="1200" input="$tr_input_value"]
+	[return]
+
+*trans1500
+	[trans type="1" time="1500" input="$tr_input_value"]
+	[return]
+
+// ---------------------------------------------------------------------------------------------
+//캐릭 id값
+*chrid
+	//[chrid name="" id=""]
+	[var name="chrid_name" data="$name"]
+	[var name="chrid_id" data="$id"]
+	
+	[if estimate="$chrid_name == 'seres'"]
+		[var name="seres" data="$chrid_id"]
+	[elseif estimate="$chrid_name == 'lithia'"]
+		[var name="lithia" data="$chrid_id"]
+	[elseif estimate="$chrid_name == 'sophia'"]
+		[var name="sophia" data="$chrid_id"]
+	[elseif estimate="$chrid_name == 'freya'"]
+		[var name="freya" data="$chrid_id"]
+	[elseif estimate="$chrid_name == 'witch'"]
+		[var name="witch" data="$chrid_id"]
+	[elseif estimate="$chrid_name == 'def'"]
+		[var name="seres" data="15"]
+		[var name="lithia" data="16"]
+		[var name="sophia" data="17"]
+		[var name="freya" data="18"]
+		[var name="witch" data="19"]
+	[else]
+	[/if]
+	
+	[return]
+
+
+// ---------------------------------------------------------------------------------------------
+//캐릭 포지
+*chrpos
+	//[chrpos name="" face="" size="" pos=""]
+	//표정 없으므로 표정 빼놓음
+
+	[var name="chrpos_name" data="$name"]
+	//[var name="chrpos_face" data="$face"]
+	[var name="chrpos_size" data="$size"]
+	[var name="chrpos_pos" data="$pos"]
+	
+	[if estimate="$chrpos_name == 'seres'"]
+		[var name="chrpos_id" data="$seres"]
+		[lyc id="$seres" file="$g.imagepath + 'chr/knight.png'"]
+		//[lyc id="5.1"  file="$g.facepath_seres + chrpos_face"]
+	[elseif estimate="$chrpos_name == 'lithia'"]
+		[var name="chrpos_id" data="$lithia"]
+		[lyc id="$lithia" file="$g.imagepath + 'chr/lithia.png'"]
+		//[lyc id="6.1"  file="$g.facepath_lithia + chrpos_face"]
+	[elseif estimate="$chrpos_name == 'sophia'"]
+		[var name="chrpos_id" data="$sophia"]
+		[lyc id="$sophia" file="$g.imagepath + 'chr/sophia.png'"]
+		//[lyc id="7.1"  file="$g.facepath_sophia + chrpos_face"]
+	[elseif estimate="$chrpos_name == 'freya'"]
+		[var name="chrpos_id" data="$freya"]
+		[lyc id="$freya" file="$g.imagepath + 'chr/freya.png'"]
+		//[lyc id="8.1"  file="$g.facepath_freya + chrpos_face"]
+	[elseif estimate="$chrpos_name == 'witch'"]
+		[var name="chrpos_id" data="$witch"]
+		[lyc id="$witch" file="$g.imagepath + 'chr/witch.png'"]
+		//[lyc id="9.1"  file="$g.facepath_witch + chrpos_face"]
+	[else]
+	[/if]
+	
+	 //L사이즈
+	[if estimate="$chrpos_size == 'l'"]
+		[lyprop id="$chrpos_id" xscale="100" yscale="100"]
+		[var name="chrpos_y" data="$-170 + movey"]
+		//포지션
+		[if estimate="$chrpos_pos == '1c'"]
+			[var name="chrpos_x" data="$125 + movex"]
+			//[lyprop id="$chrpos_id" left="$chrpos_x" top="$-170"]
+		[elseif estimate="$chrpos_pos == '2l'"]
+			[var name="chrpos_x" data="$-135 + movex"]
+		[elseif estimate="$chrpos_pos == '2r'"]
+			[var name="chrpos_x" data="$445 + movex"]
+		[else]
+		[/if]
+	//M사이즈
+	[elseif estimate="$chrpos_size == 'm'"]
+		[lyprop id="$chrpos_id" xscale="85" yscale="85"]
+		[var name="chrpos_y" data="$-200 + movey"]
+		//포지션
+		[if estimate="$chrpos_pos == '2l'"]
+			[var name="chrpos_x" data="$-135 + movex"]
+		[elseif estimate="$chrpos_pos == '2r'"]
+			[var name="chrpos_x" data="$445 + movex"]
+		[elseif estimate="$chrpos_pos == '3l'"]
+			[var name="chrpos_x" data="$-200 + movex"]
+		[elseif estimate="$chrpos_pos == '3c'"]
+			[var name="chrpos_x" data="$125 + movex"]
+		[elseif estimate="$chrpos_pos == '3r'"]
+			[var name="chrpos_x" data="$500 + movex"]
+		[elseif estimate="$chrpos_pos == '4ll'"]
+			[var name="chrpos_x" data="$-270 + movex"]
+		[elseif estimate="$chrpos_pos == '4l'"]
+			[var name="chrpos_x" data="$50 + movex"]
+		[elseif estimate="$chrpos_pos == '4r'"]
+			[var name="chrpos_x" data="$340 + movex"]
+		[elseif estimate="$chrpos_pos == '4rr'"]
+			[var name="chrpos_x" data="$620 + movex"]
+		[elseif estimate="$chrpos_size == 5c"]
+			[var name="chrpos_x" data="$125 + movex"]
+		[else]
+		[/if]
+	//S사이즈
+	[elseif estimate="$chrpos_size == 's'"]
+		[lyprop id="$chrpos_id" xscale="70" yscale="70"]
+		[var name="chrpos_y" data="$-290 + movey"]
+		//포지션
+		[if estimate="$chrpos_pos == '1c'"]
+			[var name="chrpos_x" data="$125 + movex"]
+		[elseif estimate="$chrpos_pos == '3l'"]
+			[var name="chrpos_x" data="$-200 + movex"]
+		[elseif estimate="$chrpos_pos == '3c'"]
+			[var name="chrpos_x" data="$125 + movex"]
+		[elseif estimate="$chrpos_pos == '3r'"]
+			[var name="chrpos_x" data="$500 + movex"]
+		[elseif estimate="$chrpos_pos == '4ll'"]
+			[var name="chrpos_x" data="$-300 + movex"]
+		[elseif estimate="$chrpos_pos == '4l'"]
+			[var name="chrpos_x" data="$20 + movex"]
+		[elseif estimate="$chrpos_pos == '4r'"]
+			[var name="chrpos_x" data="$280 + movex"]
+		[elseif estimate="$chrpos_pos == '4rr'"]
+			[var name="chrpos_x" data="$600 + movex"]
+		[else]
+		[/if]
+	[else]
+	[/if]
+	[lyprop id="$chrpos_id" left="$chrpos_x" top="$chrpos_y"]
+	[return]
+// ---------------------------------------------------------------------------------------------
+//연출
+*cutin02
+	//[cutin02 id="" name="" left=""]
+	//id	scg의 레이어 id가 아닌 컷인의 레이어입니다. 생략시 4.	필수아님
+	//name 캐릭의 이름. 그냥 캐릭 이름 영문으로 넣으시면 됩니다.	필수
+	//left 	컷인의 left값.						필수
+	//캐릭 밑에 오는 컷인의 id 범위는 기본적으로는 4~10으로 잡아놓았습니다. 가능하면 id는 이 범위 안에서 사용 부탁드립니다.
+	//자세한 id값에 대해서는 sc.txt를 참조해주세요
+
+	[if estimate="$id == 0"]
+		[lyc id="4" file="$g.imagepath + 'cutin/cutin02.png'"]
+		[lyopt id="4" left="$left" top="$-100" scale="100"]
+		[lytween id="4" param="top" from="$-100" to="$0" time="300" sync="0" ]
+	[else]
+		[lyc id="$id" file="$g.imagepath + 'cutin/cutin02.png'"]
+		[lyopt id="$id" left="$left" top="$-100" scale="100"]
+		[lytween id="$id" param="top" from="$-100" to="$0" time="300" sync="0" ]
+	[/if]
+	[trans type="1" time="300" input="$tr_input_value"]
+
+	[if estimate="$name == 'seres'"]
+		[lyc id="$seres" file="$g.imagepath + 'chr/knight.png'"]
+		[lyprop id ="$seres" left ="$left + 2" top ="$-170" clip ="320,0,296,1500"]
+	[elseif estimate="$name == 'lithia'"]
+		[lyc id="$lithia" file="$g.imagepath + 'chr/lithia.png'"]
+		[lyprop id ="$lithia" left ="$left + 2" top ="$-170" clip ="320,0,296,1500"]
+	[elseif estimate="$name == 'sophia'"]
+		[lyc id="$freya" file="$g.imagepath + 'chr/sophia.png'"]
+		[lyprop id ="$freya" left ="$left + 2" top ="$-170" clip ="320,0,296,1500"]
+	[elseif estimate="$name == 'freya'"]
+		[lyc id="$freya" file="$g.imagepath + 'chr/freya.png'"]
+		[lyprop id ="$freya" left ="$left + 2" top ="$-170" clip ="320,0,296,1500"]
+	[elseif estimate="$name == 'witch'"]
+		[lyc id="$witch" file="$g.imagepath + 'chr/witch.png'"]
+		[lyprop id ="$witch" left ="$left + 2" top ="$-170" clip ="320,0,296,1500"]
+	[else]
+	[/if]
+	[trans type="1" time="500" input="$tr_input_value"]
+	[return]
+
+*cutin03
+	//[cutin03 id="" name="" left=""] ←기본적인 사용 경우입니다.
+	//[cutin03 name="del"] ←삭제시 사용 경우입니다.
+	//id	scg의 레이어 id가 아닌 컷인의 레이어입니다. 생략시 4.	필수아님
+	//name 캐릭의 이름. 그냥 캐릭 이름 영문으로 넣으시면 됩니다.	필수
+	//left 	컷인의 left값.						필수
+	//캐릭 밑에 오는 컷인의 id 범위는 기본적으로는 4~10으로 잡아놓았습니다. 가능하면 id는 이 범위 안에서 사용 부탁드립니다.
+	//자세한 id값에 대해서는 sc.txt를 참조해주세요
+
+	[if estimate="$id == 0"]
+		[var name="t.cutin03_id" data="4"]
+		[lyc id="4" file="$g.imagepath + 'cutin/cutin02.png'"]
+		[lyopt id="4" left="$left" top="$-100" scale="100"]
+		[lytween id="4" param="top" from="$-100" to="$0" time="300" sync="0" ]
+	[else]
+		[var name="t.cutin03_id" data="$id"]
+		[lyc id="$id" file="$g.imagepath + 'cutin/cutin02.png'"]
+		[lyopt id="$id" left="$left" top="$-100" scale="100"]
+		[lytween id="$id" param="top" from="$-100" to="$0" time="300" sync="0" ]
+	[/if]
+
+	[if estimate="$name == 'seres'"]
+		[var name="t.cutin03_name" data="$seres"]
+		[var name="t.cutin03_seres" data="1"]
+		[lyc id="$seres" file="$g.imagepath + 'chr/knight.png'"]
+		[lyprop id ="$seres" left ="$left + 2" top ="$-270" clip ="320,0,296,1500"]
+		[lytween id="$seres" param="top" from="$-270" to="$-170" time="300" sync="0" ]
+	[elseif estimate="$name == 'lithia'"]
+		[var name="t.cutin03_name" data="$lithia"]
+		[var name="t.cutin03_lithia" data="1"]
+		[lyc id="$lithia" file="$g.imagepath + 'chr/lithia.png'"]
+		[lyprop id ="$lithia" left ="$left + 2" top ="$-270" clip ="320,0,296,1500"]
+		[lytween id="$lithia" param="top" from="$-270" to="$-170" time="300" sync="0" ]
+	[elseif estimate="$name == 'sophia'"]
+		[var name="t.cutin03_name" data="$sophia"]
+		[var name="t.cutin03_sophia" data="1"]
+		[lyc id="$sophia" file="$g.imagepath + 'chr/sophia.png'"]
+		[lyprop id ="$sophia" left ="$left + 2" top ="$-270" clip ="320,0,296,1500"]
+		[lytween id="$sophia" param="top" from="$-270" to="$-170" time="300" sync="0" ]
+	[elseif estimate="$name == 'freya'"]
+		[var name="t.cutin03_name" data="$freya"]
+		[var name="t.cutin03_freya" data="1"]
+		[lyc id="$freya" file="$g.imagepath + 'chr/freya.png'"]
+		[lyprop id ="$freya" left ="$left + 2" top ="$-270" clip ="320,0,296,1500"]
+		[lytween id="$freya" param="top" from="$-270" to="$-170" time="300" sync="0" ]
+	[elseif estimate="$name == 'witch'"]
+		[var name="t.cutin03_name" data="$witch"]
+		[var name="t.cutin03_witch" data="1"]
+		[lyc id="$witch" file="$g.imagepath + 'chr/witch.png'"]
+		[lyprop id ="$witch" left ="$left + 2" top ="$-270" clip ="320,0,296,1500"]
+		[lytween id="$witch" param="top" from="$-270" to="$-170" time="300" sync="0" ]
+	[elseif estimate="$name == 'del1'"] //얘는 캐릭터가 아닌 삭제시의 경우입니다. left값 불필요
+		[lytween id="$t.cutin03_id" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lytween id="$t.cutin03_name" param="top" from="$-170" to="$-270" time="300" sync="0" ]
+		[lydel id="$t.cutin03_name"][lydel id="$t.cutin03_id"]
+	[elseif estimate="$name == 'del2'"] //얘는 여러 캐릭터 삭재용임다. 깡무식 스크립트 만세!!!
+		[if estimate="$t.cutin03_seres == 1"]
+			[lytween id="$seres" param="top" from="$-170" to="$-270" time="300" sync="0" ]
+		[else]
+		[/if]
+		
+		[if estimate="$t.cutin03_lithia == 1"]
+			[lytween id="$lithia" param="top" from="$-170" to="$-270" time="300" sync="0" ]
+		[else]
+		[/if]
+
+		[if estimate="$t.cutin03_sophia == 1"]
+			[lytween id="$sophia" param="top" from="$-170" to="$-270" time="300" sync="0" ]
+		[else]
+		[/if]
+
+		[if estimate="$t.cutin03_freya == 1"]
+			[lytween id="$freya" param="top" from="$-170" to="$-270" time="300" sync="0" ]
+		[else]
+		[/if]
+		
+		[if estimate="$t.cutin03_witch == 1"]
+			[lytween id="$witch" param="top" from="$-170" to="$-270" time="300" sync="0" ]
+		[else]
+		[/if]
+
+		[lytween id="$4" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lytween id="$5" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lytween id="$6" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lytween id="$7" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lytween id="$8" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lytween id="$9" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lytween id="$10" param="top" from="$0" to="$-100" time="300" sync="0" ]
+		[lydel id="4"][lydel id="5"][lydel id="6"][lydel id="7"][lydel id="8"][lydel id="9"][lydel id="10"]
+
+		[if estimate="$t.cutin03_seres == 1"]
+			[lydel id="$seres"]
+		[else]
+		[/if]
+		
+		[if estimate="$t.cutin03_lithia == 1"]
+			[lydel id="$lithia"]
+		[else]
+		[/if]
+
+		[if estimate="$t.cutin03_sophia == 1"]
+			[lydel id="$sophia"]
+		[else]
+		[/if]
+
+		[if estimate="$t.cutin03_freya == 1"]
+			[lydel id="$freya"]
+		[else]
+		[/if]
+		
+		[if estimate="$t.cutin03_witch == 1"]
+			[lydel id="$witch"]
+		[else]
+		[/if]
+		
+		[var name="t.cutin03_seres" data="0"][var name="t.cutin03_lithia" data="0"][var name="t.cutin03_sophia" data="0"]
+		[var name="t.cutin03_freya" data="0"][var name="t.cutin03_witch" data="0"]
+	[else]
+	[/if]
+	[trans type="1" time="500" input="$tr_input_value"]
+	[return]
+
+
+
+
+//테스트용 매크로
+*testmacro
+[lyc id="1" file="$'Data/bg/' + file"]

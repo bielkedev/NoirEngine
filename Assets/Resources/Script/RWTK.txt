@@ -1,0 +1,44 @@
+﻿/*
+20161121
+test 001
+유니티 엔진에서 아르테미스 엔진용으로 작성한 스크립트 작성 확인 밑 앞으로 유니티 엔진 사용을 위한 macro의 좌표값 수정
+*/
+
+[rp]
+[&autoinsert target="lineend" command="@[rp]"]
+//[&autoinsert target="linehead" command="nontag"]//얘는 필요 없으니 일단 죽였습니다
+//[&scpsupport mode="add" command="clearntag" char="”"]//얘도 위와 동일
+//[&autoinsert target="blankline" command="[rp]"]//응 안써
+//[automode allow="1"]//얘는 유저가 오토모드드 가능 여부를 정하는 녀석입니다. 0=ㄴㄴ 1=ㅇㅇ
+//[hide allow="1"]//얘는 유저가 이미지 레이어에서 hide 가능 여부를 정하는 녀석입니다. 주로 UI같은 자주 쓰되 지우기 뭐한녀석들에게 hide 값 쓰더군요. 0=ㄴㄴ 1=ㅇㅇ
+//[backlog allow="1"]//뭐 이제 원패턴이라 대충 이름 보고 아시겠지만 백로그 가능 여부를 (후략)
+//[rclick allow="1"]//이거도... 우클릭(요컨데 메뉴) 가능 여ㅂ(후략)
+//[autosave allow="1"]//자동 세이ㅂ(후략)
+//[writebacklog mode="1"]//백로그 작성 여ㅂ(후략`)
+//[backlog clear="1"]//백로그를 지울ㅈ(후략)
+[wait time="500" ]
+//[bg file="lvroom.png" type="1" time="1500" preset="s"]//얘를 ↓이거보다 먼저 부르는 이유가 저거 부르면 대사창이 떠서... 수정은 귀찮아서 안했슴다(...)
+//[call file="txtcfg" label="text_def"]//폰트 기본값 설정하는 서브루틴. 폰트값과 디폴트 폰트 애니메이션을 설정함다
+//[call file="txtcfg" label="text_init"]//게임 시작시나 뭐 아무튼 텍스트 리셋빵 때려버리면 꼭 불러오던 녀석. 하는일은 glyph (대사 끝에 빙빙 도는 정신 사나운 푸른새끼)랑 ui(대사창, 대사창에 있는 버튼)불러오기 밑 hide 설정 가능하게 하는 녀석임다.
+//↓사실 밑에 요 hide로 대사창 가리기 띄우기 하는 매크로 설정해서 쓰는중임다.
+//[mwin]//지금 당장은 필요 없는애라 빼요.
+
+기본 명령어 테스트
+[lyc id="1" file="data/bg/lvroom"]//성공
+lyc 테스트.//trans 작동 안하는건 아직 알지만 뭐 되면 그때 쓰기로(...)
+
+[lyprop id="1" xscale="65" yscale="65"]//성공
+lyprop 단독으로 사용시 테스트
+
+[lyc id="1" file="data/bg/lvroom"]//성공
+[lyprop id="1" xscale="80" yscale="80"]//성공
+lyc와 lyprop 양측 다 사용.
+
+매크로 사용 테스트
+
+[testmacro file="bedroom"]//성공
+테스트 매크로 사용
+
+
+bg 매크로 테스트
+[bg file="bedroom" preset="s"]//실패.
