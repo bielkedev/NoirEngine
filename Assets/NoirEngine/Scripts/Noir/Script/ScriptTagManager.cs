@@ -52,8 +52,19 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("waittime", ScriptTagManager.waittimeHandler);
 			ScriptTagManager.sTagHandlerMap.Add("waittween", ScriptTagManager.waittweenHandler);
 			ScriptTagManager.sTagHandlerMap.Add("waitmotion", ScriptTagManager.waitmotionHandler);
-			ScriptTagManager.sTagHandlerMap.Add("test", ScriptTagManager.testHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayerx", ScriptTagManager.getlayerxHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayery", ScriptTagManager.getlayeryHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayerlalpha", ScriptTagManager.getlayeralphaHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayeranchorx", ScriptTagManager.getlayeranchorxHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayeranchory", ScriptTagManager.getlayeranchoryHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayerxscale", ScriptTagManager.getlayerxscaleHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayeryscale", ScriptTagManager.getlayeryscaleHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayerrotate", ScriptTagManager.getlayerrotateHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayerreversex", ScriptTagManager.getlayerreversexHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayerreversey", ScriptTagManager.getlayerreverseyHandler);
+			ScriptTagManager.sTagHandlerMap.Add("getlayervisible", ScriptTagManager.getlayervisibleHandler);
 
+			ScriptTagManager.sTagHandlerMap.Add("test", ScriptTagManager.testHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -1211,6 +1222,259 @@ namespace Noir.Script
 				new AnimatedLayer(sAnimatedLayer);
 				return;
 			}
+		}
+
+		private static void getlayerxHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if(sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Position.x.ToString());
+		}
+
+		private static void getlayeryHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Position.y.ToString());
+		}
+
+		private static void getlayeralphaHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Alpha.ToString());
+		}
+
+		private static void getlayeranchorxHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Pivot.x.ToString());
+		}
+
+		private static void getlayeranchoryHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Pivot.y.ToString());
+		}
+
+		private static void getlayerxscaleHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Scale.x.ToString());
+		}
+
+		private static void getlayeryscaleHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Scale.y.ToString());
+		}
+
+		private static void getlayerrotateHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Rotation.ToString());
+		}
+
+		private static void getlayerreversexHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.ReverseX ? "1" : "0");
+		}
+
+		private static void getlayerreverseyHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.ReverseY ? "1" : "0");
+		}
+
+		private static void getlayervisibleHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return;
+			}
+
+			string sName = sTag.getAttribute("name");
+
+			if (sName == null)
+				return;
+
+			EquationVariable.setVar(sName, sLayer.Visiblility ? "1" : "0");
 		}
 	}
 }

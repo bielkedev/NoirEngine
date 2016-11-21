@@ -17,6 +17,14 @@ namespace Noir.Unity
 		protected static SortedList<string, Layer> sLayerList = new SortedList<string, Layer>();
 		protected static HashSet<Layer> sNeedUpdateLayerSet = new HashSet<Layer>();
 
+		public Vector2 Position { get { return this.sLayerState.sPosition; } }
+		public Vector2 Pivot { get { return this.sLayerState.sPivot; } }
+		public Vector2 Scale { get { return this.sLayerState.sScale; } }
+		public float Alpha { get { return this.sLayerState.nAlpha; } }
+		public float Rotation { get { return this.sLayerState.nRotation; } }
+		public bool ReverseX { get { return this.sLayerState.bReverseX; } }
+		public bool ReverseY { get { return this.sLayerState.bReverseY; } }
+		public bool Visiblility { get { return this.sLayerState.bVisible; } }
 		public string LayerName { get { return this.sLayerObject.name; } }
 		public RectTransform Transform { get { return this.sLayerTransform; } }
 		public LayerClipper Clipper { get { return this.sLayerClipper; } }
@@ -160,9 +168,9 @@ namespace Noir.Unity
 		{
 			if (bUpdateInstantly)
 			{
-				Vector3 sPosition = this.sLayerTransform.localPosition;
+				Vector3 sPosition = this.sLayerTransform.position;
 				this.sLayerState.sPosition.x = sPosition.x = nNewX;
-				this.sLayerTransform.localPosition = sPosition;
+				this.sLayerTransform.position = sPosition;
 			}
 			else
 			{
@@ -354,7 +362,7 @@ namespace Noir.Unity
 			//Apply position
 			if (this.sLayerStateDirty.bPosition)
 			{
-				this.sLayerTransform.localPosition = this.sLayerState.sPosition;
+				this.sLayerTransform.position = this.sLayerState.sPosition;
 				this.sLayerStateDirty.bPosition = false;
 			}
 
