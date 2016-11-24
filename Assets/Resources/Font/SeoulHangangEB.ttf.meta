@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 5976831de1533b64ca2661b53804bf87
+timeCreated: 1479985871
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - SeoulHangang
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 14ef0ae0a58ac4c46ad133204d05786c, type: 3}
+  - {fileID: 12800000, guid: 5abf04d3a67aa784b887acbebbbdf817, type: 3}
+  - {fileID: 12800000, guid: f67ffeda211b0ce4a8c492287a85ac7b, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

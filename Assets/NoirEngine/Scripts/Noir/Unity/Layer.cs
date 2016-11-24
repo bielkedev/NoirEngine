@@ -27,12 +27,10 @@ namespace Noir.Unity
 		public bool Visiblility { get { return this.sLayerState.bVisible; } }
 		public string LayerName { get { return this.sLayerObject.name; } }
 		public RectTransform Transform { get { return this.sLayerTransform; } }
-		public LayerClipper Clipper { get { return this.sLayerClipper; } }
 
 		protected GameObject sLayerObject;
 		protected RectTransform sLayerTransform;
 		protected RawImage sLayerImage;
-		protected LayerClipper sLayerClipper;
 		protected LayerState sLayerState = LayerState.Identity;
 		protected LayerStateDirty sLayerStateDirty;
 		protected List<LayerTween> sLayerTweenList = new List<LayerTween>();
@@ -82,14 +80,9 @@ namespace Noir.Unity
 
 		protected Layer(Layer sLayer)
 		{
-			GameObject sClipperObject = GameObject.Instantiate(sLayer.sLayerClipper.Object);
-
-			foreach (Transform sTransform in sClipperObject.transform)
-				this.sLayerObject = sTransform.gameObject;
-			
+			this.sLayerObject = GameObject.Instantiate(sLayer.sLayerObject);
 			this.sLayerTransform = this.sLayerObject.GetComponent<RectTransform>();
 			this.sLayerImage = this.sLayerObject.GetComponent<RawImage>();
-			this.sLayerClipper = new LayerClipper(sClipperObject, this);
 
 			foreach (LayerTween sLayerTween in this.sLayerObject.GetComponents<LayerTween>())
 			{
@@ -100,21 +93,20 @@ namespace Noir.Unity
 			Layer.sLayerMap.Add(this.sLayerObject.name = sLayer.LayerName + '\n', this);
 			Layer.sLayerList.Add(this.sLayerObject.name, this);
 
-			this.sLayerClipper.Transform.SetParent(Layer.sLayerPanel, false);
-			this.sLayerClipper.Transform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(this.sLayerObject.name));
+			this.sLayerTransform.SetParent(Layer.sLayerPanel, false);
+			this.sLayerTransform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(this.sLayerObject.name));
 		}
 
 		protected Layer(string sLayerName, GameObject sLayerPrefab)
 		{
 			this.sLayerTransform = (this.sLayerObject = GameObject.Instantiate(sLayerPrefab)).GetComponent<RectTransform>();
 			(this.sLayerImage = this.sLayerObject.GetComponent<RawImage>()).material = GameObject.Instantiate(Layer.sLayerMaterial);
-			this.sLayerClipper = new LayerClipper(this, this.sLayerState.bClipping);
 
 			Layer.sLayerMap.Add(this.sLayerObject.name = sLayerName, this);
 			Layer.sLayerList.Add(this.sLayerObject.name, this);
 
-			this.sLayerClipper.Transform.SetParent(Layer.sLayerPanel, false);
-			this.sLayerClipper.Transform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(this.sLayerObject.name));
+			this.sLayerTransform.SetParent(Layer.sLayerPanel, false);
+			this.sLayerTransform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(this.sLayerObject.name));
 		}
 
 		public void addLayerTween(ref LayerTweenData sNewLayerTweenData, LayerStateModifier fNewStateModifier)
@@ -306,6 +298,7 @@ namespace Noir.Unity
 			}
 		}
 
+		/*
 		public void setClipping(bool bNewClipping, bool bUpdateInstantly = false)
 		{
 			if (bUpdateInstantly)
@@ -327,6 +320,7 @@ namespace Noir.Unity
 				this.sLayerStateDirty.bClipping = true;
 			}
 		}
+		*/
 
 		public void setVisible(float nNewVisible, bool bUpdateInstantly = false)
 		{
@@ -345,8 +339,6 @@ namespace Noir.Unity
 
 			Layer.sLayerMap.Remove(this.sLayerObject.name);
 			Layer.sLayerList.Remove(this.sLayerObject.name);
-
-			this.sLayerClipper.deleteLayerClipper();
 		}
 
 		public virtual void applyLayerProperties()
@@ -410,12 +402,14 @@ namespace Noir.Unity
 			}
 
 			//Apply clipping
+			/*
 			if (this.sLayerStateDirty.bClipping)
 			{
 				this.sLayerClipper.Enabled = this.sLayerState.bClipping;
 				this.sLayerClipper.setRegion(this.sLayerState.sClipper);
 				this.sLayerStateDirty.bClipping = false;
 			}
+			*/
 
 			//Apply visible
 			if (this.sLayerStateDirty.bVisible)

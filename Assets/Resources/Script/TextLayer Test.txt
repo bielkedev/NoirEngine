@@ -1,0 +1,40 @@
+
+/*
+	2016.11.24
+	Created by AcrylicShrimp
+*/
+
+//텍스트 레이어를 생성합니다! 이름은 'txt'.
+[lyctxt id="txt"]
+
+//텍스트 레이어의 텍스트(글씨)를 모두 지웁니다. 처음 생성할땐 비어있어서 따로 호출해줄 필욘 없어요.
+[lycleartxt id="txt"]
+
+//스크립트 대사가 기본적으로 어느 텍스트 레이어에 출력되는지를 지정합니다.
+//기본적으로 텍스트 레이어를 생성해주지 않으면 백로그에서만 보이기 때문에 대사창을 등록하려면 얘 호출해줘야해요.
+[lysetmaintxt id="txt"]
+
+//텍스트 레이어의 폰트를 지정합니다. 폰트 파일 경로 적어주세요.
+[lyfonttxt id="txt" font="Font/SeoulHangangB"]
+
+//텍스트 레이어에 사용할 폰트의 크기를 지정합니다. 20(너무 작아요) ~ 50(엄청 커요)사이로 지정해주시면 편합니다.
+[lyfontsizetxt id="txt" size="42"]
+
+//텍스트 레이어의 글자색을 지정합니다. 기본값은 0, 0, 0, 255(완전 불투명한 검은색)이에요. 적당히 바꿔주세욧.
+[lyfontcolortxt id="txt" r="255" g="255" b="255" a="255"]
+
+//텍스트 레이어의 수평 정렬을 지정합니다. align이 음수면 왼쪽, 양수면 오른쪽, 0이면 가운데 정렬입니다.
+[lyalignhtxt id="txt" align="-1"]
+
+//텍스트 레이어의 수직 정렬을 지정합니다. align이 음수면 윗쪽, 양수면 아랫쪽, 0이면 가운데 정렬입니다.
+[lyalignvtxt id="txt" align="-1"]
+
+//귀차니즘...
+[&autoinsert target="lineend" command="@[rt]"]
+
+//이 대사들이 위에서 lysetmaintxt로 지정한 텍스트 레이어 위에 출력됩니다.
+1234567890!\@#$%^&*()_+
+abcdefghijklmnopqrstuvwxyz
+가나다라마바사아자차카타파하
+the red brown fox jumps over the lazy dog
+키스의 고유조건은 입술끼리 만나야 하고 특별한 기술은 필요치 않다
