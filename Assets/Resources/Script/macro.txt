@@ -140,35 +140,41 @@
 	//val2	움직일 픽셀 값만큼 좌측으로 이동
 	//time	시간.
 	[var name="t.scgmovexid" data="$id"]
-	[var name="t.lycinfo" system="get_layer_info" style="array" id = "$t.scgmovexid"]
-	[var name="t.scgmovexleft" data="$t.lycinfo.left"]
+	[getlayerx id="$id" name="t.scgmovexleft"]
+	[var name="t.scgmovex_val2_exist" system="var_exist" target="val2" local="1"]//없으면 0 있으면 1
+	[var name="t.scgmovex_loop_exist" system="var_exist" target="loop" local="1"]//없으면 0 있으면 1
 
-	[if estimate="$val2 == 0" ]
-		[if estimate="$loop == 0"]
+	[if estimate="$t.scgmovex_val2_exist == 0" ]
+
+		[if estimate="$t.scgmovex_loop_exist == 0"]
 			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
-		[elseif estimate="$loop != 0"]
+			[waittween id="$id" input="$tr_input_value"]
+
+		[elseif estimate="$t.scgmovex_loop_exist == 1"]
 			[var name="scgmovex_loop" data="0"]
 			[loop estimate="$scgmovex_loop < loop"]
-				[var name="t.lycinfo" system="get_layer_info" style="array" id = "$t.scgmovexid"]
-				[var name="t.scgmovexleft" data="$t.lycinfo.left"]
-				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
+				[getlayerx id="$id" name="t.scgmovexleft"]
+				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time"]
+				[waittween id="$id" input="$tr_input_value"]
 				[var name="scgmovex_loop" data="$scgmovex_loop + 1"]
 			[/loop]
 		[/if]
 
-	[elseif estimate="$val2 != 0"]
-		[font color="0xf2aa7f"]일단 val2 != 0 진입[/font][rt]
-		//[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
-		[if estimate="$loop == 0"]
-			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
-			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft + val1" to="$t.scgmovexleft + val1 - val2" time="$time" sync="1"]
-		[elseif estimate="$loop != 0"]
+	[elseif estimate="$t.scgmovex_val2_exist == 1"]
+		[if estimate="$t.scgmovex_loop_exist == 0"]
+			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time"]
+			[waittween id="$id" input="$tr_input_value"]
+			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft + val1" to="$t.scgmovexleft + val1 - val2" time="$time"]
+			[waittween id="$id" input="$tr_input_value"]
+
+		[elseif estimate="$t.scgmovex_loop_exist == 1"]
 			[var name="scgmovex_loop" data="0"]
 			[loop estimate="$scgmovex_loop < loop"]
-				[var name="t.lycinfo" system="get_layer_info" style="array" id = "$t.scgmovexid"]
-				[var name="t.scgmovexleft" data="$t.lycinfo.left"]
-				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
-				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft + val1" to="$t.scgmovexleft - val2" time="$time" sync="1"]
+				[getlayerx id="$id" name="t.scgmovexleft"]
+				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time"]
+				[waittween id="$id" input="$tr_input_value"]
+				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft + val1" to="$t.scgmovexleft + val1 - val2" time="$time"]
+				[waittween id="$id" input="$tr_input_value"]
 				[var name="scgmovex_loop" data="$scgmovex_loop + 1"]
 			[/loop]
 		[/if]
@@ -366,106 +372,6 @@
 // ---------------------------------------------------------------------------------------------
 //캐릭 포지
 *chrpos
-	//[chrpos name="" face="" size="" pos=""]
-	//표정 없으므로 표정 빼놓음
-
-	[var name="chrpos_name" data="$name"]
-	//[var name="chrpos_face" data="$face"]
-	[var name="chrpos_size" data="$size"]
-	[var name="chrpos_pos" data="$pos"]
-	
-	[if estimate="$chrpos_name == 'seres'"]
-		[var name="chrpos_id" data="$seres"]
-		[lyc id="$seres" file="Data/chr/knight"]
-		//[lyc id="5.1"  file="$g.facepath_seres + chrpos_face"]
-	[elseif estimate="$chrpos_name == 'lithia'"]
-		[var name="chrpos_id" data="$lithia"]
-		[lyc id="$lithia" file="$g.imagepath + 'chr/lithia'"]
-		//[lyc id="6.1"  file="$g.facepath_lithia + chrpos_face"]
-	[elseif estimate="$chrpos_name == 'sophia'"]
-		[var name="chrpos_id" data="$sophia"]
-		[lyc id="$sophia" file="$g.imagepath + 'chr/sophia'"]
-		//[lyc id="7.1"  file="$g.facepath_sophia + chrpos_face"]
-	[elseif estimate="$chrpos_name == 'freya'"]
-		[var name="chrpos_id" data="$freya"]
-		[lyc id="$freya" file="$g.imagepath + 'chr/freya'"]
-		//[lyc id="8.1"  file="$g.facepath_freya + chrpos_face"]
-	[elseif estimate="$chrpos_name == 'witch'"]
-		[var name="chrpos_id" data="$witch"]
-		[lyc id="$witch" file="$g.imagepath + 'chr/witch'"]
-		//[lyc id="9.1"  file="$g.facepath_witch + chrpos_face"]
-	[/if]
-	
-	 //L사이즈
-	[if estimate="$chrpos_size == 'l'"]
-		[lyprop id="$chrpos_id" xscale="100" yscale="100"]
-		[var name="chrpos_y" data="$-170 + movey"]
-		//포지션
-		[if estimate="$chrpos_pos == '1c'"]
-			[var name="chrpos_x" data="$movex"]
-			//[lyprop id="$chrpos_id" left="$chrpos_x" top="$-170"]
-		[elseif estimate="$chrpos_pos == '2l'"]
-			[var name="chrpos_x" data="$-135 + movex"]
-		[elseif estimate="$chrpos_pos == '2r'"]
-			[var name="chrpos_x" data="$445 + movex"]
-		[/if]
-	//M사이즈
-	[elseif estimate="$chrpos_size == 'm'"]
-		[lyprop id="$chrpos_id" xscale="85" yscale="85"]
-		[var name="chrpos_y" data="$-200 + movey"]
-		//포지션
-		[if estimate="$chrpos_pos == '2l'"]
-			[var name="chrpos_x" data="$-135 + movex"]
-		[elseif estimate="$chrpos_pos == '2r'"]
-			[var name="chrpos_x" data="$445 + movex"]
-		[elseif estimate="$chrpos_pos == '3l'"]
-			[var name="chrpos_x" data="$-200 + movex"]
-		[elseif estimate="$chrpos_pos == '3c'"]
-			[var name="chrpos_x" data="$125 + movex"]
-		[elseif estimate="$chrpos_pos == '3r'"]
-			[var name="chrpos_x" data="$500 + movex"]
-		[elseif estimate="$chrpos_pos == '4ll'"]
-			[var name="chrpos_x" data="$-270 + movex"]
-		[elseif estimate="$chrpos_pos == '4l'"]
-			[var name="chrpos_x" data="$50 + movex"]
-		[elseif estimate="$chrpos_pos == '4r'"]
-			[var name="chrpos_x" data="$340 + movex"]
-		[elseif estimate="$chrpos_pos == '4rr'"]
-			[var name="chrpos_x" data="$620 + movex"]
-		[elseif estimate="$chrpos_size == 5c"]
-			[var name="chrpos_x" data="$125 + movex"]
-		[else]
-		[/if]
-	//S사이즈
-	[elseif estimate="$chrpos_size == 's'"]
-		[lyprop id="$chrpos_id" xscale="70" yscale="70"]
-		[var name="chrpos_y" data="$-290 + movey"]
-		//포지션
-		[if estimate="$chrpos_pos == '1c'"]
-			[var name="chrpos_x" data="$125 + movex"]
-		[elseif estimate="$chrpos_pos == '3l'"]
-			[var name="chrpos_x" data="$-200 + movex"]
-		[elseif estimate="$chrpos_pos == '3c'"]
-			[var name="chrpos_x" data="$125 + movex"]
-		[elseif estimate="$chrpos_pos == '3r'"]
-			[var name="chrpos_x" data="$500 + movex"]
-		[elseif estimate="$chrpos_pos == '4ll'"]
-			[var name="chrpos_x" data="$-300 + movex"]
-		[elseif estimate="$chrpos_pos == '4l'"]
-			[var name="chrpos_x" data="$20 + movex"]
-		[elseif estimate="$chrpos_pos == '4r'"]
-			[var name="chrpos_x" data="$280 + movex"]
-		[elseif estimate="$chrpos_pos == '4rr'"]
-			[var name="chrpos_x" data="$600 + movex"]
-		[else]
-		[/if]
-	[else]
-	[/if]
-	[lyprop id="$chrpos_id" left="$chrpos_x" top="$chrpos_y"]
-	[return]
-
-
-*chrpos2
 	[var name="t.chrpos_name" data="$name"]
 	//[var name="chrpos_face" data="$face"]
 	[var name="t.chrpos_size" data="$size"]
@@ -481,16 +387,41 @@
 		[var name="chrpos_id" data="$freya"]
 	[elseif estimate="$t.chrpos_name == 'witch'"]
 		[var name="t.chrpos_id" data="$witch"]
+		[var name="t.chrpos_exist_witch" data="1"]
 		[lycl2d id="$witch" file="Data/chr/nachael/nachael.model.json" idle="idle"]
 		
 	[/if]
 
-	L사이즈
-	[if estimate="$chrpos_size == 'l'"]
-		[lyprop id="$t.chrpos_id" xscale="250" yscale="250"]
-	[/if]
+	//L사이즈
+	[if estimate="$t.chrpos_size == 'l'"]
+		[lyprop id="$t.chrpos_id" left="100" top="-300" xscale="230" yscale="230"]
+		
+		[if estimate="$t.chrpos_pos == '1c'"]
+			[var name="chrpos_x" data="$movex"]
+		[elseif estimate="$t.chrpos_pos == '2l'"]
+			[var name="chrpos_x" data="$-10 + movex"]
+		[elseif estimate="$t.chrpos_pos == '2r'"]
+			[var name="chrpos_x" data="$30 + movex"]
+		[/if]
+	[elseif estimate="$t.chrpos_size == 'm'"]
+		[lyprop id="$t.chrpos_id" left="100" top="-300" xscale="230" yscale="230"]
+		
+		[if estimate="$t.chrpos_pos == '1c'"]
+		[elseif estimate="$t.chrpos_pos == '2l'"]
+		[elseif estimate="$t.chrpos_pos == '2r'"]
+		[/if]
+	[elseif estimate="$t.chrpos_size == 's'"]
+		[lyprop id="$t.chrpos_id" left="100" top="-300" xscale="230" yscale="230"]
+		
+		[if estimate="$t.chrpos_pos == '1c'"]
+		[elseif estimate="$t.chrpos_pos == '2l'"]
+		[elseif estimate="$t.chrpos_pos == '2r'"]
+		[/if]
 
+	[/if]
+	[lyprop id="$t.chrpos_id" left="$chrpos_x" top="$chrpos_y"]
 	[return]
+
 // ---------------------------------------------------------------------------------------------
 //연출
 *cutin02
@@ -656,7 +587,3 @@
 
 
 
-
-//테스트용 매크로
-*testmacro
-[lyc id="1" file="$'Data/bg/' + file"]

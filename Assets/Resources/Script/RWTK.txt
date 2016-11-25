@@ -24,7 +24,7 @@ test 002
 
 [rp]
 [&autoinsert target="lineend" command="@[rp]"]
-
+[tr_input val="1"]
 //기본 텍스트 설명
 [lyctxt id="txt"]
 [lycleartxt id="txt"]//텍스트 레이어의 텍스트(글씨)를 모두 지웁니다. 처음 생성할땐 비어있어서 따로 호출해줄 필욘 없어요.
@@ -71,6 +71,22 @@ m
 
 l
 [bg file="bedroom" preset="l"]
+
+
+[scgmovex id="$witch" val1="100" time="100"]
+scgmovex 테스트. val1
+
+[chrpos name="witch" size="l" pos="1c"]
+[scgmovex id="$witch" val1="100" time="100" loop="3"]
+scgmovex 테스트. val1, loop
+
+[chrpos name="witch" size="l" pos="1c"]
+[scgmovex id="$witch" val1="100" val2="400" time="300"]
+scgmovex 테스트. val1, val2
+
+[chrpos name="witch" size="l" pos="1c"]
+[scgmovex id="$witch" val1="100" val2="400" time="300" loop="3"]
+scgmovex 테스트. val1, val2, loop
 */
 
 
@@ -79,6 +95,11 @@ l
 [chrid name="def"]//각 캐릭터에게 기본 레이어값을 할당한다
 //[lycl2d id="$witch" file="Data/chr/nachael/nachael.model.json" idle="idle"]
 //[lyprop id="$witch" left="100" top="-300" xscale="250" yscale="250"]
-[chrpos2 name="witch" size="l"]
+
+[chrpos name="witch" size="l" pos="1c"]
+1c
+
+
+
 
 뀨뀨꺄꺄
