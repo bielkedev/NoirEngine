@@ -148,9 +148,10 @@ namespace Noir.Unity.Live2D
 			this.sPhysicsAsset = null;
 			this.sPoseAsset = null;
 
-			foreach (var sTexture in this.vTexture)
-				if (sTexture != null)
-					Resources.UnloadAsset(sTexture);
+			if (this.vTexture != null)
+				foreach (var sTexture in this.vTexture)
+					if (sTexture != null)
+						Resources.UnloadAsset(sTexture);
 
 			this.vTexture = null;
 

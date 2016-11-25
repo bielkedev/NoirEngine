@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Noir.UI;
+﻿using Noir.UI;
 using Noir.Util;
+using System.Text;
 
 namespace Noir.Script
 {

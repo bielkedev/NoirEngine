@@ -8,10 +8,12 @@ namespace Noir.Unity
 		public static Cache<string, Script.Script> ScriptCache { get { return CacheManager.sScriptCache; } }
 		public static Cache<string, Sprite> SpriteCache { get { return CacheManager.sSpriteCache; } }
 		public static Cache<string, Live2DSharedData> Live2DSharedDataCache { get { return CacheManager.sLive2DSharedDataCache; } }
+		public static Cache<string, Font> FontCache { get { return CacheManager.sFontCache; } }
 
 		private static Cache<string, Script.Script> sScriptCache = new Cache<string, Script.Script>((sScript) => { sScript.releaseScript(); });
 		private static Cache<string, Sprite> sSpriteCache = new Cache<string, Sprite>((sSprite) => { Resources.UnloadAsset(sSprite); });
 		private static Cache<string, Live2DSharedData> sLive2DSharedDataCache = new Cache<string, Live2DSharedData>((sSharedData) => { sSharedData.releaseSharedData(); });
+		private static Cache<string, Font> sFontCache = new Cache<string, Font>((sFont) => { Resources.UnloadAsset(sFont); });
 
 		public static Script.Script loadScript(string sScriptPath)
 		{
@@ -29,7 +31,7 @@ namespace Noir.Unity
 
 			if (sSprite != null)
 				return sSprite;
-			
+
 			sSprite = Resources.Load<Sprite>(sSpritePath);
 
 			if (sSprite != null)
@@ -50,11 +52,27 @@ namespace Noir.Unity
 			return sSharedData;
 		}
 
+		public static Font loadFont(string sFontPath)
+		{
+			Font sFont = CacheManager.sFontCache[sFontPath];
+
+			if (sFont != null)
+				return sFont;
+
+			sFont = Resources.Load<Font>(sFontPath);
+
+			if (sFont != null)
+				CacheManager.sFontCache.addCache(sFontPath, sFont);
+
+			return sFont;
+		}
+
 		public static void releaseCacheAll()
 		{
 			CacheManager.sScriptCache.releaseCacheAll();
 			CacheManager.sSpriteCache.releaseCacheAll();
 			CacheManager.Live2DSharedDataCache.releaseCacheAll();
+			CacheManager.sFontCache.releaseCacheAll();
 		}
 	}
 }

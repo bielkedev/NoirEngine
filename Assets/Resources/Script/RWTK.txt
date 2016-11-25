@@ -41,4 +41,12 @@ lyc와 lyprop 양측 다 사용.
 
 
 bg 매크로 테스트
-[bg file="bedroom" preset="s"]//실패.
+
+s
+[bg file="bedroom" preset="s"]
+
+m
+[bg file="bedroom" preset="m"]
+
+l
+[bg file="bedroom" preset="l"]

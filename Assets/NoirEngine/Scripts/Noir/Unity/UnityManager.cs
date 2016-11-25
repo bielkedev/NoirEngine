@@ -30,7 +30,6 @@ namespace Noir.Unity
 		[Header("Layer")]
 		public RectTransform _LayerPanel;
 		public Material _LayerMaterial;
-		public GameObject _LayerClipperPrefab;
 
 		[Header("Sprite Layer")]
 		public GameObject _SpriteLayerPrefab;
@@ -42,10 +41,12 @@ namespace Noir.Unity
 		[Header("Animated Layer")]
 		public GameObject _AnimatedLayerPrefab;
 
+		[Header("Text Layer")]
+		public GameObject _TextLayerPrefab;
+		public Texture2D _TransparentTexture;
+
 		[Header("Front UI")]
 		public GameObject _FrontPanel;
-		public Text _NameText;
-		public Text _DialogueText;
 		public Button _ProceedButton;
 		public Button _MenuButton;
 
@@ -109,7 +110,6 @@ namespace Noir.Unity
 			//Layer
 			Layer.LayerPanel = this._LayerPanel;
 			Layer.LayerMaterial = this._LayerMaterial;
-			LayerClipper.LayerClipperPrefab = this._LayerClipperPrefab;
 
 			//Sprite Layer
 			SpriteLayer.SpriteLayerPrefab = this._SpriteLayerPrefab;
@@ -120,6 +120,10 @@ namespace Noir.Unity
 
 			//Animated Layer
 			AnimatedLayer.AnimatedLayerPrefab = this._AnimatedLayerPrefab;
+
+			//Text Layer
+			TextLayer.TextLayerPrefab = this._TextLayerPrefab;
+			TextLayer.TransparentTexture = this._TransparentTexture;
 
 			foreach (var sMacroScriptFilePath in this._MacroScriptFilePath)
 				Macro.addMacroScript(sMacroScriptFilePath);
@@ -141,9 +145,6 @@ namespace Noir.Unity
 				this.sBacklogContentSize = this._BacklogContent.rect.size;
 				this.sBacklogContentSize.y = 0;
 			}
-
-			UIManager.clearNameText();
-			UIManager.clearDialogueText();
 
 			/*
 				테스트가 필요하다면 여기부터
