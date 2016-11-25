@@ -94,8 +94,8 @@ namespace Noir.Unity.Live2D
 
 		public void updateCharacter()
 		{
-			this.sExpressionManager.updateParam(this.sLive2DModelUnity);
 			this.sMotionManager.updateParam(this.sLive2DModelUnity);
+			this.sExpressionManager.updateParam(this.sLive2DModelUnity);
 			this.sEyeBlink.updateParam(this.sLive2DModelUnity);
 			this.sPhysics.updateParam(this.sLive2DModelUnity);
 			this.sPose.updateParam(this.sLive2DModelUnity);

@@ -32,13 +32,18 @@
 //귀차니즘...
 [&autoinsert target="lineend" command="@[rt]"]
 
-//이 대사들이 위에서 lysetmaintxt로 지정한 텍스트 레이어 위에 출력됩니다.
-1234567890!\@#$%^&*()_+
-abcdefghijklmnopqrstuvwxyz
-가나다라마바사아자차카타파하
-the red brown fox jumps over the lazy dog
-키스의 고유조건은 입술끼리 만나야 하고 특별한 기술은 필요치 않다
+/*
+	//이 대사들이 위에서 lysetmaintxt로 지정한 텍스트 레이어 위에 출력됩니다.
+	1234567890!\@#$%^&*()_+
+	abcdefghijklmnopqrstuvwxyz
+	가나다라마바사아자차카타파하
+	the red brown fox jumps over the lazy dog
+	키스의 고유조건은 입술끼리 만나야 하고 특별한 기술은 필요치 않다
+*/
 
 [lytween id="txt" param="rotate" ease="linear" from="0" to="359" time="5000" loop="-1"]//질문, ease값 생략시 어떻게 되는지. sync값 관련은 어떻게 되었는지
 [lytween id="txt" param="xscale" ease="easeinout_quad" from="100" to="200" time="500" yoyo="-1"]
 [lytween id="txt" param="yscale" ease="easeinout_quad" from="100" to="200" time="500" yoyo="-1"]
+
+[lycl2d id="나이첼" file="data/chr/nachael/nachael.model.json" idle="idle"]
+[lyexpressionl2d id="나이첼" expression="f06"]

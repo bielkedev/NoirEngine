@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace Noir.Unity.Live2D
 {
 	[RequireComponent(typeof(AudioSource), typeof(RawImage))]
-	public class Live2DController : MonoBehaviour, IWaitableObject
+	public class Live2DController : MonoBehaviour
 	{
 		private static Live2DController sCurrentRenderingController = null;
 
@@ -167,11 +167,6 @@ namespace Noir.Unity.Live2D
 				this.sCurrentMotionName = sMotionName;
 
 			return bResult;
-		}
-
-		bool IWaitableObject.isComplete()
-		{
-			return this.sCurrentMotionName == this._IdleMotionName;
 		}
 	}
 }

@@ -73,6 +73,8 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("lyalignhtxt", ScriptTagManager.lyalignhtxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyalignvtxt", ScriptTagManager.lyalignvtxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lysetmaintxt", ScriptTagManager.lysetmaintxtHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lyexpressionl2d", ScriptTagManager.lyexpressionl2dHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lyexpressionstopl2d", ScriptTagManager.lyexpressionstopl2dHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -1184,7 +1186,7 @@ namespace Noir.Script
 				return;
 			}
 
-			UIManager.waitForObject((int)nInput, sLive2DLayer.Controller);
+			UIManager.waitForObject((int)nInput, sLive2DLayer.MotionWait);
 		}
 		
 		private static void getlayerxHandler(ScriptTag sTag)
@@ -1774,6 +1776,57 @@ namespace Noir.Script
 			}
 
 			UIManager.MainTextLayer = sLayer;
+		}
+
+		public static void lyexpressionl2dHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
+				return;
+			}
+
+			string sExpression = sTag.getAttribute("expression");
+
+			if (string.IsNullOrEmpty(sExpression))
+				return;
+
+			bool bLoop = false;
+			string sLoop = sTag.getAttribute("loop", false);
+
+			if (!string.IsNullOrEmpty(sLoop))
+			{
+				float nLoop;
+				bLoop = float.TryParse(sLoop, out nLoop) && nLoop != 0f;
+			}
+
+			if (!sLayer.Controller.startExpression(sExpression, bLoop))
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sExpression + "'은(는) 존재하지 않는 표정입니다.", sTag);
+		}
+
+		public static void lyexpressionstopl2dHandler(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (string.IsNullOrEmpty(sID))
+				return;
+
+			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
+
+			if (sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
+				return;
+			}
+
+			sLayer.Controller.startIdleExpression();
 		}
 	}
 }

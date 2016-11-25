@@ -3,14 +3,10 @@
 	Created by PHJ.
 */
 
-[lycl2d id="nachael" file="live2d/nachael/nachael.model.json" idle="idle"]
-[lytween id="nachael" param="left" ease="linear" from="-500" to="500" time="1000" yoyo="-1"]
+[lycl2d id="0" file="data/chr/nachael/nachael.model.json" idle="idle"]
+[lyprop id="0" left="-150"]
+[lymotionl2d id="0" motion="disapp" loop="1"]
 
-[lyc id="test01" file="chr/slime02"]
-[lytween id="test01" param="top" ease="linear" from="-300" to="300" time="1000" yoyo="-1"]
-
-[loop estimate="1"]
-	[waittween id="nachael" input="1"]
-	[test id="nachael"]
-	[test id="test01"]
-[/loop]
+[lycl2d id="1" file="data/chr/freyja/freyja.model.json" idle="idle"]
+[lyprop id="1" left="150"]
+[lymotionl2d id="1" motion="angry" loop="1"]

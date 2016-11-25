@@ -2,7 +2,8 @@
 	"type": "Live2D Model Setting",
 	"name": "nachael",
 	"model": "nachael.moc",
-	"textures": [
+	"textures":
+	[
 		"nachael.2048/texture_00.png",
 		"nachael.2048/texture_01.png",
 		"nachael.2048/texture_02.png",
@@ -11,16 +12,15 @@
 	"physics":"nachael.physics.json",
 	"expressions":
 	[
-		{"name":"f01","file":"expressions/f01.exp.json"},
-		{"name":"f02","file":"expressions/f02.exp.json"},
-		{"name":"f03","file":"expressions/f03.exp.json"},
-		{"name":"f04","file":"expressions/f04.exp.json"},
-		{"name":"f05","file":"expressions/f05.exp.json"},
-		{"name":"f06","file":"expressions/f06.exp.json"},
-		{"name":"f07","file":"expressions/f07.exp.json"},
-		{"name":"f08","file":"expressions/f08.exp.json"},
-		{"name":"f09","file":"expressions/f09.exp.json"},
-		{"name":"f10","file":"expressions/f10.exp.json"}
+		{"name":"angry","file":"expressions/angry.exp.json"},
+		{"name":"cat","file":"expressions/cat.exp.json"},
+		{"name":"laugh","file":"expressions/laugh.exp.json"},
+		{"name":"ques","file":"expressions/ques.exp.json"},
+		{"name":"sad","file":"expressions/sad.exp.json"},
+		{"name":"shy","file":"expressions/shy.exp.json"},
+		{"name":"smile","file":"expressions/smile.exp.json"},
+		{"name":"smirk","file":"expressions/smirk.exp.json"},
+		{"name":"srp","file":"expressions/srp.exp.json"}
 	],
 	"motions":
 	{
@@ -46,12 +46,6 @@
 		[
 			{"file":"motions/question01.mtn"}
 		],
-		"sample":
-		[
-			{"file":"motions/sample02.mtn"},
-			{"file":"motions/sample03.mtn"},
-			{"file":"motions/sample04.mtn"}
-		],
 		"shy":
 		[
 			{"file":"motions/shy01.mtn"}
@@ -63,6 +57,10 @@
 		"surprise":
 		[
 			{"file":"motions/surprise01.mtn"}
+		],
+		"disapp":
+		[
+			{"file":"motions/disapp01.mtn"}
 		]
 	}
 }
