@@ -65,6 +65,8 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("getlayervisible", ScriptTagManager.getlayervisibleHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyctxt", ScriptTagManager.lyctxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lycleartxt", ScriptTagManager.lycleartxtHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lynewlinetxt", ScriptTagManager.lynewlinetxtHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lyapptexttxt", ScriptTagManager.lyapptexttxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyfonttxt", ScriptTagManager.lyfonttxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyfontsizetxt", ScriptTagManager.lyfontsizetxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyfontcolortxt", ScriptTagManager.lyfontcolortxtHandler);
