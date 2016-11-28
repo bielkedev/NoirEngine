@@ -3,10 +3,24 @@
 	Created by PHJ.
 */
 
-[lycl2d id="0" file="data/chr/nachael/nachael.model.json" idle="idle"]
-[lyprop id="0" left="-150"]
-[lymotionl2d id="0" motion="disapp" loop="1"]
+[lyctxt id="txt"]
+[lyfonttxt id="txt" font="Font/SeoulHangangB"]
+[lyfontsizetxt id="txt" size="16"]
+[lyfontcolortxt id="txt" r="255" g="255" b="255" a="255"]
+[lyalignhtxt id="txt" align="-1"]
+[lyalignvtxt id="txt" align="-1"]
+[lysetmaintxt id="txt"]
 
-[lycl2d id="1" file="data/chr/freyja/freyja.model.json" idle="idle"]
-[lyprop id="1" left="150"]
-[lymotionl2d id="1" motion="angry" loop="1"]
+[&autoinsert target="lineend" command="@[rt]"]
+
+테스트
+테스트
+12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+
+[lysetwidthtxt id="txt" width="100"]
+
+dssfdfsffdsfs
+
+[lysetwidthtxt id="txt" width="1280"]
+[lysetheighttxt id="txt" height="100"]
