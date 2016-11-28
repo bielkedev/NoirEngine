@@ -5,7 +5,7 @@
 
 [lyctxt id="txt"]
 [lyfonttxt id="txt" font="Font/SeoulHangangB"]
-[lyfontsizetxt id="txt" size="16"]
+[lyfontsizetxt id="txt" size="32"]
 [lyfontcolortxt id="txt" r="255" g="255" b="255" a="255"]
 [lyalignhtxt id="txt" align="-1"]
 [lyalignvtxt id="txt" align="-1"]
@@ -14,13 +14,5 @@
 [&autoinsert target="lineend" command="@[rt]"]
 
 테스트
-테스트
-12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
 
-[lysetwidthtxt id="txt" width="100"]
-
-dssfdfsffdsfs
-
-[lysetwidthtxt id="txt" width="1280"]
-[lysetheighttxt id="txt" height="100"]
+<color=aqua>테스트</color>

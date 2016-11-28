@@ -43,8 +43,8 @@
 		],
 		"idle_mouth_old":
 		[
-			{"file":"motions_old/idle01_mouth.mtn"},
-			{"file":"motions_old/idle02_mouth.mtn"}
+			{"file":"motions_old/idle01mouth.mtn"},
+			{"file":"motions_old/idle02mouth.mtn"}
 		],
 		"question":
 		[
