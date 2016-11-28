@@ -75,6 +75,8 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("lysetmaintxt", ScriptTagManager.lysetmaintxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyexpressionl2d", ScriptTagManager.lyexpressionl2dHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyexpressionstopl2d", ScriptTagManager.lyexpressionstopl2dHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lysetwidthtxt", ScriptTagManager.lysetwidthtxtHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lysetheighttxt", ScriptTagManager.lysetheighttxtHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -1442,7 +1444,7 @@ namespace Noir.Script
 			EquationVariable.setVar(sName, sLayer.Visiblility ? "1" : "0");
 		}
 
-		public static void lyctxtHandler(ScriptTag sTag)
+		private static void lyctxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1460,7 +1462,7 @@ namespace Noir.Script
 			new TextLayer(sID);
 		}
 
-		public static void lycleartxtHandler(ScriptTag sTag)
+		private static void lycleartxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1478,7 +1480,7 @@ namespace Noir.Script
 			sLayer.LayerText.text = string.Empty;
 		}
 
-		public static void lynewlinetxtHandler(ScriptTag sTag)
+		private static void lynewlinetxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1496,7 +1498,7 @@ namespace Noir.Script
 			sLayer.LayerText.text += '\n';
 		}
 
-		public static void lyapptexttxtHandler(ScriptTag sTag)
+		private static void lyapptexttxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1519,7 +1521,7 @@ namespace Noir.Script
 			sLayer.LayerText.text += sText;
 		}
 
-		public static void lyfonttxtHandler(ScriptTag sTag)
+		private static void lyfonttxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1550,7 +1552,7 @@ namespace Noir.Script
 			sLayer.LayerText.font = sFont;
 		}
 
-		public static void lyfontsizetxtHandler(ScriptTag sTag)
+		private static void lyfontsizetxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1577,7 +1579,7 @@ namespace Noir.Script
 			sLayer.LayerText.fontSize = (int)nFontSize;
 		}
 
-		public static void lyfontcolortxtHandler(ScriptTag sTag)
+		private static void lyfontcolortxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1628,7 +1630,7 @@ namespace Noir.Script
 			sLayer.LayerText.color = new UnityEngine.Color(nR / 255f, nG / 255f, nB / 255f, nA / 255f);
 		}
 
-		public static void lyalignhtxtHandler(ScriptTag sTag)
+		private static void lyalignhtxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1694,7 +1696,7 @@ namespace Noir.Script
 			}
 		}
 
-		public static void lyalignvtxtHandler(ScriptTag sTag)
+		private static void lyalignvtxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1760,7 +1762,7 @@ namespace Noir.Script
 			}
 		}
 
-		public static void lysetmaintxtHandler(ScriptTag sTag)
+		private static void lysetmaintxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1778,7 +1780,7 @@ namespace Noir.Script
 			UIManager.MainTextLayer = sLayer;
 		}
 
-		public static void lyexpressionl2dHandler(ScriptTag sTag)
+		private static void lyexpressionl2dHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1811,7 +1813,7 @@ namespace Noir.Script
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sExpression + "'은(는) 존재하지 않는 표정입니다.", sTag);
 		}
 
-		public static void lyexpressionstopl2dHandler(ScriptTag sTag)
+		private static void lyexpressionstopl2dHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
 
@@ -1827,6 +1829,40 @@ namespace Noir.Script
 			}
 
 			sLayer.Controller.startIdleExpression();
+		}
+
+		private static void lysetwidthtxtHandler(ScriptTag sTag)
+		{
+			TextLayer sTextLayer = ScriptTagHelper.getTextLayer(sTag);
+
+			if (sTextLayer == null)
+				return;
+
+			float nWidth;
+
+			if (!ScriptTagHelper.getFloat(sTag, "width", out nWidth))
+				return;
+			
+			var sSize = sTextLayer.Transform.sizeDelta;
+			sSize.x = nWidth;
+			sTextLayer.Transform.sizeDelta = sSize;
+		}
+
+		private static void lysetheighttxtHandler(ScriptTag sTag)
+		{
+			TextLayer sTextLayer = ScriptTagHelper.getTextLayer(sTag);
+
+			if (sTextLayer == null)
+				return;
+
+			float nHeight;
+
+			if (!ScriptTagHelper.getFloat(sTag, "height", out nHeight))
+				return;
+
+			var sSize = sTextLayer.Transform.sizeDelta;
+			sSize.y = nHeight;
+			sTextLayer.Transform.sizeDelta = sSize;
 		}
 	}
 }

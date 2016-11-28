@@ -49,7 +49,7 @@ namespace Noir.Unity.Live2D
 
 			if (!this.sLive2DCharacter.loadLiveCharacter(sSharedData))
 				return false;
-			
+
 			this.startIdleExpression();
 			this.startIdleMotion();
 
@@ -58,6 +58,9 @@ namespace Noir.Unity.Live2D
 
 		private void Update()
 		{
+			if (!this.gameObject.activeSelf)
+				return;
+
 			if (this.sLive2DCharacter.Model == null)
 				return;
 
