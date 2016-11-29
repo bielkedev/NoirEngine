@@ -339,6 +339,8 @@ namespace Noir.Unity
 
 			Layer.sLayerMap.Remove(this.sLayerObject.name);
 			Layer.sLayerList.Remove(this.sLayerObject.name);
+
+			GameObject.Destroy(this.sLayerObject);
 		}
 
 		public virtual void applyLayerProperties()

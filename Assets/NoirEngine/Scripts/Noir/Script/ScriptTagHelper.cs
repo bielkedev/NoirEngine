@@ -5,6 +5,24 @@ namespace Noir.Script
 {
 	public class ScriptTagHelper
 	{
+		public static Layer getLayer(ScriptTag sTag)
+		{
+			string sID = sTag.getAttribute("id");
+
+			if (sID == null)
+				return null;
+
+			Layer sLayer = Layer.getLayer(sID);
+
+			if(sLayer == null)
+			{
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
+				return null;
+			}
+
+			return sLayer;
+		}
+
 		public static SpriteLayer getSpriteLayer(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
