@@ -29,7 +29,7 @@ namespace Noir.Unity
 				this.sLayerImage.SetMaterialDirty();
 
 				if (this.sSprite != null)
-					this.sLayerTransform.sizeDelta = this.sSprite.textureRect.size;
+					this.sLayerImage.SetNativeSize();
 			}
 			else
 			{
@@ -49,7 +49,7 @@ namespace Noir.Unity
 				this.sLayerImage.SetMaterialDirty();
 
 				if (this.sSprite != null)
-					this.sLayerTransform.sizeDelta = this.sSprite.textureRect.size;
+					this.sLayerImage.SetNativeSize();
 			}
 		}
 	}
