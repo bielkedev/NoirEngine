@@ -101,17 +101,19 @@ scgmovey 테스트. val, loop
 [bg file="bedroom" preset="l"]
 [chrid name="def"]//각 캐릭터에게 기본 레이어값을 할당한다
 
-/*
+
 [var name="t.chrpos_exist_witch" data="0"]
 [var name="t.chrpos_exist_freya" data="0"]
+
+/*
 [chrpos name="witch" size="l" pos="1c"]
 size=l pos=1c
 
 [chrpos name="witch" size="l" pos="2l"]
-[chrpos name="freya" size="l" pos="2l"]
+[chrpos name="freya" size="l" pos="2r"]
 witch size=l pos=2l               freya size=l pos=2r
 */
 
-[lycl2d id="18" file="Data/chr/freyja/freyja.model.json" idle="idle"]
+[lyc id ="11" file="Data/chr/기사"]
 
 뀨뀨꺄꺄
