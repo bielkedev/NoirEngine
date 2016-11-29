@@ -87,19 +87,31 @@ scgmovex 테스트. val1, val2
 [chrpos name="witch" size="l" pos="1c"]
 [scgmovex id="$witch" val1="100" val2="400" time="300" loop="3"]
 scgmovex 테스트. val1, val2, loop
+
+//20161125
+[scgmovey id="$witch" val="100" time="100"]
+scgmovey 테스트. val
+
+[scgmovey id="$witch" val="100" time="100" loop="3"]
+scgmovey 테스트. val, loop
+
+
 */
 
-
 [bg file="bedroom" preset="l"]
-변수로 id값 설정 후 제대로 숫자값으로 레이어 먹혔나 테스트.
 [chrid name="def"]//각 캐릭터에게 기본 레이어값을 할당한다
-//[lycl2d id="$witch" file="Data/chr/nachael/nachael.model.json" idle="idle"]
-//[lyprop id="$witch" left="100" top="-300" xscale="250" yscale="250"]
 
+/*
+[var name="t.chrpos_exist_witch" data="0"]
+[var name="t.chrpos_exist_freya" data="0"]
 [chrpos name="witch" size="l" pos="1c"]
-1c
+size=l pos=1c
 
+[chrpos name="witch" size="l" pos="2l"]
+[chrpos name="freya" size="l" pos="2l"]
+witch size=l pos=2l               freya size=l pos=2r
+*/
 
-
+[lycl2d id="18" file="Data/chr/freyja/freyja.model.json" idle="idle"]
 
 뀨뀨꺄꺄

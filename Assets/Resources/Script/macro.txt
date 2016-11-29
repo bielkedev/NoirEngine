@@ -107,7 +107,13 @@
 	[lydel id="1"][lydel id="2"][lydel id="3"]
 	[lydel id="11"][lydel id="12"][lydel id="13"][lydel id="14"][lydel id="15"][lydel id="16"][lydel id="17"][lydel id="18"][lydel id="19"]
 	[lydel id="25"]
-	[trans type="2" time="$time" rule="$g.maskpath + rule" vague="32" input="$tr_input_value"]
+	[var name="t.chrpos_exist_seres" data="0"]
+	[var name="t.chrpos_exist_lithia" data="0"]
+	[var name="t.chrpos_exist_sophia" data="0"]
+	[var name="t.chrpos_exist_freya" data="0"]
+	[var name="t.chrpos_exist_witch" data="0"]
+
+	[trans type="2" time="$time" rule="$'Data/mask/ + rule'" vague="32" input="$tr_input_value"]
 	
 	[if estimate="$tr2e_wait != 0"]
 		[wait time="tr2e_wait"]
@@ -115,21 +121,21 @@
 	[wait time="500"]
 	[/if]
 	
-	[lyc id="1" file="$g.bgpath + file"]
+	[lyc id="1" file="$'Data/bg/' + file"]
 	
 	[if estimate="$tr2e_preset == 0"]
 		[lyprop id="1" left="$left" top="$top" xscale="$scale" yscale="$scale"]
 	[elseif estimate="$tr2e_preset == 'xl'"]
-		[lyprop id="1" left="$-380" top="$-200" xscale="$120" yscale="$120"]
+		[lyprop id="1" xscale="$120" yscale="$120"]
 	[elseif estimate="$tr2e_preset == 'l'"]
-		[lyprop id="1" left="$-384" top="$-228" xscale="$95" yscale="$95"]
+		[lyprop id="1" xscale="$95" yscale="$95"]
 	[elseif estimate="$tr2e_preset == 'm'"]
-		[lyprop id="1" left="$-384" top="$-228" xscale="$80" yscale="$80"]
+		[lyprop id="1" xscale="$80" yscale="$80"]
 	[elseif estimate="$tr2e_preset == 's'"]
-		[lyprop id="1" left="$-384" top="$-228" xscale="$65" yscale="$65"]
+		[lyprop id="1" xscale="$65" yscale="$65"]
 	[else]
 	[/if]
-	[trans type="2" time="$time" rule="$g.maskpath + rule" vague="32" input="$tr_input_value"]
+	[trans type="2" time="$time" rule="$'Data/mask/ + rule'" vague="32" input="$tr_input_value"]
 	[return]
 
 
@@ -145,7 +151,6 @@
 	[var name="t.scgmovex_loop_exist" system="var_exist" target="loop" local="1"]//없으면 0 있으면 1
 
 	[if estimate="$t.scgmovex_val2_exist == 0" ]
-
 		[if estimate="$t.scgmovex_loop_exist == 0"]
 			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time" sync="1"]
 			[waittween id="$id" input="$tr_input_value"]
@@ -184,15 +189,33 @@
 	[return]
 
 *scgmovey
-	//[scgmovey id="" val="" time=""]
+	//[scgmovey id="" val="" time="" loop=""]
 	//id	작동을 가할 레이어 아이디
 	//val	움직일 픽셀 값. -로 하면 위로 감.
 	//time	시간.
+
+	
 	[var name="t.scgmoveyid" data="$id"]
-	[var name="t.lycinfo" system="get_layer_info" style="array" id = "$t.scgmoveyid"]
-	[var name="t.scgmoveytop" data="$t.lycinfo.top"]
-	[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop" to="$t.scgmoveytop - val" time="$time" sync="1"]
-	[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop - val" to="$t.scgmoveytop" time="$time" sync="1"]
+	[var name="scgmovey_loop" data="0"]
+	[var name="t.scgmovey_loop_exist" system="var_exist" target="loop" local="1"]//없으면 0 있으면 1
+	[getlayery id="$id" name="t.scgmoveytop"]
+
+
+	[if estimate="$t.scgmovey_loop_exist == 0"]
+		[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop" to="$t.scgmoveytop + val" time="$time"]
+		[waittween id="$id" input="$tr_input_value"]
+		[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop + val" to="$t.scgmoveytop" time="$time"]
+		[waittween id="$id" input="$tr_input_value"]
+	[elseif estimate="$t.scgmovey_loop_exist == 1"]
+		[loop estimate="$scgmovey_loop < loop"]
+			루프 진입
+			[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop" to="$t.scgmoveytop + val" time="$time"]
+			[waittween id="$id" input="$tr_input_value"]
+			[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop + val" to="$t.scgmoveytop" time="$time"]
+			[waittween id="$id" input="$tr_input_value"]
+			[var name="scgmovey_loop" data="$scgmovey_loop + 1"]
+		[/loop]
+	[/if]
 	[return]
 
 
@@ -237,14 +260,20 @@
 	[return]
 
 *witch
-	[lycl2d id="$witch" file="Data/chr/" idle=""]
-	[lyc id="$witch" file="$g.imagepath + 'chr/witch'"]
+	[if estimate="$t.chrpos_exist_witch == 0"]
+		[var name="t.chrpos_exist_witch" data="1"]
+		[lycl2d id="$witch" file="Data/chr/nachael/nachael.model.json" idle="idle"]
 	[return]
 
 // ---------------------------------------------------------------------------------------------
 //레이어 한번에 제거. 뒤에 trans 명령어 사용해야 함.
 *ClearChr
 	[lydel id="11"][lydel id="12"][lydel id="13"][lydel id="14"][lydel id="15"][lydel id="16"][lydel id="17"][lydel id="18"][lydel id="19"][lydel id="25"]
+	[var name="t.chrpos_exist_seres" data="0"]
+	[var name="t.chrpos_exist_lithia" data="0"]
+	[var name="t.chrpos_exist_sophia" data="0"]
+	[var name="t.chrpos_exist_freya" data="0"]
+	[var name="t.chrpos_exist_witch" data="0"]
 	[return]
 
 *ClearBg
@@ -385,11 +414,16 @@
 		[var name="chrpos_id" data="$sophia"]
 	[elseif estimate="$t.chrpos_name == 'freya'"]
 		[var name="chrpos_id" data="$freya"]
+		[if estimate="$t.chrpos_exist_freya == 0"]
+			[var name="t.chrpos_exist_freya" data="1"]
+			[lycl2d id="$freya" file="Data/chr/freyja/freyja.model.json" idle="idle"]
+		[/if]
 	[elseif estimate="$t.chrpos_name == 'witch'"]
 		[var name="t.chrpos_id" data="$witch"]
-		[var name="t.chrpos_exist_witch" data="1"]
-		[lycl2d id="$witch" file="Data/chr/nachael/nachael.model.json" idle="idle"]
-		
+		[if estimate="$t.chrpos_exist_witch == 0"]
+			[var name="t.chrpos_exist_witch" data="1"]
+			[lycl2d id="$witch" file="Data/chr/nachael/nachael.model.json" idle="idle"]
+		[/if]
 	[/if]
 
 	//L사이즈
