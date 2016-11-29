@@ -29,12 +29,21 @@ test 002
 [lyctxt id="txt"]
 [lycleartxt id="txt"]//텍스트 레이어의 텍스트(글씨)를 모두 지웁니다. 처음 생성할땐 비어있어서 따로 호출해줄 필욘 없어요.
 [lysetmaintxt id="txt"]//텍스트가 기본적으로 어느 레이어에 출력되는지를 지정합니다. 기본적으로 텍스트 레이어를 생성해주지 않으면 백로그에서만 보이기 때문에 대사창을 등록하려면 얘 호출해줘야해요.
-[lyfonttxt id="txt" font="Font/SeoulHangangB"]//텍스트 레이어의 폰트를 지정합니다. 폰트 파일 경로 적어주세요.
-[lyfontsizetxt id="txt" size="32"]//텍스트 레이어에 사용할 폰트의 크기를 지정합니다. 20(너무 작아요) ~ 50(엄청 커요)사이로 지정해주시면 편합니다.
-[lyfontcolortxt id="txt" r="255" g="255" b="255" a="255"]//텍스트 레이어의 글자색을 지정합니다. 기본값은 0, 0, 0, 255(완전 불투명한 검은색)이에요.
-[lyalignhtxt id="txt" align="-1"]//텍스트 레이어의 수평 정렬을 지정합니다. align이 음수면 왼쪽, 양수면 오른쪽, 0이면 가운데 정렬입니다.
-[lyalignvtxt id="txt" align="-1"]//텍스트 레이어의 수직 정렬을 지정합니다. align이 음수면 윗쪽, 양수면 아랫쪽, 0이면 가운데 정렬입니다.
-[lyprop id="txt" top="-555"]//위치 설정
+[lyprop id="txt" top="-350"]
+[lyproptxt
+	id="txt"				//id : Text 레이어의 이름입니다.
+//	text=""				//text : 표시할 문자열입니다.
+	font="Font/SeoulHangangB"	//font : 폰트파일 경로입니다.
+	size="36"			//size : 글자 크기입니다. [10, 50]의 범위가 일반적입니다.
+	r="255"				//r : 글자 색상의 Red 요소입니다. [0, 255]의 범위를 갖습니다.
+	g="255"				//g : 글자 색상의 Green 요소입니다. [0, 255]의 범위를 갖습니다.
+	b="255"				//b : 글자 색상의 Blue 요소입니다. [0, 255]의 범위를 갖습니다.
+	a="255"				//a : 글자 색상의 Alpha 요소입니다. [0, 255]의 범위를 갖습니다.
+	alignh="-1"			//alignh : 글자의 가로 정렬 방법입니다. 음수면 왼쪽, 양수면 오른쪽, 0이면 가운데 정렬합니다.
+	alignv="-1"			//alignv : 글자의 세로 정렬 방법입니다. 음수면 윗쪽, 양수면 아랫쪽, 0이면 가운데 정렬합니다.
+	width="1100"			//width : 레이어의 가로 길이입니다. 기본값은 1280(화면 가로 길이)입니다.
+	height="300"			//height : 레이어의 세로 길이입니다. 기본값은 720(화면 세로 길이)입니다.
+]
 
 //메세지 윈도우를 부른다
 [lyc id="80" file="Data/UI/mw1"]
@@ -100,20 +109,75 @@ scgmovey 테스트. val, loop
 
 [bg file="bedroom" preset="l"]
 [chrid name="def"]//각 캐릭터에게 기본 레이어값을 할당한다
+[var name="t.chrpos_exist_test1" data="0"]
+[var name="t.chrpos_exist_test2" data="0"]
+[var name="t.chrpos_exist_test3" data="0"]
+[var name="t.chrpos_exist_test4" data="0"]
+[var name="t.chrpos_exist_test5" data="0"]
 
-
-[var name="t.chrpos_exist_witch" data="0"]
-[var name="t.chrpos_exist_freya" data="0"]
-
-/*
-[chrpos name="witch" size="l" pos="1c"]
+[chrpos name="test1" size="l" pos="1c"]
 size=l pos=1c
 
-[chrpos name="witch" size="l" pos="2l"]
-[chrpos name="freya" size="l" pos="2r"]
-witch size=l pos=2l               freya size=l pos=2r
-*/
+[chrpos name="test1" size="l" pos="1c" movex="500"]
+size=l pos=1c movex=500
 
-[lyc id ="11" file="Data/chr/기사"]
+[chrpos name="test1" size="l" pos="1c" movex="-500"]
+size=l pos=1c movex=-500
+
+[chrpos name="test1" size="l" pos="2l"]
+[chrpos name="test2" size="l" pos="2r"]
+size=l pos=2l 2r
+
+[chrpos name="test1" size="m" pos="2l"]
+[chrpos name="test2" size="m" pos="2r"]
+size=m pos=2l 2r
+
+[chrpos name="test1" size="m" pos="3l"]
+[chrpos name="test2" size="m" pos="3c"]
+[chrpos name="test3" size="m" pos="3r"]
+size=m pos=3l 3c 3r
+
+[chrpos name="test1" size="m" pos="4ll"]
+[chrpos name="test2" size="m" pos="4l"]
+[chrpos name="test3" size="m" pos="4r"]
+[chrpos name="test4" size="m" pos="4rr"]
+size=m pos=4ll 4l 4r 4rr
+
+[ClearChr]
+[var name="t.chrpos_exist_test1" data="0"]
+[var name="t.chrpos_exist_test2" data="0"]
+[var name="t.chrpos_exist_test3" data="0"]
+[var name="t.chrpos_exist_test4" data="0"]
+[var name="t.chrpos_exist_test5" data="0"]
+
+[chrpos name="test1" size="s" pos="1c"]
+size=s pos=1c
+
+[chrpos name="test1" size="s" pos="2l"]
+[chrpos name="test2" size="s" pos="2r"]
+size=s pos=2l 2r
+
+[chrpos name="test1" size="s" pos="3l"]
+[chrpos name="test2" size="s" pos="3c"]
+[chrpos name="test3" size="s" pos="3r"]
+size=s pos=3l 3c 3r
+
+[chrpos name="test1" size="s" pos="4ll"]
+[chrpos name="test2" size="s" pos="4l"]
+[chrpos name="test3" size="s" pos="4r"]
+[chrpos name="test4" size="s" pos="4rr"]
+size=s pos=4ll 4l 4r 4rr
+
+[lydel id="13"]
+[chrid name="def"]
+[chrpos name="test1" size="s" pos="5ll"]
+[chrpos name="test2" size="s" pos="5l"]
+[chrpos name="witch" size="s" pos="5c"]
+[chrpos name="test4" size="s" pos="5r"]
+[chrpos name="test5" size="s" pos="5rr"]
+size=s pos=5ll 5l 5c 5r 5rr
+
+[scgmovey id="19" val="200" time="100"]
+
 
 뀨뀨꺄꺄
