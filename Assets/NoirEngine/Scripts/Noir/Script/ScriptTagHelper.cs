@@ -109,9 +109,9 @@ namespace Noir.Script
 			return sTextLayer;
 		}
 
-		public static bool getFloat(ScriptTag sTag, string sAttr, out float nFloat)
+		public static bool getFloat(ScriptTag sTag, string sAttr, out float nFloat, bool bPushError = true)
 		{
-			string sFloat = sTag.getAttribute(sAttr);
+			string sFloat = sTag.getAttribute(sAttr, bPushError);
 
 			if (sFloat == null)
 			{

@@ -67,16 +67,10 @@ namespace Noir.Script
 			ScriptTagManager.sTagHandlerMap.Add("lycleartxt", ScriptTagManager.lycleartxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lynewlinetxt", ScriptTagManager.lynewlinetxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyapptexttxt", ScriptTagManager.lyapptexttxtHandler);
-			ScriptTagManager.sTagHandlerMap.Add("lyfonttxt", ScriptTagManager.lyfonttxtHandler);
-			ScriptTagManager.sTagHandlerMap.Add("lyfontsizetxt", ScriptTagManager.lyfontsizetxtHandler);
-			ScriptTagManager.sTagHandlerMap.Add("lyfontcolortxt", ScriptTagManager.lyfontcolortxtHandler);
-			ScriptTagManager.sTagHandlerMap.Add("lyalignhtxt", ScriptTagManager.lyalignhtxtHandler);
-			ScriptTagManager.sTagHandlerMap.Add("lyalignvtxt", ScriptTagManager.lyalignvtxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lysetmaintxt", ScriptTagManager.lysetmaintxtHandler);
+			ScriptTagManager.sTagHandlerMap.Add("lyproptxt", ScriptTagManager.lyproptxtHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyexpressionl2d", ScriptTagManager.lyexpressionl2dHandler);
 			ScriptTagManager.sTagHandlerMap.Add("lyexpressionstopl2d", ScriptTagManager.lyexpressionstopl2dHandler);
-			ScriptTagManager.sTagHandlerMap.Add("lysetwidthtxt", ScriptTagManager.lysetwidthtxtHandler);
-			ScriptTagManager.sTagHandlerMap.Add("lysetheighttxt", ScriptTagManager.lysetheighttxtHandler);
 		}
 
 		public static ScriptTagHandler getTagHandler(string sTagName)
@@ -1520,248 +1514,7 @@ namespace Noir.Script
 
 			sLayer.LayerText.text += sText;
 		}
-
-		private static void lyfonttxtHandler(ScriptTag sTag)
-		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			string sFontPath = sTag.getAttribute("font");
-
-			if (sFontPath == null)
-				return;
-
-			UnityEngine.Font sFont = CacheManager.loadFont(sFontPath);
-
-			if(sFont == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFontPath + "'에 폰트가 없습니다.", sTag);
-				return;
-			}
-
-			sLayer.LayerText.font = sFont;
-		}
-
-		private static void lyfontsizetxtHandler(ScriptTag sTag)
-		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			string sFontSize = sTag.getAttribute("size");
-			float nFontSize;
-
-			if (!float.TryParse(sFontSize, out nFontSize))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFontSize + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			sLayer.LayerText.fontSize = (int)nFontSize;
-		}
-
-		private static void lyfontcolortxtHandler(ScriptTag sTag)
-		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			string sR = sTag.getAttribute("r");
-			string sG = sTag.getAttribute("g");
-			string sB = sTag.getAttribute("b");
-			string sA = sTag.getAttribute("a");
-			float nR;
-			float nG;
-			float nB;
-			float nA;
-
-			if (!float.TryParse(sR, out nR))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sR + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			if (!float.TryParse(sG, out nG))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sG + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			if (!float.TryParse(sB, out nB))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sB + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			if (!float.TryParse(sA, out nA))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sA + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			sLayer.LayerText.color = new UnityEngine.Color(nR / 255f, nG / 255f, nB / 255f, nA / 255f);
-		}
-
-		private static void lyalignhtxtHandler(ScriptTag sTag)
-		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			string sAlign = sTag.getAttribute("align");
-
-			if (sAlign == null)
-				return;
-
-			float nAlign;
-
-			if (!float.TryParse(sAlign, out nAlign))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sAlign + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-			
-			switch(sLayer.LayerText.alignment)
-			{
-				case UnityEngine.TextAnchor.LowerCenter:
-				case UnityEngine.TextAnchor.LowerLeft:
-				case UnityEngine.TextAnchor.LowerRight:
-				if (nAlign < 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.LowerLeft;
-				else if (nAlign > 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.LowerRight;
-				else
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.LowerCenter;
-				break;
-
-				default:
-				case UnityEngine.TextAnchor.MiddleCenter:
-				case UnityEngine.TextAnchor.MiddleLeft:
-				case UnityEngine.TextAnchor.MiddleRight:
-				if (nAlign < 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.MiddleLeft;
-				else if (nAlign > 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.MiddleRight;
-				else
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.MiddleCenter;
-				break;
-
-				case UnityEngine.TextAnchor.UpperCenter:
-				case UnityEngine.TextAnchor.UpperLeft:
-				case UnityEngine.TextAnchor.UpperRight:
-				if (nAlign < 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.UpperLeft;
-				else if (nAlign > 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.UpperRight;
-				else
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.UpperCenter;
-				break;
-			}
-		}
-
-		private static void lyalignvtxtHandler(ScriptTag sTag)
-		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			string sAlign = sTag.getAttribute("align");
-
-			if (sAlign == null)
-				return;
-
-			float nAlign;
-
-			if (!float.TryParse(sAlign, out nAlign))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sAlign + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			switch (sLayer.LayerText.alignment)
-			{
-				default:
-				case UnityEngine.TextAnchor.LowerCenter:
-				case UnityEngine.TextAnchor.MiddleCenter:
-				case UnityEngine.TextAnchor.UpperCenter:
-				if (nAlign < 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.UpperCenter;
-				else if (nAlign > 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.LowerCenter;
-				else
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.MiddleCenter;
-				break;
-
-				case UnityEngine.TextAnchor.LowerLeft:
-				case UnityEngine.TextAnchor.MiddleLeft:
-				case UnityEngine.TextAnchor.UpperLeft:
-				if (nAlign < 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.UpperLeft;
-				else if (nAlign > 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.LowerLeft;
-				else
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.MiddleLeft;
-				break;
-
-				case UnityEngine.TextAnchor.LowerRight:
-				case UnityEngine.TextAnchor.MiddleRight:
-				case UnityEngine.TextAnchor.UpperRight:
-				if (nAlign < 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.UpperRight;
-				else if (nAlign > 0f)
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.LowerRight;
-				else
-					sLayer.LayerText.alignment = UnityEngine.TextAnchor.MiddleRight;
-				break;
-			}
-		}
-
+		
 		private static void lysetmaintxtHandler(ScriptTag sTag)
 		{
 			string sID = sTag.getAttribute("id");
@@ -1778,6 +1531,88 @@ namespace Noir.Script
 			}
 
 			UIManager.MainTextLayer = sLayer;
+		}
+
+		private static void lyproptxtHandler(ScriptTag sTag)
+		{
+			TextLayer sTextLayer = ScriptTagHelper.getTextLayer(sTag);
+
+			if (sTextLayer == null)
+				return;
+
+			string sText = sTag.getAttribute("text");
+			if (sText != null)
+				sTextLayer.LayerText.text = sText;
+
+			string sFont = sTag.getAttribute("font");
+			if (sFont != null)
+			{
+				var sFontFile = CacheManager.loadFont(sFont);
+
+				if (sFont == null)
+				{
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFont + "'에 폰트가 없습니다.", sTag);
+					return;
+				}
+
+				sTextLayer.LayerText.font = sFontFile;
+			}
+
+			float nSize;
+			if (ScriptTagHelper.getFloat(sTag, "size", out nSize, false))
+				sTextLayer.LayerText.fontSize = (int)nSize;
+
+			float nValue;
+			const float nFactor = 1f / 255f;
+			var sColor = sTextLayer.LayerText.color;
+
+			if (ScriptTagHelper.getFloat(sTag, "r", out nValue, false))
+				sColor.r = nValue * nFactor;
+
+			if (ScriptTagHelper.getFloat(sTag, "g", out nValue, false))
+				sColor.g = nValue * nFactor;
+
+			if (ScriptTagHelper.getFloat(sTag, "b", out nValue, false))
+				sColor.b = nValue * nFactor;
+
+			if (ScriptTagHelper.getFloat(sTag, "a", out nValue, false))
+				sColor.a = nValue * nFactor;
+
+			sTextLayer.LayerText.color = sColor;
+
+			if (ScriptTagHelper.getFloat(sTag, "alignh", out nValue, false))
+			{
+				var nCurrent = (int)sTextLayer.LayerText.alignment / 3;
+
+				if (nCurrent == 0)
+					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperLeft : nValue > 0f ? UnityEngine.TextAnchor.UpperRight : UnityEngine.TextAnchor.UpperCenter;
+				else if (nCurrent == 2)
+					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.LowerLeft : nValue > 0f ? UnityEngine.TextAnchor.LowerRight : UnityEngine.TextAnchor.LowerCenter;
+				else
+					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.MiddleLeft : nValue > 0f ? UnityEngine.TextAnchor.MiddleRight : UnityEngine.TextAnchor.MiddleCenter;
+			}
+
+			if (ScriptTagHelper.getFloat(sTag, "alignv", out nValue, false))
+			{
+				var nCurrent = (int)sTextLayer.LayerText.alignment % 3;
+
+				if (nCurrent == 0)
+					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperLeft : nValue > 0f ? UnityEngine.TextAnchor.LowerLeft : UnityEngine.TextAnchor.MiddleLeft;
+				else if (nCurrent == 2)
+					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperRight : nValue > 0f ? UnityEngine.TextAnchor.LowerRight : UnityEngine.TextAnchor.MiddleRight;
+				else
+					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperCenter : nValue > 0f ? UnityEngine.TextAnchor.LowerCenter : UnityEngine.TextAnchor.MiddleCenter;
+			}
+
+			var sSize = sTextLayer.Transform.sizeDelta;
+
+			if (ScriptTagHelper.getFloat(sTag, "width", out nValue, false))
+				sSize.x = nValue;
+
+			if (ScriptTagHelper.getFloat(sTag, "height", out nValue, false))
+				sSize.y = nValue;
+
+			sTextLayer.Transform.sizeDelta = sSize;
 		}
 
 		private static void lyexpressionl2dHandler(ScriptTag sTag)
@@ -1829,40 +1664,6 @@ namespace Noir.Script
 			}
 
 			sLayer.Controller.startIdleExpression();
-		}
-
-		private static void lysetwidthtxtHandler(ScriptTag sTag)
-		{
-			TextLayer sTextLayer = ScriptTagHelper.getTextLayer(sTag);
-
-			if (sTextLayer == null)
-				return;
-
-			float nWidth;
-
-			if (!ScriptTagHelper.getFloat(sTag, "width", out nWidth))
-				return;
-			
-			var sSize = sTextLayer.Transform.sizeDelta;
-			sSize.x = nWidth;
-			sTextLayer.Transform.sizeDelta = sSize;
-		}
-
-		private static void lysetheighttxtHandler(ScriptTag sTag)
-		{
-			TextLayer sTextLayer = ScriptTagHelper.getTextLayer(sTag);
-
-			if (sTextLayer == null)
-				return;
-
-			float nHeight;
-
-			if (!ScriptTagHelper.getFloat(sTag, "height", out nHeight))
-				return;
-
-			var sSize = sTextLayer.Transform.sizeDelta;
-			sSize.y = nHeight;
-			sTextLayer.Transform.sizeDelta = sSize;
 		}
 	}
 }
