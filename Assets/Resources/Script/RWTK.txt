@@ -123,6 +123,7 @@ size=l pos=1c movex=500
 
 [chrpos name="test1" size="l" pos="1c" movex="-500"]
 size=l pos=1c movex=-500
+[scgmovey id="11" val="100" time="100" loop="3"]
 
 [chrpos name="test1" size="l" pos="2l"]
 [chrpos name="test2" size="l" pos="2r"]
