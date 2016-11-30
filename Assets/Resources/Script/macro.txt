@@ -1,4 +1,4 @@
-//
+된//
 // ---------------------------------------------------------------------------------------------
 //이미지 관련 매크로
 *bg
@@ -53,7 +53,7 @@
 	[/if]
 	[return]
 
-*bg2
+//*bg2
 	//bg2는 배경이 여러 레이어이거나 아니면 이펙트용으로 쓰는 id2값의 bg. trans값은 제거했음.
 	//[bg2 file="" scale="" top="" left="" alpha=""]
 	//[bg2 file="" scale="" alpha=""] ←타입1에 top left값 안 써도 되면 이렇게 써도 됨.
@@ -62,9 +62,9 @@
 	//top	위							필수아님
 	//left	옆							필수아님
 
-	[lyc id="2" file="$g.bgpath + file"]
-	[lyprop id="2" left="$left" top="$top" xscale="$scale" yscale="$scale" alpha="%alpha"]
-	[return]
+//	[lyc id="2" file="$g.bgpath + file"]
+//	[lyprop id="2" left="$left" top="$top" xscale="$scale" yscale="$scale" alpha="%alpha"]
+//	[return]
 
 
 *lytscale
@@ -145,8 +145,21 @@
 	//val1	움직일 픽셀 값만큼 우측으로 이동.
 	//val2	움직일 픽셀 값만큼 좌측으로 이동
 	//time	시간.
-	[var name="t.scgmovexid" data="$id"]
-	[getlayerx id="$id" name="t.scgmovexleft"]
+	[if estimate="$id == 'seres"]
+		[var name="t.scgmovexid" data="$seres"]
+	[elseif estimate="$id == 'lithia"]
+		[var name="t.scgmovexid" data="$lithia"]
+	[elseif estimate="$id == 'sophia"]
+		[var name="t.scgmovexid" data="$sophia"]
+	[elseif estimate="$id == 'freya"]
+		[var name="t.scgmovexid" data="$freya"]
+	[elseif estimate="$id == 'witch"]
+		[var name="t.scgmovexid" data="$witch"]
+	[else]
+		[var name="scgmovexid" data="$id"]
+	[/if]
+
+	[getlayerx id="$t.scgmovexid" name="t.scgmovexleft"]
 	[var name="t.scgmovex_val2_exist" system="var_exist" target="val2" local="1"]//없으면 0 있으면 1
 	[var name="t.scgmovex_loop_exist" system="var_exist" target="loop" local="1"]//없으면 0 있으면 1
 
@@ -168,18 +181,18 @@
 	[elseif estimate="$t.scgmovex_val2_exist == 1"]
 		[if estimate="$t.scgmovex_loop_exist == 0"]
 			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time"]
-			[waittween id="$id" input="$tr_input_value"]
+			[waittween id="$t.scgmovexid" input="$tr_input_value"]
 			[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft + val1" to="$t.scgmovexleft + val1 - val2" time="$time"]
-			[waittween id="$id" input="$tr_input_value"]
+			[waittween id="$t.scgmovexid" input="$tr_input_value"]
 
 		[elseif estimate="$t.scgmovex_loop_exist == 1"]
 			[var name="scgmovex_loop" data="0"]
 			[loop estimate="$scgmovex_loop < loop"]
-				[getlayerx id="$id" name="t.scgmovexleft"]
+				[getlayerx id="$t.scgmovexid" name="t.scgmovexleft"]
 				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft" to="$t.scgmovexleft + val1" time="$time"]
-				[waittween id="$id" input="$tr_input_value"]
+				[waittween id="$t.scgmovexid" input="$tr_input_value"]
 				[lytween id="$t.scgmovexid" param="left" from="$t.scgmovexleft + val1" to="$t.scgmovexleft + val1 - val2" time="$time"]
-				[waittween id="$id" input="$tr_input_value"]
+				[waittween id="$t.scgmovexid" input="$tr_input_value"]
 				[var name="scgmovex_loop" data="$scgmovex_loop + 1"]
 			[/loop]
 		[/if]
@@ -193,44 +206,43 @@
 	//id	작동을 가할 레이어 아이디
 	//val	움직일 픽셀 값. -로 하면 위로 감.
 	//time	시간.
-
 	
 	[var name="t.scgmoveyid" data="$id"]
-	[var name="scgmovey_loop" data="0"]
+	[var name="t.scgmovey_loop" data="0"]
 	[var name="t.scgmovey_loop_exist" system="var_exist" target="loop" local="1"]//없으면 0 있으면 1
-	[getlayery id="$id" name="t.scgmoveytop"]
+	
+	[if estimate="$id == 'seres"]
+		[var name="t.scgmoveyid" data="$seres"]
+	[elseif estimate="$id == 'lithia"]
+		[var name="t.scgmoveyid" data="$lithia"]
+	[elseif estimate="$id == 'sophia"]
+		[var name="t.scgmoveyid" data="$sophia"]
+	[elseif estimate="$id == 'freya"]
+		[var name="t.scgmoveyid" data="$freya"]
+	[elseif estimate="$id == 'witch"]
+		[var name="t.scgmoveyid" data="$witch"]
+	[else]
+		[var name="t.scgmoveyid" data="$id"]
+	[/if]
+
+	[getlayery id="$t.scgmoveyid" name="t.scgmoveytop"]
 
 
 	[if estimate="$t.scgmovey_loop_exist == 0"]
 		[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop" to="$t.scgmoveytop + val" time="$time"]
-		[waittween id="$id" input="$tr_input_value"]
+		[waittween id="$t.scgmoveyid" input="$tr_input_value"]
 		[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop + val" to="$t.scgmoveytop" time="$time"]
-		[waittween id="$id" input="$tr_input_value"]
+		[waittween id="$t.scgmoveyid" input="$tr_input_value"]
 	[elseif estimate="$t.scgmovey_loop_exist == 1"]
-		[loop estimate="$scgmovey_loop < loop"]
+		[loop estimate="$t.scgmovey_loop < loop"]
 			루프 진입
 			[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop" to="$t.scgmoveytop + val" time="$time"]
-			[waittween id="$id" input="$tr_input_value"]
+			[waittween id="$t.scgmoveyid" input="$tr_input_value"]
 			[lytween id="$t.scgmoveyid" param="top" from="$t.scgmoveytop + val" to="$t.scgmoveytop" time="$time"]
-			[waittween id="$id" input="$tr_input_value"]
-			[var name="scgmovey_loop" data="$scgmovey_loop + 1"]
+			[waittween id="$t.scgmoveyid" input="$tr_input_value"]
+			[var name="t.scgmovey_loop" data="$t.scgmovey_loop + 1"]
 		[/loop]
 	[/if]
-	[return]
-
-
-
-*scgcut2
-	//id	작동을 가할 레이어 아이디
-	
-	
-	[lyc id="$id" file="$g.imagepath + 'cutin/cutin02'"]
-	[lyopt id="$id" left="$675" top="$-100" scale="100"]
-	[lytween id="$id" param="top" from="$-100" to="$0" time="300" sync="0" ]
-	[trans type="1" time="300" input="$tr_input_value"]
-	[lyc id="8" file="$g.imagepath + 'chr/freya'"]
-	[lyprop id ="8" left ="$677" top ="$-170" clip ="320,0,296,1500"]
-	[trans type="1" time="500" input="$tr_input_value"]
 	[return]
 
 *tr_input

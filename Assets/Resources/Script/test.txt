@@ -1,7 +1,7 @@
-﻿/*
-	2016.10.09
-	Created by PHJ.
-*/
+[rp]
+[&autoinsert target="lineend" command="@[rp]"]
+[tr_input val="1"]
+//기본 텍스트 설명
 [lyctxt id="txt"]
 [lycleartxt id="txt"]//텍스트 레이어의 텍스트(글씨)를 모두 지웁니다. 처음 생성할땐 비어있어서 따로 호출해줄 필욘 없어요.
 [lysetmaintxt id="txt"]//텍스트가 기본적으로 어느 레이어에 출력되는지를 지정합니다. 기본적으로 텍스트 레이어를 생성해주지 않으면 백로그에서만 보이기 때문에 대사창을 등록하려면 얘 호출해줘야해요.
@@ -21,7 +21,49 @@
 	height="300"			//height : 레이어의 세로 길이입니다. 기본값은 720(화면 세로 길이)입니다.
 ]
 
-[&autoinsert target="lineend" command="@[rp]"]
+//메세지 윈도우를 부른다
 
-test
-<color=aqua>test</color>
+[bg file="witchroom2" type="1" time="1200" preset="s"] 
+[ClearChr]
+[chrid name="def"]
+[lyc id="80" file="Data/UI/mw1"]
+//[trans type="1" time="300"]
+테스트
+
+[bg preset="l"]
+[chrpos name="witch" size="m" pos="1c"]
+//[trans300]
+나이첼이다냥!
+
+[lymotionl2d id="19" motion="idle_angry"]
+화남
+[lymotionl2d id="19" motion="idle_sad"]
+슬픔
+[lymotionl2d id="19" motion="question"]
+궁금
+[lymotionl2d id="19" motion="shy"]
+데레데레
+[lymotionl2d id="19" motion="smile"]
+냥냥
+[lymotionl2d id="19" motion="surprise"]
+놀람
+[lymotionl2d id="19" motion="disapp"]
+실망
+
+
+[ClearChr]
+[chrpos name="freya" size="m" pos="1c"]
+[trans300]
+프레이야입니다.
+[lymotionl2d id="18" motion="idle_mouth"]
+.(입이 움직임)
+[lymotionl2d id="18" motion="question"]
+궁금
+[lymotionl2d id="18" motion="sigh"]
+한숨
+[lymotionl2d id="18" motion="smile"]
+웃음
+[lymotionl2d id="18" motion="surprise"]
+놀람
+[lymotionl2d id="18" motion="angry"]
+화남
