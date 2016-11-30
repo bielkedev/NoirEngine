@@ -94,7 +94,10 @@ namespace Noir.Unity
 			Layer.sLayerList.Add(this.sLayerObject.name, this);
 
 			this.sLayerTransform.SetParent(Layer.sLayerPanel, false);
-			this.sLayerTransform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(this.sLayerObject.name));
+
+			int nIndex = 0;
+			foreach (var sPair in Layer.sLayerList)
+				sPair.Value.sLayerTransform.SetSiblingIndex(nIndex++);
 		}
 
 		protected Layer(string sLayerName, GameObject sLayerPrefab)
@@ -106,7 +109,10 @@ namespace Noir.Unity
 			Layer.sLayerList.Add(this.sLayerObject.name, this);
 
 			this.sLayerTransform.SetParent(Layer.sLayerPanel, false);
-			this.sLayerTransform.SetSiblingIndex(Layer.sLayerList.IndexOfKey(this.sLayerObject.name));
+
+			int nIndex = 0;
+			foreach (var sPair in Layer.sLayerList)
+				sPair.Value.sLayerTransform.SetSiblingIndex(nIndex++);
 		}
 
 		public void addLayerTween(ref LayerTweenData sNewLayerTweenData, LayerStateModifier fNewStateModifier)

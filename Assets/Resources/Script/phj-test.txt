@@ -3,16 +3,13 @@
 	Created by PHJ.
 */
 
-[lyctxt id="txt"]
-[lyfonttxt id="txt" font="Font/SeoulHangangB"]
-[lyfontsizetxt id="txt" size="32"]
-[lyfontcolortxt id="txt" r="255" g="255" b="255" a="255"]
-[lyalignhtxt id="txt" align="-1"]
-[lyalignvtxt id="txt" align="-1"]
-[lysetmaintxt id="txt"]
+[lycl2d id="19" file="data/chr/freyja/freyja.model.json" idle="idle"]
+[lycl2d id="13" file="data/chr/freyja/freyja.model.json" idle="idle"]
+[lycl2d id="14" file="data/chr/freyja/freyja.model.json" idle="idle"]
+[lycl2d id="12" file="data/chr/freyja/freyja.model.json" idle="idle"]
+[lycl2d id="11" file="data/chr/freyja/freyja.model.json" idle="idle"]
 
-[&autoinsert target="lineend" command="@[rt]"]
-
-테스트
-
-<color=aqua>테스트</color>
+[lyprop id="11" left="-300"]
+[lyprop id="12" left="-150"]
+[lyprop id="14" left="150"]
+[lyprop id="19" left="300"]
