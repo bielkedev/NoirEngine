@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Noir.Unity
 {
@@ -34,13 +35,20 @@ namespace Noir.Unity
 		protected LayerState sLayerState = LayerState.Identity;
 		protected LayerStateDirty sLayerStateDirty;
 		protected List<LayerTween> sLayerTweenList = new List<LayerTween>();
-
+		
 		public static Layer getLayer(string sLayerName)
 		{
 			Layer sLayer;
 			Layer.sLayerMap.TryGetValue(sLayerName, out sLayer);
 
 			return sLayer;
+		}
+
+		public static IEnumerable<Layer> getLayerFamily(string sLayerFamilyName)
+		{
+			return from sPair in Layer.sLayerMap
+				   where sPair.Key.StartsWith(sLayerFamilyName)
+				   select sPair.Value;
 		}
 
 		public static void clearNeedUpdateLayerList()

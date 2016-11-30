@@ -183,15 +183,14 @@ namespace Noir.Script
 
 		private static void lydelHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLayer(sTag);
 
-			if (!string.IsNullOrEmpty(sID))
-			{
-				Layer sLayer = Layer.getLayer(sID);
+			if (sLayers == null)
+				return;
 
+			foreach (var sLayer in sLayers)
 				if (sLayer != null)
 					sLayer.deleteLayer();
-			}
 		}
 
 		private static void varHandler(ScriptTag sTag)
@@ -253,26 +252,18 @@ namespace Noir.Script
 
 		private static void lypropHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
-
-			Layer sLayer = Layer.getLayer(sID);
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
-				return;
-			}
 
 			string sValue;
-			float nValue;
 
 			if ((sValue = sTag.getAttribute("mask", false)) != null)
 			{
 				if (sValue == "!")
-					sLayer.setMask(null);
+					foreach (var sLayer in sLayers)
+						sLayer.setMask(null);
 				else
 				{
 					UnityEngine.Sprite sMask = CacheManager.loadSprite(sValue);
@@ -280,70 +271,35 @@ namespace Noir.Script
 					if (sMask == null)
 						ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'에 스프라이트가 없습니다.", sTag);
 					else
-						sLayer.setMask(sMask);
+						foreach (var sLayer in sLayers)
+							sLayer.setMask(sMask);
 				}
 			}
 
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("left", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setPosX(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
+			float nX;
+			float nY;
+			float nAlpha;
+			float nAnchorX;
+			float nAnchorY;
+			float nScaleX;
+			float nScaleY;
+			float nRotate;
+			float nReverseX;
+			float nReverseY;
+			float nVisible;
 
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("top", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setPosY(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
+			bool bDirtyX = ScriptTagHelper.getFloat(sTag, "left", out nX, false);
+			bool bDirtyY = ScriptTagHelper.getFloat(sTag, "top", out nY, false);
+			bool bDirtyAlpha = ScriptTagHelper.getFloat(sTag, "alpha", out nAlpha, false);
+			bool bDirtyAnchorX = ScriptTagHelper.getFloat(sTag, "anchorx", out nAnchorX, false);
+			bool bDirtyAnchorY = ScriptTagHelper.getFloat(sTag, "anchory", out nAnchorY, false);
+			bool bDirtyScaleX = ScriptTagHelper.getFloat(sTag, "xscale", out nScaleX, false);
+			bool bDirtyScaleY = ScriptTagHelper.getFloat(sTag, "yscale", out nScaleY, false);
+			bool bDirtyRotate = ScriptTagHelper.getFloat(sTag, "rotate", out nRotate, false);
+			bool bDirtyReverseX = ScriptTagHelper.getFloat(sTag, "reversex", out nReverseX, false);
+			bool bDirtyReverseY = ScriptTagHelper.getFloat(sTag, "reversey", out nReverseY, false);
+			bool bDirtyVisible = ScriptTagHelper.getFloat(sTag, "visible", out nVisible, false);
 
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("alpha", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setAlpha(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("anchorx", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setAnchorX(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("anchory", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setAnchorY(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("xscale", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setScaleX(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("yscale", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setScaleY(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("rotate", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setRotate(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("reversex", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setReverseX(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("reversey", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setReverseY(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-			
 			/*
 			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("clip", false)))
 			{
@@ -383,47 +339,62 @@ namespace Noir.Script
 			}
 			*/
 
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("visible", false)))
-				if (float.TryParse(sValue, out nValue))
-					sLayer.setVisible(nValue);
-				else
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
+			foreach (var sLayer in sLayers)
+			{
+				if (bDirtyX)
+					sLayer.setPosX(nX);
 
-			sLayer.markAsNeedUpdate();
+				if (bDirtyY)
+					sLayer.setPosY(nY);
+
+				if (bDirtyAlpha)
+					sLayer.setAlpha(nAlpha);
+
+				if (bDirtyAnchorX)
+					sLayer.setAnchorX(nAnchorX);
+
+				if (bDirtyAnchorY)
+					sLayer.setAnchorY(nAnchorY);
+
+				if (bDirtyScaleX)
+					sLayer.setScaleX(nScaleX);
+
+				if (bDirtyScaleY)
+					sLayer.setScaleY(nScaleY);
+
+				if (bDirtyRotate)
+					sLayer.setRotate(nRotate);
+
+				if (bDirtyReverseX)
+					sLayer.setReverseX(nReverseX);
+
+				if (bDirtyReverseY)
+					sLayer.setReverseY(nReverseY);
+
+				if (bDirtyVisible)
+					sLayer.setVisible(nVisible);
+
+				sLayer.markAsNeedUpdate();
+			}
 		}
 
 		private static void lytweendelHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
 
-			Layer sLayer = Layer.getLayer(sID);
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
-				return;
-			}
-
-			sLayer.removeLayerTweenAll();
+			foreach (var sLayer in sLayers)
+				sLayer.removeLayerTweenAll();
 		}
 
 		private static void lytweenHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
-
-			Layer sLayer = Layer.getLayer(sID);
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
-				return;
-			}
 
 			LayerStateModifier fModifier;
 
@@ -605,66 +576,32 @@ namespace Noir.Script
 					break;
 				}
 
-			if (string.IsNullOrEmpty(sValue = sTag.getAttribute("from")))
+			if (!ScriptTagHelper.getFloat(sTag, "from", out sTweenData.nValueBegin))
 				return;
 
-			if (!float.TryParse(sValue, out sTweenData.nValueBegin))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			if (string.IsNullOrEmpty(sValue = sTag.getAttribute("to")))
+			if (!ScriptTagHelper.getFloat(sTag, "to", out sTweenData.nValueEnd))
 				return;
 
-			if (!float.TryParse(sValue, out sTweenData.nValueEnd))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
+			if (!ScriptTagHelper.getFloat(sTag, "time", out sTweenData.nDuration))
 				return;
-			}
-
-			if (string.IsNullOrEmpty(sValue = sTag.getAttribute("time")))
-				return;
-
-			if (!float.TryParse(sValue, out sTweenData.nDuration))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-				return;
-			}
 			else
-				sTweenData.nDuration /= 1000f;
+				sTweenData.nDuration *= .001f;
 
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("delay", false)))
-			{
-				if (!float.TryParse(sValue, out sTweenData.nDelay))
-				{
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-					return;
-				}
-				else
-					sTweenData.nDelay /= 1000f;
-			}
+			if (ScriptTagHelper.getFloat(sTag, "delay", out sTweenData.nDelay, false))
+				sTweenData.nDelay *= .001f;
 
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("loop", false)))
-			{
-				if (!int.TryParse(sValue, out sTweenData.nLoop))
-				{
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-					return;
-				}
-			}
+			float nValue;
 
-			if (!string.IsNullOrEmpty(sValue = sTag.getAttribute("yoyo", false)))
-			{
-				if (!int.TryParse(sValue, out sTweenData.nYoyo))
-				{
-					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sValue + "'(은)는 숫자가 아닙니다.", sTag);
-					return;
-				}
-			}
+			if (ScriptTagHelper.getFloat(sTag, "loop", out nValue, false))
+				sTweenData.nLoop = (int)nValue;
+
+			if (ScriptTagHelper.getFloat(sTag, "yoyo", out nValue, false))
+				sTweenData.nYoyo = (int)nValue;
 
 			sTweenData.bDelete = string.IsNullOrEmpty(sValue = sTag.getAttribute("delete", false)) ? false : sValue != "0";
-			sLayer.addLayerTween(ref sTweenData, fModifier);
+
+			foreach (var sLayer in sLayers)
+				sLayer.addLayerTween(ref sTweenData, fModifier);
 		}
 
 		private static void transHandler(ScriptTag sTag)
@@ -862,7 +799,7 @@ namespace Noir.Script
 
 			if (sLayer != null)
 			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 존재하는 레이어입니다.", sTag);
+				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 있는 레이어입니다.", sTag);
 				return;
 			}
 
@@ -876,27 +813,19 @@ namespace Noir.Script
 
 			if (string.IsNullOrEmpty(sIdle))
 				return;
-			
+
 			if (!sLive2DLayer.setModel(sFile, sIdle))
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFile + "'에 Live2D 모델이 없거나 손상되었습니다.", sTag);
-			
+
 			sLive2DLayer.markAsNeedUpdate();
 		}
 
 		private static void lymotionl2dHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLive2DLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
-
-			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
-				return;
-			}
 
 			string sMotion = sTag.getAttribute("motion");
 
@@ -912,26 +841,20 @@ namespace Noir.Script
 				bLoop = float.TryParse(sLoop, out nLoop) && nLoop != 0f;
 			}
 
-			if (!sLayer.Controller.startMotion(sMotion, bLoop))
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sMotion + "'은(는) 존재하지 않는 모션입니다.", sTag);
+			foreach (var sLayer in sLayers)
+				if (!sLayer.Controller.startMotion(sMotion, bLoop))
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sMotion + "'은(는) '" + sLayer.LayerName + "'에 존재하지 않는 모션입니다.", sTag);
 		}
 
 		private static void lymotionstopl2dHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLive2DLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
 
-			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			sLayer.Controller.startIdleMotion();
+			foreach (var sLayer in sLayers)
+				sLayer.Controller.startIdleMotion();
 		}
 
 		private static void printHandler(ScriptTag sTag)
@@ -1032,18 +955,10 @@ namespace Noir.Script
 
 		private static void lyaddanimHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getAnimatedLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
-
-			AnimatedLayer sAnimatedLayer = Layer.getLayer(sID) as AnimatedLayer;
-
-			if (sAnimatedLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) Animated 레이어가 아닙니다.", sTag);
-				return;
-			}
 
 			string sFile = sTag.getAttribute("file");
 
@@ -1071,134 +986,75 @@ namespace Noir.Script
 				return;
 			}
 
-			sAnimatedLayer.addLayerSprite(sMainSprite, nTime * .001f);
+			foreach (var sLayer in sLayers)
+				sLayer.addLayerSprite(sMainSprite, nTime * .001f);
 		}
 
 		private static void lyupdateanimHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getAnimatedLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
 
-			AnimatedLayer sAnimatedLayer = Layer.getLayer(sID) as AnimatedLayer;
-
-			if (sAnimatedLayer == null)
+			foreach (var sLayer in sLayers)
 			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) Animated 레이어가 아닙니다.", sTag);
-				return;
+				sLayer.updateLayerSprite();
+				sLayer.markAsNeedUpdate();
 			}
-
-			sAnimatedLayer.updateLayerSprite();
 		}
 
 		private static void waittimeHandler(ScriptTag sTag)
 		{
-			string sTime = sTag.getAttribute("time");
-
-			if (sTime == null)
-				return;
-
 			float nTime;
 
-			if (!float.TryParse(sTime, out nTime))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sTime + "'은(는) 숫자가 아닙니다.", sTag);
-				return;
-			}
-
-			string sInput = sTag.getAttribute("input");
-
-			if (sInput == null)
+			if (!ScriptTagHelper.getFloat(sTag, "time", out nTime))
 				return;
 
 			float nInput;
 
-			if (!float.TryParse(sInput, out nInput))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sInput + "'은(는) 숫자가 아닙니다.", sTag);
+			if (!ScriptTagHelper.getFloat(sTag, "input", out nInput))
 				return;
-			}
 
 			UIManager.waitForObject((int)nInput, new WaitTimeObject(nTime * .001f));
 		}
 
 		private static void waittweenHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (string.IsNullOrEmpty(sID))
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
-				return;
-			}
-
-			string sInput = sTag.getAttribute("input");
-
-			if (sInput == null)
 				return;
 
 			float nInput;
 
-			if (!float.TryParse(sInput, out nInput))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sInput + "'은(는) 숫자가 아닙니다.", sTag);
+			if (!ScriptTagHelper.getFloat(sTag, "input", out nInput))
 				return;
-			}
 
 			UIManager.waitForObject((int)nInput, sLayer);
 		}
 
 		private static void waitmotionHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayer = ScriptTagHelper.getLive2DLayerExact(sTag);
 
-			if (string.IsNullOrEmpty(sID))
-				return;
-
-			Live2DLayer sLive2DLayer = Layer.getLayer(sID) as Live2DLayer;
-
-			if (sLive2DLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			string sInput = sTag.getAttribute("input");
-
-			if (sInput == null)
+			if (sLayer == null)
 				return;
 
 			float nInput;
 
-			if (!float.TryParse(sInput, out nInput))
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sInput + "'은(는) 숫자가 아닙니다.", sTag);
+			if (!ScriptTagHelper.getFloat(sTag, "input", out nInput))
 				return;
-			}
 
-			UIManager.waitForObject((int)nInput, sLive2DLayer.MotionWait);
+			UIManager.waitForObject((int)nInput, sLayer.MotionWait);
 		}
-		
+
 		private static void getlayerxHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1210,18 +1066,10 @@ namespace Noir.Script
 
 		private static void getlayeryHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1233,18 +1081,10 @@ namespace Noir.Script
 
 		private static void getlayeralphaHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1256,18 +1096,10 @@ namespace Noir.Script
 
 		private static void getlayeranchorxHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1279,18 +1111,10 @@ namespace Noir.Script
 
 		private static void getlayeranchoryHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1302,18 +1126,10 @@ namespace Noir.Script
 
 		private static void getlayerxscaleHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1325,18 +1141,10 @@ namespace Noir.Script
 
 		private static void getlayeryscaleHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1348,18 +1156,10 @@ namespace Noir.Script
 
 		private static void getlayerrotateHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1371,18 +1171,10 @@ namespace Noir.Script
 
 		private static void getlayerreversexHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1394,18 +1186,10 @@ namespace Noir.Script
 
 		private static void getlayerreverseyHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1417,18 +1201,10 @@ namespace Noir.Script
 
 		private static void getlayervisibleHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			Layer sLayer = Layer.getLayer(sID);
+			var sLayer = ScriptTagHelper.getLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어입니다.", sTag);
 				return;
-			}
 
 			string sName = sTag.getAttribute("name");
 
@@ -1447,7 +1223,7 @@ namespace Noir.Script
 
 			Layer sLayer = Layer.getLayer(sID);
 
-			if(sLayer != null)
+			if (sLayer != null)
 			{
 				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 이미 있는 레이어입니다.", sTag);
 				return;
@@ -1458,177 +1234,190 @@ namespace Noir.Script
 
 		private static void lycleartxtHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getTextLayer(sTag);
 
-			if (sID == null)
+			if (sLayers == null)
 				return;
 
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if(sLayer == null)
+			foreach (var sLayer in sLayers)
 			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
+				sLayer.LayerText.text = string.Empty;
+				sLayer.markAsNeedUpdate();
 			}
-
-			sLayer.LayerText.text = string.Empty;
 		}
 
 		private static void lynewlinetxtHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getTextLayer(sTag);
 
-			if (sID == null)
+			if (sLayers == null)
 				return;
 
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if (sLayer == null)
+			foreach (var sLayer in sLayers)
 			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
+				sLayer.LayerText.text += '\n';
+				sLayer.markAsNeedUpdate();
 			}
-
-			sLayer.LayerText.text += '\n';
 		}
 
 		private static void lyapptexttxtHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getTextLayer(sTag);
 
-			if (sID == null)
+			if (sLayers == null)
 				return;
-
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
-				return;
-			}
 
 			string sText = sTag.getAttribute("text");
 
 			if (sText == null)
 				return;
 
-			sLayer.LayerText.text += sText;
+			foreach (var sLayer in sLayers)
+			{
+				sLayer.LayerText.text += sText;
+				sLayer.markAsNeedUpdate();
+			}
 		}
-		
+
 		private static void lysetmaintxtHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
-
-			if (sID == null)
-				return;
-
-			TextLayer sLayer = Layer.getLayer(sID) as TextLayer;
+			var sLayer = ScriptTagHelper.getTextLayerExact(sTag);
 
 			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어거나 Text 레이어가 아닙니다.", sTag);
 				return;
-			}
 
 			UIManager.MainTextLayer = sLayer;
 		}
 
 		private static void lyproptxtHandler(ScriptTag sTag)
 		{
-			TextLayer sTextLayer = ScriptTagHelper.getTextLayer(sTag);
+			var sTextLayers = ScriptTagHelper.getTextLayer(sTag);
 
-			if (sTextLayer == null)
+			if (sTextLayers == null)
 				return;
 
-			string sText = sTag.getAttribute("text");
-			if (sText != null)
-				sTextLayer.LayerText.text = sText;
+			string sText = sTag.getAttribute("text", false);
 
-			string sFont = sTag.getAttribute("font");
+			string sFont = sTag.getAttribute("font", false);
+
+			UnityEngine.Font sFontFile = null;
+
 			if (sFont != null)
 			{
-				var sFontFile = CacheManager.loadFont(sFont);
+				sFontFile = CacheManager.loadFont(sFont);
 
 				if (sFont == null)
-				{
 					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sFont + "'에 폰트가 없습니다.", sTag);
-					return;
+			}
+
+			float nFontSize;
+			bool bDirtyFontSize = ScriptTagHelper.getFloat(sTag, "size", out nFontSize, false);
+
+			float nR;
+			float nG;
+			float nB;
+			float nA;
+
+			bool bDirtyR = ScriptTagHelper.getFloat(sTag, "r", out nR, false);
+			bool bDirtyG = ScriptTagHelper.getFloat(sTag, "g", out nG, false);
+			bool bDirtyB = ScriptTagHelper.getFloat(sTag, "b", out nB, false);
+			bool bDirtyA = ScriptTagHelper.getFloat(sTag, "a", out nA, false);
+			bool bDirtyColor = bDirtyR || bDirtyG || bDirtyB || bDirtyA;
+
+			const float nFactor = 1f / 255f;
+			nR *= nFactor;
+			nG *= nFactor;
+			nB *= nFactor;
+			nA *= nFactor;
+
+			float nAlignH;
+			float nAlignV;
+
+			bool bDirtyAlignH = ScriptTagHelper.getFloat(sTag, "alignh", out nAlignH, false);
+			bool bDirtyAlignV = ScriptTagHelper.getFloat(sTag, "alignv", out nAlignV, false);
+
+			float nWidth;
+			float nHeight;
+
+			bool bDirtyWidth = ScriptTagHelper.getFloat(sTag, "width", out nWidth, false);
+			bool bDirtyHeight = ScriptTagHelper.getFloat(sTag, "height", out nHeight, false);
+			bool bDirtySize = bDirtyWidth || bDirtyHeight;
+
+			foreach (var sTextLayer in sTextLayers)
+			{
+				if (sText != null)
+					sTextLayer.LayerText.text = sText;
+
+				if (sFontFile != null)
+					sTextLayer.LayerText.font = sFontFile;
+
+				if (bDirtyFontSize)
+					sTextLayer.LayerText.fontSize = (int)nFontSize;
+
+				if (bDirtyColor)
+				{
+					var sColor = sTextLayer.LayerText.color;
+
+					if (bDirtyR)
+						sColor.r = nR;
+
+					if (bDirtyG)
+						sColor.g = nG;
+
+					if (bDirtyB)
+						sColor.b = nB;
+
+					if (bDirtyA)
+						sColor.a = nA;
+
+					sTextLayer.LayerText.color = sColor;
 				}
 
-				sTextLayer.LayerText.font = sFontFile;
+				if (bDirtyAlignH)
+				{
+					var nCurrent = (int)sTextLayer.LayerText.alignment / 3;
+
+					if (nCurrent == 0)
+						sTextLayer.LayerText.alignment = nAlignH < 0f ? UnityEngine.TextAnchor.UpperLeft : nAlignH > 0f ? UnityEngine.TextAnchor.UpperRight : UnityEngine.TextAnchor.UpperCenter;
+					else if (nCurrent == 2)
+						sTextLayer.LayerText.alignment = nAlignH < 0f ? UnityEngine.TextAnchor.LowerLeft : nAlignH > 0f ? UnityEngine.TextAnchor.LowerRight : UnityEngine.TextAnchor.LowerCenter;
+					else
+						sTextLayer.LayerText.alignment = nAlignH < 0f ? UnityEngine.TextAnchor.MiddleLeft : nAlignH > 0f ? UnityEngine.TextAnchor.MiddleRight : UnityEngine.TextAnchor.MiddleCenter;
+				}
+
+				if (bDirtyAlignV)
+				{
+					var nCurrent = (int)sTextLayer.LayerText.alignment % 3;
+
+					if (nCurrent == 0)
+						sTextLayer.LayerText.alignment = nAlignV < 0f ? UnityEngine.TextAnchor.UpperLeft : nAlignV > 0f ? UnityEngine.TextAnchor.LowerLeft : UnityEngine.TextAnchor.MiddleLeft;
+					else if (nCurrent == 2)
+						sTextLayer.LayerText.alignment = nAlignV < 0f ? UnityEngine.TextAnchor.UpperRight : nAlignV > 0f ? UnityEngine.TextAnchor.LowerRight : UnityEngine.TextAnchor.MiddleRight;
+					else
+						sTextLayer.LayerText.alignment = nAlignV < 0f ? UnityEngine.TextAnchor.UpperCenter : nAlignV > 0f ? UnityEngine.TextAnchor.LowerCenter : UnityEngine.TextAnchor.MiddleCenter;
+				}
+
+				if (bDirtySize)
+				{
+					var sSize = sTextLayer.Transform.sizeDelta;
+
+					if (bDirtyWidth)
+						sSize.x = nWidth;
+
+					if (bDirtyHeight)
+						sSize.y = nHeight;
+
+					sTextLayer.Transform.sizeDelta = sSize;
+				}
 			}
-
-			float nSize;
-			if (ScriptTagHelper.getFloat(sTag, "size", out nSize, false))
-				sTextLayer.LayerText.fontSize = (int)nSize;
-
-			float nValue;
-			const float nFactor = 1f / 255f;
-			var sColor = sTextLayer.LayerText.color;
-
-			if (ScriptTagHelper.getFloat(sTag, "r", out nValue, false))
-				sColor.r = nValue * nFactor;
-
-			if (ScriptTagHelper.getFloat(sTag, "g", out nValue, false))
-				sColor.g = nValue * nFactor;
-
-			if (ScriptTagHelper.getFloat(sTag, "b", out nValue, false))
-				sColor.b = nValue * nFactor;
-
-			if (ScriptTagHelper.getFloat(sTag, "a", out nValue, false))
-				sColor.a = nValue * nFactor;
-
-			sTextLayer.LayerText.color = sColor;
-
-			if (ScriptTagHelper.getFloat(sTag, "alignh", out nValue, false))
-			{
-				var nCurrent = (int)sTextLayer.LayerText.alignment / 3;
-
-				if (nCurrent == 0)
-					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperLeft : nValue > 0f ? UnityEngine.TextAnchor.UpperRight : UnityEngine.TextAnchor.UpperCenter;
-				else if (nCurrent == 2)
-					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.LowerLeft : nValue > 0f ? UnityEngine.TextAnchor.LowerRight : UnityEngine.TextAnchor.LowerCenter;
-				else
-					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.MiddleLeft : nValue > 0f ? UnityEngine.TextAnchor.MiddleRight : UnityEngine.TextAnchor.MiddleCenter;
-			}
-
-			if (ScriptTagHelper.getFloat(sTag, "alignv", out nValue, false))
-			{
-				var nCurrent = (int)sTextLayer.LayerText.alignment % 3;
-
-				if (nCurrent == 0)
-					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperLeft : nValue > 0f ? UnityEngine.TextAnchor.LowerLeft : UnityEngine.TextAnchor.MiddleLeft;
-				else if (nCurrent == 2)
-					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperRight : nValue > 0f ? UnityEngine.TextAnchor.LowerRight : UnityEngine.TextAnchor.MiddleRight;
-				else
-					sTextLayer.LayerText.alignment = nValue < 0f ? UnityEngine.TextAnchor.UpperCenter : nValue > 0f ? UnityEngine.TextAnchor.LowerCenter : UnityEngine.TextAnchor.MiddleCenter;
-			}
-
-			var sSize = sTextLayer.Transform.sizeDelta;
-
-			if (ScriptTagHelper.getFloat(sTag, "width", out nValue, false))
-				sSize.x = nValue;
-
-			if (ScriptTagHelper.getFloat(sTag, "height", out nValue, false))
-				sSize.y = nValue;
-
-			sTextLayer.Transform.sizeDelta = sSize;
 		}
 
 		private static void lyexpressionl2dHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLive2DLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
-
-			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
-				return;
-			}
 
 			string sExpression = sTag.getAttribute("expression");
 
@@ -1644,26 +1433,20 @@ namespace Noir.Script
 				bLoop = float.TryParse(sLoop, out nLoop) && nLoop != 0f;
 			}
 
-			if (!sLayer.Controller.startExpression(sExpression, bLoop))
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sExpression + "'은(는) 존재하지 않는 표정입니다.", sTag);
+			foreach (var sLayer in sLayers)
+				if (!sLayer.Controller.startExpression(sExpression, bLoop))
+					ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sExpression + "'은(는) '" + sLayer.LayerName + "'에 존재하지 않는 표정입니다.", sTag);
 		}
 
 		private static void lyexpressionstopl2dHandler(ScriptTag sTag)
 		{
-			string sID = sTag.getAttribute("id");
+			var sLayers = ScriptTagHelper.getLive2DLayer(sTag);
 
-			if (string.IsNullOrEmpty(sID))
+			if (sLayers == null)
 				return;
 
-			Live2DLayer sLayer = Layer.getLayer(sID) as Live2DLayer;
-
-			if (sLayer == null)
-			{
-				ScriptError.pushError(ScriptError.ErrorType.RuntimeError, "'" + sID + "'은(는) 없는 레이어이거나 Live2D 레이어가 아닙니다.", sTag);
-				return;
-			}
-
-			sLayer.Controller.startIdleExpression();
+			foreach (var sLayer in sLayers)
+				sLayer.Controller.startIdleExpression();
 		}
 	}
 }

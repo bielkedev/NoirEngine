@@ -1,27 +1,12 @@
-﻿/*
+﻿
+/*
 	2016.10.09
 	Created by PHJ.
 */
-[lyctxt id="txt"]
-[lycleartxt id="txt"]//텍스트 레이어의 텍스트(글씨)를 모두 지웁니다. 처음 생성할땐 비어있어서 따로 호출해줄 필욘 없어요.
-[lysetmaintxt id="txt"]//텍스트가 기본적으로 어느 레이어에 출력되는지를 지정합니다. 기본적으로 텍스트 레이어를 생성해주지 않으면 백로그에서만 보이기 때문에 대사창을 등록하려면 얘 호출해줘야해요.
-[lyprop id="txt" top="-350"]
-[lyproptxt
-	id="txt"				//id : Text 레이어의 이름입니다.
-//	text=""				//text : 표시할 문자열입니다.
-	font="Font/SeoulHangangB"	//font : 폰트파일 경로입니다.
-	size="36"			//size : 글자 크기입니다. [10, 50]의 범위가 일반적입니다.
-	r="255"				//r : 글자 색상의 Red 요소입니다. [0, 255]의 범위를 갖습니다.
-	g="255"				//g : 글자 색상의 Green 요소입니다. [0, 255]의 범위를 갖습니다.
-	b="255"				//b : 글자 색상의 Blue 요소입니다. [0, 255]의 범위를 갖습니다.
-	a="255"				//a : 글자 색상의 Alpha 요소입니다. [0, 255]의 범위를 갖습니다.
-	alignh="-1"			//alignh : 글자의 가로 정렬 방법입니다. 음수면 왼쪽, 양수면 오른쪽, 0이면 가운데 정렬합니다.
-	alignv="-1"			//alignv : 글자의 세로 정렬 방법입니다. 음수면 윗쪽, 양수면 아랫쪽, 0이면 가운데 정렬합니다.
-	width="1100"			//width : 레이어의 가로 길이입니다. 기본값은 1280(화면 가로 길이)입니다.
-	height="300"			//height : 레이어의 세로 길이입니다. 기본값은 720(화면 세로 길이)입니다.
-]
 
-[&autoinsert target="lineend" command="@[rp]"]
+[lycl2d id="1.a" file="data/chr/nachael/nachael.model.json" idle="idle"]
+[lycl2d id="1.b" file="data/chr/freyja/freyja.model.json" idle="idle"]
 
-test
-<color=aqua>test</color>
+[lyprop id="1.a" left="-170"]
+[lyprop id="1.b" left="300"]
+[lyprop id="1." top="-250" xscale="200" yscale="200"]
