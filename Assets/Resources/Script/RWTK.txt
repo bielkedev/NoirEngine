@@ -174,11 +174,12 @@ size=s pos=4ll 4l 4r 4rr
 size=s pos=5ll 5l 5c 5r 5rr
 */
 
-[ClearChr]
+//[ClearChr]
 
 [bg file="bedroom" preset="l"]
 [chrid name="def"]//각 캐릭터에게 기본 레이어값을 할당한다
 
+/*
 [chrpos name="witch" size="l" pos="1c"]
 
 뀨뀨꺄꺄
@@ -187,3 +188,29 @@ size=s pos=5ll 5l 5c 5r 5rr
 ㅁㅁㅁ
 
 [lymotionl2d id="$witch" motion="surprise"]
+*/
+
+//[lyc id="$Heroine_B" file="Data/PA/chr/Heroine_B/Heroine_B_a1"]
+//[lyprop id="$Heroine_B" top="-400"]
+//[lyc id="$Heroine_B+'.3'" file="Data/PA/chr/Heroine_B/face/01"]
+//[lyprop id="$Heroine_B+'.3'" top="-400"]
+
+[var name="t.chrpos_exist_heroine_A" data="0"]
+[var name="t.chrpos_exist_heroine_B" data="0"]
+
+[var name="Heroine_A" data="15"]
+[var name="Heroine_B" data="16"]
+
+[chrclothes name="A" data="a"]
+[chrclothes name="B" data="a"]
+
+
+[B body="1" face="기본" size="l" pos="1c"]
+l
+[B size="m" pos="1c"]
+m
+[B size="s" pos="1c"]
+s
+[chrclothes name="B" data="b"]
+[B size="s" pos="1c"]
+bb

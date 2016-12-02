@@ -59,44 +59,6 @@
 	[/if]
 	[return]
 
-//*bg2
-	//bg2는 배경이 여러 레이어이거나 아니면 이펙트용으로 쓰는 id2값의 bg. trans값은 제거했음.
-	//[bg2 file="" scale="" top="" left="" alpha=""]
-	//[bg2 file="" scale="" alpha=""] ←타입1에 top left값 안 써도 되면 이렇게 써도 됨.
-	//file	bg폴더 안에 있는 이미지명				필수
-	//scale 이미지 크기 비율					필수.
-	//top	위							필수아님
-	//left	옆							필수아님
-
-//	[lyc id="2" file="$g.bgpath + file"]
-//	[lyprop id="2" left="$left" top="$top" xscale="$scale" yscale="$scale" alpha="%alpha"]
-//	[return]
-
-
-*lytscale
-	//id	레이어 id
-	//ease	이징 값.
-	//from	시작값
-	//to	끝값
-	//time	시간
-
-	[lytween id="$id" param="xscale" ease="$ease" from="$from" to="$to" time="$time" sync="0"]
-	[lytween id="$id" param="yscale" ease="$ease" from="$from" to="$to" time="$time" sync="1"]
-	[return]
-
-*lyopt
-	//[lyopt id="" left="$" top="$" scale="100"]
-	//id	레이어 id	필수
-	//left	x값.		필수 아님
-	//top	y값		필수 아님
-	//scale 배율값		필수
-
-	[lyprop id="$id" left="$left" top="$top" xscale="$scale" yscale="$scale"]
-	[if estimate="$scale == 0"]
-		[lyprop id="$id" xscale="100" yscale="100"]
-	[else]
-	[/if]
-	[return]
 
 *trans2easy
 	//rule	마스킹 종류
@@ -347,6 +309,14 @@
 	[var name="ntag" data="1"]
 	[return]
 
+
+//PA
+*백설화
+	[return]
+
+*이예은
+	[return]
+
 *nontag
 	[if estimate="$ntag == 0"]
 		[rt]
@@ -566,40 +536,133 @@
 
 //★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆
 //chrpos for non-live2D games
-*chrpos2
-	[var name="t.chrpos_name" data="$name"]
-	//[var name="chrpos_face" data="$face"]
-	[var name="t.chrpos_size" data="$size"]
-	[var name="t.chrpos_pos" data="$pos"]
+*chrpos3
+//안되면 시발 다시 만들어야지 뭐
+	[var name="t.chrpos_face_exist" system="var_exist" target="face" local="1"]//없으면 0 있으면 1
+	[var name="t.chrpos_pos_exist" system="var_exist" target="pos" local="1"]//없으면 0 있으면 1
+	[var name="t.chrpos_body_exist" system="var_exist" target="body" local="1"]//없으면 0 있으면 1
 	
-	[if estimate="$chrpos_name == 'A'"]
-		[var name="chrpos_id" data="$heroine_A"]
-		[if estimate="$t.chrpos_exist_heroine_A == 0"]
-		
-	[elseif estimate="$t.chrpos_name == 'B'"]
-		[var name="t.chrpos_id" data="$heroine_B"]
-		[if estimate="$t.chrpos_exist_heroine_B == 0"]
-			[var name="t.chrpos_exist_freya" data="1"]
-			[lyc id="15" file=file="$'Data/chr/PA/' + file"]
+	[if estimate="$name == 'A'"]
+		[var name="t.chrpos_id" data="$Heroine_A"]
+		[var name="aaa" data="$ccc"]
+		[var name="bbb" data="$body"]
+		[lyc id="$t.chrpos_id" file="$'Data/PA/chr/Heroine_A/Heroine_A_'+ clothesA + aaa + bbb"]
+		[var name="ccc" data="$aaa"]
+
+		[if estimate="$t.chrpos_face_exist == 1"]
+			[lyc id="$t.chrpos_id + '.3'" file="$'Data/PA/chr/Heroine_A/face/' + face"]
+		[/if]
+
+	[elseif estimate="$name == 'B'"]
+		[var name="t.chrpos_id" data="$Heroine_B"]
+		[var name="aaaa" data="$cccc"]
+		[var name="bbbb" data="$body"]
+		[lyc id="$t.chrpos_id" file="$'Data/PA/chr/Heroine_B/Heroine_B_'+ clothesB + aaaa + bbbb"]
+		[var name="cccc" data="$aaaa"]
+
+		[if estimate="$t.chrpos_face_exist == 1"]
+			[lyc id="$t.chrpos_id + '.3'" file="$'Data/PA/chr/Heroine_B/face/' + face"]
 		[/if]
 	[/if]
 
-	//L사이즈
-	[if estimate="$t.chrpos_size == 'l'"]
-		[lyprop id="$t.chrpos_id" xscale="280" yscale="280"]
-		[var name="chrpos_y" data="-270"]
-		[if estimate="$t.chrpos_pos == '1c'"]
-			[var name="chrpos_x" data="0"]
-		[elseif estimate="$t.chrpos_pos == '2l'"]
-			[var name="chrpos_x" data="-270 "]
-		[elseif estimate="$t.chrpos_pos == '2r'"]
-			[var name="chrpos_x" data="270 "]
+
+//	[if estimate="$t.chrpos_pos_exist == 1"]
+		[if estimate="$size == 'l'"]//L 사이즈
+			[var name="chrpos_scale" data="160"]
+			[var name="chrpos_y" data="-900"]
+			[if estimate="$pos == '1c'"]
+				[var name="chrpos_x" data="0"]
+			[elseif estimate="$pos == '2l'"]
+				[var name="chrpos_x" data="-270 "]
+			[elseif estimate="$pos == '2r'"]
+				[var name="chrpos_x" data="270 "]
+			[/if]
+		[elseif estimate="$size == 'm'"]//M 사이즈
+			[var name="chrpos_scale" data="110"]
+			[var name="chrpos_y" data="-520"]
+			[if estimate="$pos == '1c'"]
+				[var name="chrpos_x" data="0"]
+			[elseif estimate="$pos == '2l'"]
+				[var name="chrpos_x" data="-270 "]
+			[elseif estimate="$pos == '2r'"]
+				[var name="chrpos_x" data="270 "]
+			[/if]
+		[elseif estimate="$size == 's'"]//S 사이즈
+			[var name="chrpos_scale" data="80"]
+			[var name="chrpos_y" data="-320"]
+			[if estimate="$pos == '1c'"]
+				[var name="chrpos_x" data="0"]
+			[elseif estimate="$pos == '2l'"]
+				[var name="chrpos_x" data="-270 "]
+			[elseif estimate="$pos == '2r'"]
+				[var name="chrpos_x" data="270 "]
+			[/if]
 		[/if]
+	[lyprop id="$t.chrpos_id" left="$chrpos_x + movex" top="$chrpos_y + movey" xscale="$chrpos_scale" yscale="$chrpos_scale"]
+	[lyprop id="$t.chrpos_id + '.3'" left="$chrpos_x + movex" top="$chrpos_y + movey" xscale="$chrpos_scale" yscale="$chrpos_scale"]
+	//[/if]
 
-	[/if]
-
-	[lyprop id="$t.chrpos_id" left="$chrpos_x + movex" top="$chrpos_y + movey"]
+	
 	[return]
+
+*chrclothes
+	[var name="$'clothes' + name" data="$data"]
+	[return]
+
+*A
+
+*B
+//야 시발 새 매크로 결국 캐릭별로 간다 이꾸욨 하 시발
+	[var name="t.chrpos_id" data="$Heroine_B"]
+	[var name="t.chrpos_face_exist" system="var_exist" target="face" local="1"]//없으면 0 있으면 1
+	[var name="t.chrpos_pos_exist" system="var_exist" target="pos" local="1"]//없으면 0 있으면 1
+	[var name="t.chrpos_body_exist" system="var_exist" target="body" local="1"]//없으면 0 있으면 1
+	
+	[if estimate="$t.chrpos_body_exist == 1"]
+		[lyc id="$t.chrpos_id" file="$'Data/PA/chr/Heroine_B/Heroine_B_'+ clothesB + body"]
+	[/if]
+	
+	[if estimate="$t.chrpos_face_exist == 1"]
+		[lyc id="$t.chrpos_id + '.3'" file="$'Data/PA/chr/Heroine_B/face/' + face"]
+	[/if]
+
+
+	[if estimate="$t.chrpos_pos_exist == 1"]
+		[if estimate="$size == 'l'"]//L 사이즈
+			[var name="chrpos_scale" data="160"]
+			[var name="chrpos_y" data="-900"]
+			[if estimate="$pos == '1c'"]
+				[var name="chrpos_x" data="0"]
+			[elseif estimate="$pos == '2l'"]
+				[var name="chrpos_x" data="-270 "]
+			[elseif estimate="$pos == '2r'"]
+				[var name="chrpos_x" data="270 "]
+			[/if]
+		[elseif estimate="$size == 'm'"]//M 사이즈
+			[var name="chrpos_scale" data="110"]
+			[var name="chrpos_y" data="-520"]
+			[if estimate="$pos == '1c'"]
+				[var name="chrpos_x" data="0"]
+			[elseif estimate="$pos == '2l'"]
+				[var name="chrpos_x" data="-270 "]
+			[elseif estimate="$pos == '2r'"]
+				[var name="chrpos_x" data="270 "]
+			[/if]
+		[elseif estimate="$size == 's'"]//S 사이즈
+			[var name="chrpos_scale" data="80"]
+			[var name="chrpos_y" data="-320"]
+			[if estimate="$pos == '1c'"]
+				[var name="chrpos_x" data="0"]
+			[elseif estimate="$pos == '2l'"]
+				[var name="chrpos_x" data="-270 "]
+			[elseif estimate="$pos == '2r'"]
+				[var name="chrpos_x" data="270 "]
+			[/if]
+		[/if]
+	[lyprop id="$t.chrpos_id" left="$chrpos_x + movex" top="$chrpos_y + movey" xscale="$chrpos_scale" yscale="$chrpos_scale"]
+	[lyprop id="$t.chrpos_id + '.3'" left="$chrpos_x + movex" top="$chrpos_y + movey" xscale="$chrpos_scale" yscale="$chrpos_scale"]
+	[/if]
+
 //★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆
 
 
