@@ -1,4 +1,4 @@
-﻿
+﻿/*
 20161121
 test 001
 유니티 엔진에서 아르테미스 엔진용으로 작성한 스크립트 작성 확인 밑 앞으로 유니티 엔진 사용을 위한 macro의 좌표값 수정
@@ -104,13 +104,6 @@ scgmovey 테스트. val
 [scgmovey id="$witch" val="100" time="100" loop="3"]
 scgmovey 테스트. val, loop
 
-
-*/
-
-
-
-[bg file="bedroom" preset="l"]
-[chrid name="def"]//각 캐릭터에게 기본 레이어값을 할당한다
 [var name="t.chrpos_exist_test1" data="0"]
 [var name="t.chrpos_exist_test2" data="0"]
 [var name="t.chrpos_exist_test3" data="0"]
@@ -179,8 +172,18 @@ size=s pos=4ll 4l 4r 4rr
 [chrpos name="test4" size="s" pos="5r"]
 [chrpos name="test5" size="s" pos="5rr"]
 size=s pos=5ll 5l 5c 5r 5rr
+*/
 
-[scgmovey id="19" val="200" time="100"]
+[ClearChr]
 
+[bg file="bedroom" preset="l"]
+[chrid name="def"]//각 캐릭터에게 기본 레이어값을 할당한다
+
+[chrpos name="witch" size="l" pos="1c"]
 
 뀨뀨꺄꺄
+
+[scgmovey id="19" val="200" time="100"]
+ㅁㅁㅁ
+
+[lymotionl2d id="$witch" motion="surprise"]

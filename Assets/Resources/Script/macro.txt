@@ -1,4 +1,10 @@
-된//
+//캐릭터 이름 설정
+//[var name="g.chr1" data="$preset"]
+//[var name="g.chr2" data="$preset"]
+
+
+
+
 // ---------------------------------------------------------------------------------------------
 //이미지 관련 매크로
 *bg
@@ -549,6 +555,61 @@
 	[/if]
 	[lyprop id="$t.chrpos_id" left="$chrpos_x + movex" top="$chrpos_y + movey"]
 	[return]
+
+
+
+
+
+
+
+
+
+//★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆
+//chrpos for non-live2D games
+*chrpos2
+	[var name="t.chrpos_name" data="$name"]
+	//[var name="chrpos_face" data="$face"]
+	[var name="t.chrpos_size" data="$size"]
+	[var name="t.chrpos_pos" data="$pos"]
+	
+	[if estimate="$chrpos_name == 'A'"]
+		[var name="chrpos_id" data="$heroine_A"]
+		[if estimate="$t.chrpos_exist_heroine_A == 0"]
+		
+	[elseif estimate="$t.chrpos_name == 'B'"]
+		[var name="t.chrpos_id" data="$heroine_B"]
+		[if estimate="$t.chrpos_exist_heroine_B == 0"]
+			[var name="t.chrpos_exist_freya" data="1"]
+			[lyc id="15" file=file="$'Data/chr/PA/' + file"]
+		[/if]
+	[/if]
+
+	//L사이즈
+	[if estimate="$t.chrpos_size == 'l'"]
+		[lyprop id="$t.chrpos_id" xscale="280" yscale="280"]
+		[var name="chrpos_y" data="-270"]
+		[if estimate="$t.chrpos_pos == '1c'"]
+			[var name="chrpos_x" data="0"]
+		[elseif estimate="$t.chrpos_pos == '2l'"]
+			[var name="chrpos_x" data="-270 "]
+		[elseif estimate="$t.chrpos_pos == '2r'"]
+			[var name="chrpos_x" data="270 "]
+		[/if]
+
+	[/if]
+
+	[lyprop id="$t.chrpos_id" left="$chrpos_x + movex" top="$chrpos_y + movey"]
+	[return]
+//★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆
+
+
+
+
+
+
+
+
+
 
 // ---------------------------------------------------------------------------------------------
 //연출
